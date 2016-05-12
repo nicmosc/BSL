@@ -16451,7 +16451,7 @@ THREE.Audio.prototype.play = function () {
 
 	if ( this.isPlaying === true ) {
 
-		console.warn( 'THREE.Audio: Audio is already playing.' );
+		console.warn( 'THREE.Audio: Audio is already started.' );
 		return;
 
 	}

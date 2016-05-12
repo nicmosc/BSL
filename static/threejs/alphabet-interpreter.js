@@ -1,17 +1,12 @@
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
-
 var container, stats;
-var camera, scene, renderer, controls, cameraTarget, helper;
+var camera, fpCamera, scene, renderer, controls, cameraTarget;
+var firstPerson, started, paused, cancelled, done = false;
 
 var skinnedMesh;
 
-// for local testing use '../static/res/ ... etc .. '
-// for flask testing use ''
-
-//var modelUrl = '../static/res/model/model.js';  // where the model is located (for local testing)
-
-var modelUrl = '../static/res/model/model.js';
+var modelUrl = '../static/res/model/model.js'; // where the model is located (for local testing)
 
 // animation stuff
 var mixer,clips, urls; // make them global for testing
@@ -32,7 +27,7 @@ function init() {
     container = document.createElement( 'div' );
     document.body.appendChild( container );
 
-    // CAMERA
+    // STANDARD CAMERA
 
     camera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
     camera.position.set(0, 5, 10 );
@@ -41,11 +36,22 @@ function init() {
     cameraTarget.position.y = 4;
 
     controls = new THREE.OrbitControls( camera );
+    controls.minDistance = 7;   // reduce zooming options (so that we cannot see inside the model)
+    controls.maxDistance = 15;
     controls.update();
+
+    // FIRST PERSON CAMERA
+
+    fpCamera = new THREE.PerspectiveCamera( 80, SCREEN_WIDTH / SCREEN_HEIGHT, 0.1, 10000);
+    fpCamera.position.set(0, 3.7, 0.15 );
+    fpCamera.lookAt(new THREE.Vector3(0,0,10));
 
     // SCENE
 
     scene = new THREE.Scene();
+
+    // cameraHelper = new THREE.CameraHelper(fpCamera);
+    // scene.add(cameraHelper);
 
     // CONTROLS
 
@@ -60,6 +66,16 @@ function init() {
     light.position.y = 250;
     light.position.z = 500;
     scene.add( light );
+
+    light = new THREE.DirectionalLight( 0xaabbff, 0.3 );
+    light.position.x = 0;
+    light.position.y = 250;
+    light.position.z = 0;
+    scene.add( light );
+
+    // var sphereSize = 1;
+    // var pointLightHelper = new THREE.DirectionalLightHelper( light, sphereSize );
+    // scene.add( pointLightHelper );
 
     var ambient = new THREE.AmbientLight( 0x404040 ); // soft white light
     scene.add( ambient );
@@ -197,19 +213,19 @@ function setupAnimations(){
 }
 
 function updateClipList(clip, index){
-    console.log(index, clip.name);
+    //console.log(index, clip.name);
     clips.splice(index, 0, clip);   // insert object
     //console.log(clips);
 }
 
 function nextStep(){
-    console.log(clips);
+    //console.log(clips);
 
     // play idle and blinking first
     mixer.clipAction(clips[0]).play();  // play blinking and idle
     mixer.clipAction(clips[1]).play();
 
-    console.log("playing");
+    //console.log("started");
 }
 
 function onWindowResize() {
@@ -217,17 +233,50 @@ function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
+    fpCamera.aspect = window.innerWidth / window.innerHeight;
+    fpCamera.updateProjectionMatrix();
+
     renderer.setSize( window.innerWidth, window.innerHeight );
 
 }
 
-function handleKeyDown(event) {
-    if (event.keyCode == 66) { //66 is "b"
-        window.isBDown = true;
-    }
-}
+// WE CAN EITHER USE THE KEYBOARD FOR TESTING
+// function handleKeyDown(event) {
+//     if (event.keyCode == 66) { //66 is "b"
+//         window.isBDown = true;
+//     }
+//
+//     if(event.keyCode == 86){
+//         if(firstPerson) firstPerson = false;
+//         else firstPerson = true;
+//     }
+// }
+//
+// window.addEventListener('keydown', handleKeyDown, false);
 
-window.addEventListener('keydown', handleKeyDown, false);
+
+// OR WE CAN USE ONSCREEN BUTTONS
+$('#swap-camera').on('click', function() {
+    firstPerson = !firstPerson;
+});
+
+$('#start-pause-play').on('click', function() {
+
+    if (this.innerHTML == 'start') { this.innerHTML = 'pause'; started = true; }
+    else {
+        paused = !paused;
+        if (this.innerHTML == 'pause') this.innerHTML = 'play';
+        else this.innerHTML = 'pause';
+    }
+    // remember that on first click we make 'cancel' visible
+    document.getElementById('cancel').style.visibility = 'visible';
+});
+
+$('#cancel').on('click', function() {
+    cancelled = true;
+    this.style.visibility = 'hidden';
+    //paused = !paused;
+});
 
 function playAnimationSequence(){
 
@@ -248,7 +297,7 @@ function playAnimationSequence(){
     if(continuousStep){
         if(urls.length > 3) {  // if we only have to play 1 animation, we skip the middle step
             if (mixer.clipAction(clips[fadeCounter]).time > (clips[fadeCounter].duration - 0.1)) {
-                console.log("at continuous step", fadeCounter);
+                //console.log("at continuous step", fadeCounter);
                 mixer.clipAction(clips[fadeCounter]).paused = true;  // pause current clip
                 // set up next clip
                 mixer.clipAction(clips[fadeCounter + 1]).setLoop(THREE.LoopOnce);
@@ -279,6 +328,7 @@ function playAnimationSequence(){
             mixer.clipAction(clips[fadeCounter]).crossFadeTo(mixer.clipAction(clips[1]), 0.6, false);
 
             finalStep = false;
+            done = true; // this way we also set the start button back
         }
     }
 }
@@ -287,16 +337,44 @@ function animate() {
 
     requestAnimationFrame( animate );
 
-    if(window.isBDown){ // for testing, will normally be activated once the animation sequence has been formed
+    if(started){ // for testing, will normally be activated once the animation sequence has been formed
+        console.log('starting');
         fadeCounter = 1;
         firstStep = true;
-        window.isBDown = false;
+        started = false;    // avoid repeating this multiple times
     }
 
     playAnimationSequence();
 
     if(mixer) {mixer.update(clock.getDelta());
-        //console.log(mixer.clipAction(getClip(clips, 'idle')).time);
+
+        // should move all of this somewhere else
+        if(firstStep || continuousStep || finalStep) {
+            if (paused) {
+                mixer.clipAction(clips[0]).paused = true;      // also stop the blinking : will have to apply to all animations (facial expressions etc)
+                mixer.clipAction(clips[fadeCounter]).paused = true;
+            }
+            else {
+                mixer.clipAction(clips[0]).paused = false;      // put back blinking
+                mixer.clipAction(clips[fadeCounter]).paused = false;
+            }
+        }
+        if(cancelled){
+            firstStep = false;
+            continuousStep = false;
+            finalStep = true;
+            paused = false;     // stop the pause before going back to idle
+            cancelled = false;
+            done = true;
+        }
+        
+        if(done){
+            // set the first button back to start
+            document.getElementById('start-pause-play').innerHTML = 'start';
+            // hide the cancel button
+            document.getElementById('cancel').style.visibility = 'hidden';
+            done = false;
+        }
     }
 
     camera.lookAt(cameraTarget.position);
@@ -304,12 +382,15 @@ function animate() {
     render();
 
     stats.update();
-    //helper.update();
 
 }
 
 function render() {
 
-    renderer.render( scene, camera );
-
+    if(firstPerson) {
+        renderer.render(scene, fpCamera);
+    }
+    else{
+        renderer.render(scene, camera);
+    }
 }

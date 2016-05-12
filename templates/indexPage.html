@@ -10,20 +10,55 @@
             padding:0;
             margin:0;
             overflow:hidden;
-            font-family:georgia;
+            font-family:sans-serif;
             text-align:center;
         }
         h1 { }
         a { color:skyblue }
 
-        #stats { position: absolute; top:0; left: 0 }
+        #stats { position: absolute; top:0; right: 0 }
         #stats #fps { background: transparent !important }
         #stats #fps #fpsText { color: #000 !important }
         #stats #fps #fpsGraph { display: none }
+
+        #buttons {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+        .button {
+            background: #eee;
+            padding: 3px 5px;
+            margin: 5px;
+            cursor: pointer;
+            display: inline-block;
+            border: 1px solid #aaa;
+        }
+
+        #cancel {
+            visibility: hidden;
+        }
+
+        .log {
+            padding: 3px 5px;
+            margin: 5px;
+            display: inline-block;
+        }
+        .disabled {
+            color: #ccc;
+        }
+
     </style>
 </head>
 
 <body>
+
+<div id="buttons">
+    <div id="swap-camera" class="button">swap camera</div>
+    <div id="start-pause-play" class="button">start</div> <!-- first click starts the video, then switches between paused and playing -->
+    <div id="cancel" class="button">cancel</div>    <!-- used to cancel everything (back to idle) -->
+</div>
+
 <script src="../static/threejs/js/jquery.min.js"></script>
 
 <script src="../static/threejs/js/three.js"></script>
