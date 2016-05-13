@@ -25,11 +25,15 @@ def index():
 # Route that will process the AJAX request, sum up two
 # integer numbers (defaulted to zero) and return the
 # result as a proper JSON response (Content-Type, etc.)
-@app.route('/_add_numbers')
-def add_numbers():
-    a = request.args.get('a', 0, type=int)
-    b = request.args.get('b', 0, type=int)
-    return jsonify(result=a + b)
+@app.route('/_process_text')
+def processText():
+    text = request.args.get('input_text')
+    letters = list(text)
+
+    print(letters)
+    print(jsonify(letters))
+    # we process the text here for now
+    #return jsonify(result=a + b)
 
 if __name__ == '__main__':
     # app.run(

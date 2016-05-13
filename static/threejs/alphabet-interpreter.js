@@ -392,20 +392,33 @@ $('#swap-camera').on('click', function() {
 
 $('#start-pause-play').on('click', function() {
 
+    var text = '';
+
     if (this.innerHTML == 'start') {
-        this.innerHTML = 'pause';
-        // we should also do a check to see if the sentence is the same (we dont have to redo everything)
-        resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
-        tempUrl = ['A', 'B'];   // to be replaced with the result from python
-        urls = tempUrl;
-        started = true;
-        setupAnimations(tempUrl);
+
+        console.log("clicked start");
+
+        // get the text from the textbox and send it to python
+        $.getJSON('/_process_text', {
+            input_text: $('input[name="input_text"]').val()
+        }, function(data) {
+            //$("#result").text(data.result);
+            console.log(data);
+        });
+
+        // this.innerHTML = 'pause';
+        // // we should also do a check to see if the sentence is the same (we dont have to redo everything)
+        // resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
+        // tempUrl = ['A', 'B'];   // to be replaced with the result from python
+        // urls = tempUrl;
+        // started = true;
+        // setupAnimations(tempUrl);
     }
-    else {
-        paused = !paused;
-        if (this.innerHTML == 'pause') this.innerHTML = 'play';
-        else this.innerHTML = 'pause';
-    }
+    // else {
+    //     paused = !paused;
+    //     if (this.innerHTML == 'pause') this.innerHTML = 'play';
+    //     else this.innerHTML = 'pause';
+    // }
     // remember that on first click we make 'cancel' visible
     document.getElementById('cancel').style.visibility = 'visible';
 });
@@ -415,15 +428,3 @@ $('#cancel').on('click', function() {
     this.style.visibility = 'hidden';
     //paused = !paused;
 });
-
-// $(function() {
-//     $('#').bind('click', function() {
-//         $.getJSON('/_add_numbers', {
-//             a: $('input[name="a"]').val(),
-//             b: $('input[name="b"]').val()
-//         }, function(data) {
-//             $("#result").text(data.result);
-//         });
-//         return false;
-//     });
-// });
