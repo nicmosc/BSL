@@ -2,14 +2,16 @@ var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var container, stats;
 var camera, fpCamera, scene, renderer, controls, cameraTarget;
-var firstPerson, started, paused, cancelled, done = false;
+var firstPerson, started, displayTranslation, paused, cancelled, done = false;
 
 var skinnedMesh;
 
 var modelUrl = '../static/res/model/model.js'; // where the model is located (for local testing)
+var baseUrls = ['blinking', 'idle'];       // these are loaded along with the model at the beginning
+var urls = [];  // here will go all clips for the translation
 
 // animation stuff
-var mixer,clips, urls; // make them global for testing
+var mixer,clips; // make them global for testing
 
 var clock = new THREE.Clock();
 
@@ -164,32 +166,29 @@ function loadModel(materials){
 
     loader.load(modelUrl, function ( object ) {
 
-        for(var i = 0; i < object.children.length; i++) {   // there are two children in this test (body, eyes), now only 1 lol
+        skinnedMesh = new THREE.SkinnedMesh(object.children[0].geometry, new THREE.MeshFaceMaterial(materials[0]));
 
-            skinnedMesh = new THREE.SkinnedMesh(object.children[i].geometry, new THREE.MeshFaceMaterial(materials[i]));
+        scene.add(skinnedMesh);
 
-            scene.add(skinnedMesh);
+        //helper = new THREE.SkeletonHelper( skinnedMesh );
+        //helper.material.linewidth = 3;
+        //scene.add( helper );
 
-            helper = new THREE.SkeletonHelper( skinnedMesh );
-            helper.material.linewidth = 3;
-            //scene.add( helper );
+        mixer = new THREE.AnimationMixer(skinnedMesh);    // set up the mixer
 
-            setupAnimations();
-        }
+        setupAnimations(baseUrls);   // we initalise the base url
     });
 }
 
 // the next function is to test the concatenation/mixing
-function setupAnimations(){
-    urls = ['blinking', 'idle','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];  // array containing all animations required for the clip
-
-    mixer = new THREE.AnimationMixer(skinnedMesh);    // set up the mixer
+function setupAnimations(urlArray){
+    //urls = ['blinking', 'idle','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];  // array containing all animations required for the clip
 
     var counter = 0;
 
-    for(var i = 0; i < urls.length; i++){
+    for(var i = 0; i < urlArray.length; i++){
         (function(i) {
-            var url = '../static/res/animations/alphabet/' + urls[i] + '.js';  // (for local testing)
+            var url = '../static/res/animations/alphabet/' + urlArray[i] + '.js';  // (for local testing)
 
             $.getJSON(url, function (json) {
                 clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
@@ -198,8 +197,12 @@ function setupAnimations(){
 
                 updateClipList(clip, i);
 
-                if (counter == urls.length) {    // once we have loaded all the clips, go on to modify them9
-                    nextStep();
+                if (counter == urlArray.length) {    // once we have loaded all the clips, go on to modify them9
+                    if(!started) nextStep();
+                    else {
+                        console.log('done loading new', clips, urls);
+                        displayTranslation = true;
+                    }
                 }
             });
         })(i);
@@ -208,7 +211,14 @@ function setupAnimations(){
 
 function updateClipList(clip, index){
     //console.log(index, clip.name);
-    clips.splice(index, 0, clip);   // insert object
+    if(!started) {      // if we are still loading the initial animations
+        clips.splice(index, 0, clip);   // insert object
+        console.log(clips, index);
+    }
+    else{
+        clips.splice(index+2, 0, clip);   // insert object 2 indexes further
+        console.log(clips, index+2);
+    }
     //console.log(clips);
 }
 
@@ -248,29 +258,12 @@ function onWindowResize() {
 //
 // window.addEventListener('keydown', handleKeyDown, false);
 
-
 // OR WE CAN USE ONSCREEN BUTTONS
-$('#swap-camera').on('click', function() {
-    firstPerson = !firstPerson;
-});
 
-$('#start-pause-play').on('click', function() {
-
-    if (this.innerHTML == 'start') { this.innerHTML = 'pause'; started = true; }
-    else {
-        paused = !paused;
-        if (this.innerHTML == 'pause') this.innerHTML = 'play';
-        else this.innerHTML = 'pause';
-    }
-    // remember that on first click we make 'cancel' visible
-    document.getElementById('cancel').style.visibility = 'visible';
-});
-
-$('#cancel').on('click', function() {
-    cancelled = true;
-    this.style.visibility = 'hidden';
-    //paused = !paused;
-});
+function resetClipAndUrlArrays(){
+    urls = [];      // reset animations
+    clips.length = 2;   // remove all elements except the first two (idle and blinking)
+}
 
 function playAnimationSequence(){
 
@@ -289,7 +282,7 @@ function playAnimationSequence(){
     }
 
     if(continuousStep){
-        if(urls.length > 3) {  // if we only have to play 1 animation, we skip the middle step
+        if(urls.length > 1) {  // if we only have to play 1 animation, we skip the middle step
             if (mixer.clipAction(clips[fadeCounter]).time > (clips[fadeCounter].duration - 0.1)) {
                 //console.log("at continuous step", fadeCounter);
                 mixer.clipAction(clips[fadeCounter]).paused = true;  // pause current clip
@@ -299,7 +292,7 @@ function playAnimationSequence(){
                 mixer.clipAction(clips[fadeCounter + 1]).play();
                 mixer.clipAction(clips[fadeCounter]).crossFadeTo(mixer.clipAction(clips[fadeCounter + 1]), 0.6, false);
 
-                if (fadeCounter == urls.length - 2) {
+                if (fadeCounter == urls.length) {   // if we reached the end of the animations, go to final step
                     continuousStep = false;
                     finalStep = true;
                 }
@@ -331,11 +324,11 @@ function animate() {
 
     requestAnimationFrame( animate );
 
-    if(started){ // for testing, will normally be activated once the animation sequence has been formed
+    if(displayTranslation){ // for testing, will normally be activated once the animation sequence has been formed
         console.log('starting');
         fadeCounter = 1;
         firstStep = true;
-        started = false;    // avoid repeating this multiple times
+        displayTranslation = false;    // avoid repeating this multiple times
     }
 
     playAnimationSequence();
@@ -360,6 +353,7 @@ function animate() {
             paused = false;     // stop the pause before going back to idle
             cancelled = false;
             done = true;
+            started = false;
         }
         
         if(done){
@@ -368,6 +362,7 @@ function animate() {
             // hide the cancel button
             document.getElementById('cancel').style.visibility = 'hidden';
             done = false;
+            started = false;
         }
     }
 
@@ -388,3 +383,47 @@ function render() {
         renderer.render(scene, camera);
     }
 }
+
+/// MAIN PAGE RELATED STUFF
+
+$('#swap-camera').on('click', function() {
+    firstPerson = !firstPerson;
+});
+
+$('#start-pause-play').on('click', function() {
+
+    if (this.innerHTML == 'start') {
+        this.innerHTML = 'pause';
+        // we should also do a check to see if the sentence is the same (we dont have to redo everything)
+        resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
+        tempUrl = ['A', 'B'];   // to be replaced with the result from python
+        urls = tempUrl;
+        started = true;
+        setupAnimations(tempUrl);
+    }
+    else {
+        paused = !paused;
+        if (this.innerHTML == 'pause') this.innerHTML = 'play';
+        else this.innerHTML = 'pause';
+    }
+    // remember that on first click we make 'cancel' visible
+    document.getElementById('cancel').style.visibility = 'visible';
+});
+
+$('#cancel').on('click', function() {
+    cancelled = true;
+    this.style.visibility = 'hidden';
+    //paused = !paused;
+});
+
+// $(function() {
+//     $('#').bind('click', function() {
+//         $.getJSON('/_add_numbers', {
+//             a: $('input[name="a"]').val(),
+//             b: $('input[name="b"]').val()
+//         }, function(data) {
+//             $("#result").text(data.result);
+//         });
+//         return false;
+//     });
+// });
