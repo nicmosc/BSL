@@ -27,37 +27,12 @@ function init() {
     container = document.createElement( 'div' );
     document.body.appendChild( container );
 
-    // STANDARD CAMERA
-
-    camera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
-    camera.position.set(0, 5, 10 );
-    //camera.up.set(0,0,1);
-    cameraTarget = new THREE.Mesh( new THREE.CubeGeometry(0,0,0)); // so that the camera follows the head correctly
-    cameraTarget.position.y = 4;
-
-    controls = new THREE.OrbitControls( camera );
-    controls.minDistance = 7;   // reduce zooming options (so that we cannot see inside the model)
-    controls.maxDistance = 15;
-    controls.update();
-
-    // FIRST PERSON CAMERA
-
-    fpCamera = new THREE.PerspectiveCamera( 80, SCREEN_WIDTH / SCREEN_HEIGHT, 0.1, 10000);
-    fpCamera.position.set(0, 3.7, 0.15 );
-    fpCamera.lookAt(new THREE.Vector3(0,0,10));
-
     // SCENE
 
     scene = new THREE.Scene();
 
     // cameraHelper = new THREE.CameraHelper(fpCamera);
     // scene.add(cameraHelper);
-
-    // CONTROLS
-
-    controls = new THREE.OrbitControls( camera );
-    controls.maxPolarAngle = 0.9 * Math.PI / 2;
-    controls.enableZoom = false;
 
     // LIGHTS
 
@@ -113,12 +88,31 @@ function init() {
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
 
+    // STANDARD CAMERA
+
+    camera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
+    camera.position.set(0, 5, 10 );
+    //camera.up.set(0,0,1);
+    cameraTarget = new THREE.Mesh( new THREE.CubeGeometry(0,0,0)); // so that the camera follows the head correctly
+    cameraTarget.position.y = 4;
+
+    // FIRST PERSON CAMERA
+
+    fpCamera = new THREE.PerspectiveCamera( 80, SCREEN_WIDTH / SCREEN_HEIGHT, 0.1, 10000);
+    fpCamera.position.set(0, 3.7, 0.15 );
+    fpCamera.lookAt(new THREE.Vector3(0,0,10));
+
+    // CONTROLS
+
+    controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls.minDistance = 7;   // reduce zooming options (so that we cannot see inside the model)
+    controls.maxDistance = 15;
+    controls.update();
+
     // STATS
 
     stats = new Stats();
     container.appendChild( stats.domElement );
-
-
 
     // MODEL
     $.getJSON(modelUrl, function(json){

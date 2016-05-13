@@ -26,7 +26,7 @@
             top: 10px;
             left: 10px;
         }
-        .button {
+        .button, .textbox {
             background: #eee;
             padding: 3px 5px;
             margin: 5px;
@@ -57,6 +57,7 @@
     <div id="swap-camera" class="button">swap camera</div>
     <div id="start-pause-play" class="button">start</div> <!-- first click starts the video, then switches between paused and playing -->
     <div id="cancel" class="button">cancel</div>    <!-- used to cancel everything (back to idle) -->
+    <input id = "input-text" type="text" class = "textbox" size="20" name="a">
 </div>
 
 <script src="../static/threejs/js/jquery.min.js"></script>
@@ -99,6 +100,7 @@
 			}
 </script>
 
+<!-- here we choose which file we want to run -->
 <script src = ../static/threejs/alphabet-interpreter.js></script>
 
 </body>
