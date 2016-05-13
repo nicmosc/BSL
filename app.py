@@ -27,13 +27,13 @@ def index():
 # result as a proper JSON response (Content-Type, etc.)
 @app.route('/_process_text')
 def processText():
-    text = request.args.get('input_text')
-    letters = list(text)
+    text = request.args.get('input_text', '', type = str)
+    letters = list(text.upper())
 
     print(letters)
-    print(jsonify(letters))
+    #print(jsonify(letters))
     # we process the text here for now
-    #return jsonify(result=a + b)
+    return jsonify(result=letters)
 
 if __name__ == '__main__':
     # app.run(

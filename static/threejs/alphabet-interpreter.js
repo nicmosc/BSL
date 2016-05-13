@@ -213,11 +213,9 @@ function updateClipList(clip, index){
     //console.log(index, clip.name);
     if(!started) {      // if we are still loading the initial animations
         clips.splice(index, 0, clip);   // insert object
-        console.log(clips, index);
     }
     else{
         clips.splice(index+2, 0, clip);   // insert object 2 indexes further
-        console.log(clips, index+2);
     }
     //console.log(clips);
 }
@@ -287,6 +285,10 @@ function playAnimationSequence(){
                 //console.log("at continuous step", fadeCounter);
                 mixer.clipAction(clips[fadeCounter]).paused = true;  // pause current clip
                 // set up next clip
+                if(clips[fadeCounter].name == clips[fadeCounter+1].name){
+                    clips[fadeCounter+1].name += '_1';  // if the same letter repeats, we need to change its name
+                    console.log(clips[fadeCounter+1].name);
+                }
                 mixer.clipAction(clips[fadeCounter + 1]).setLoop(THREE.LoopOnce);
                 mixer.clipAction(clips[fadeCounter + 1]).reset();
                 mixer.clipAction(clips[fadeCounter + 1]).play();
@@ -403,22 +405,22 @@ $('#start-pause-play').on('click', function() {
             input_text: $('input[name="input_text"]').val()
         }, function(data) {
             //$("#result").text(data.result);
-            console.log(data);
-        });
+            console.log(data.result);
 
-        // this.innerHTML = 'pause';
-        // // we should also do a check to see if the sentence is the same (we dont have to redo everything)
-        // resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
-        // tempUrl = ['A', 'B'];   // to be replaced with the result from python
-        // urls = tempUrl;
-        // started = true;
-        // setupAnimations(tempUrl);
+            this.innerHTML = 'pause';
+            // we should also do a check to see if the sentence is the same (we dont have to redo everything)
+            resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
+            urls = data.result;           // change this back!!!!
+            //urls = ['L','L','L', 'L'];
+            started = true;
+            setupAnimations(urls);
+        });
     }
-    // else {
-    //     paused = !paused;
-    //     if (this.innerHTML == 'pause') this.innerHTML = 'play';
-    //     else this.innerHTML = 'pause';
-    // }
+    else {
+        paused = !paused;
+        if (this.innerHTML == 'pause') this.innerHTML = 'play';
+        else this.innerHTML = 'pause';
+    }
     // remember that on first click we make 'cancel' visible
     document.getElementById('cancel').style.visibility = 'visible';
 });
