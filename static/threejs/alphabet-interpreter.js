@@ -400,14 +400,13 @@ $('#start-pause-play').on('click', function() {
 
         console.log("clicked start");
 
+        this.innerHTML = 'pause';
         // get the text from the textbox and send it to python
         $.getJSON('/_process_text', {
             input_text: $('input[name="input_text"]').val()
         }, function(data) {
             //$("#result").text(data.result);
             console.log(data.result);
-
-            this.innerHTML = 'pause';
             // we should also do a check to see if the sentence is the same (we dont have to redo everything)
 
             if(JSON.stringify(data.result) != JSON.stringify(urls)) {
