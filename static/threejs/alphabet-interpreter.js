@@ -409,11 +409,18 @@ $('#start-pause-play').on('click', function() {
 
             this.innerHTML = 'pause';
             // we should also do a check to see if the sentence is the same (we dont have to redo everything)
-            resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
-            urls = data.result;           // change this back!!!!
-            //urls = ['L','L','L', 'L'];
-            started = true;
-            setupAnimations(urls);
+
+            if(JSON.stringify(data.result) != JSON.stringify(urls)) {
+                console.log(data.result, urls);
+                resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
+                urls = data.result;
+                started = true;
+                setupAnimations(urls);
+            }
+            else{
+                displayTranslation = true;
+                console.log("text is still the same");
+            }
         });
     }
     else {
