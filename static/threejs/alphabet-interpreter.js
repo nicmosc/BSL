@@ -109,6 +109,8 @@ function init() {
     controls = new THREE.OrbitControls( camera, renderer.domElement );
     controls.minDistance = 7;   // reduce zooming options (so that we cannot see inside the model)
     controls.maxDistance = 15;
+    controls.maxPolarAngle = 0.9 * Math.PI / 2;
+
     controls.update();
 
     // STATS

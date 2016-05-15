@@ -36,14 +36,14 @@ def stemming():		#i.e. removing suffixes from words (to extract the "root" stem)
 
 def lemmatization():	# i.e. finding the root word -> this will be very useful to find files for words
 	lemmatizer = nltk.stem.WordNetLemmatizer()
-	root = lemmatizer.lemmatize('cooking', pos = 'v')	# the pos tags dont work directly i.e. VB, VBG VBP dont work
+	root = lemmatizer.lemmatize('cooking', pos = 'v')	# the pos tags dont work directly i.e. VB, VBG VBP dont work (only works with n and v)
 	# if we dont specify the pos it defaults to noun
 	print(root)
 
 
 start = time.time()
 
-tag()
+#tag()
 lemmatization()
 
 end = time.time()
