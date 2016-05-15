@@ -132,30 +132,26 @@ function init() {
         /** EVERYTHING ELSE BELOW WORKS FINE **/
 
         // first load all the materials needed (as ObjectLoader does not support multiple materials)
-        var modelMaterials = [];
-        for(var i = 0; i < json.geometries.length; i++){
 
-            var materials = [];
+        var materials = [];
 
-            for(var mat = 0; mat < json.geometries[i].materials.length; mat++){
-                var name = json.geometries[i].materials[mat].DbgName;
+        for(var mat = 0; mat < json.geometries[0].materials.length; mat++){
+            var name = json.geometries[0].materials[mat].DbgName;
 
-                var material;
-                for(var id in threeMaterials){
-                    if(threeMaterials[id].name == name){
-                        material = threeMaterials[id];
-                        break;
-                    }
+            var material;
+            for(var id in threeMaterials){
+                if(threeMaterials[id].name == name){
+                    material = threeMaterials[id];
+                    break;
                 }
-
-                materials.push(new THREE.MeshPhongMaterial(material));
-                materials[mat].skinning = true;
-                materials[mat].side = THREE.DoubleSide; // make all faces double sided (messes up for some)
             }
 
-            modelMaterials.push(materials);
+            materials.push(new THREE.MeshPhongMaterial(material));
+            materials[mat].skinning = true;
+            materials[mat].side = THREE.DoubleSide; // make all faces double sided (messes up for some)
         }
-        loadModel(modelMaterials);
+
+        loadModel(materials);
     });
 
     window.addEventListener( 'resize', onWindowResize, false );
@@ -168,7 +164,7 @@ function loadModel(materials){
 
     loader.load(modelUrl, function ( object ) {
 
-        skinnedMesh = new THREE.SkinnedMesh(object.children[0].geometry, new THREE.MeshFaceMaterial(materials[0]));
+        skinnedMesh = new THREE.SkinnedMesh(object.children[0].geometry, new THREE.MeshFaceMaterial(materials));
 
         scene.add(skinnedMesh);
 
