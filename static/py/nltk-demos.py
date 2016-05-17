@@ -20,15 +20,18 @@ def CST():	# constituent structure tree
 
 	grammar = "NP: {<DT>?<JJ>*<NN>}"	#an optional determiner (DT) followed by any number of adjectives (JJ) and then a noun (NN)
 
-	chunkParser = nltk.RegexpParser(grammar)
+	chunkParser = nltk.RegexpParser(nltk.grammar)
 	result = chunkParser.parse(tokens)
 	print(result)
 	result.draw()
 
 
 def chartParsing():
-	nltk.app.chartparser()
+	sent = "Mary saw a dog".split()
 
+def stanfordParsing():
+	sent =  "The little yellow dow barked at the cat"
+	#tree = nltk.parse
 
 def stemming():		#i.e. removing suffixes from words (to extract the "root" stem)
 	stemmer = nltk.stem.PorterStemmer()
@@ -44,7 +47,8 @@ def lemmatization():	# i.e. finding the root word -> this will be very useful to
 start = time.time()
 
 #tag()
-lemmatization()
+#lemmatization()
+chartParsing()
 
 end = time.time()
 print(end-start)

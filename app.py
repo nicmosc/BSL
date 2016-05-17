@@ -10,6 +10,7 @@
 # using the request object from flask. jsonigy is required
 # to send JSON as a response of a request
 from flask import Flask, render_template, request, jsonify
+import json
 
 # Initialize the Flask application
 app = Flask(__name__)
@@ -30,10 +31,18 @@ def processText():
     text = request.args.get('input_text', '', type = str)
     letters = list(text.upper())
 
-    print(letters)
+    data = []   # will contain the signs/letters with their path
+
+    for letter in letters:
+        obj = {}
+        obj['name'] = letter
+        obj['path'] = 'alphabet'    # specific to this program (will have to differentiate facial and more)
+        data.append(json.dumps(obj))
+
+    print(letters, data)
     #print(jsonify(letters))
     # we process the text here for now
-    return jsonify(result=letters)
+    return jsonify(result=data)
 
 if __name__ == '__main__':
     # app.run(

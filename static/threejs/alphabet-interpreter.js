@@ -7,7 +7,7 @@ var firstPerson, started, displayTranslation, paused, cancelled, done = false;
 var skinnedMesh;
 
 var modelUrl = '../static/res/model/model.js'; // where the model is located (for local testing)
-var baseUrls = ['blinking', 'idle'];       // these are loaded along with the model at the beginning
+var baseUrls = [{name:'blinking', path:'init'}, {name:'idle', path:'init'}];       // these are loaded along with the model at the beginning
 var urls = [];  // here will go all clips for the translation
 
 // animation stuff
@@ -186,7 +186,8 @@ function setupAnimations(urlArray){
 
     for(var i = 0; i < urlArray.length; i++){
         (function(i) {
-            var url = '../static/res/animations/alphabet/' + urlArray[i] + '.js';  // (for local testing)
+            console.log(urlArray[i].name);
+            var url = '../static/res/animations/' + urlArray[i].path + '/' + urlArray[i].name + '.js';  // (for local testing)
 
             $.getJSON(url, function (json) {
                 clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
@@ -403,14 +404,14 @@ $('#start-pause-play').on('click', function() {
         $.getJSON('/_process_text', {
             input_text: $('input[name="input_text"]').val()
         }, function(data) {
-            //$("#result").text(data.result);
-            console.log(data.result);
-            // we should also do a check to see if the sentence is the same (we dont have to redo everything)
 
             if(JSON.stringify(data.result) != JSON.stringify(urls)) {
                 console.log(data.result, urls);
                 resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
-                urls = data.result;
+                for(i = 0; i < data.result.length; i++){
+                    urls.push(JSON.parse(data.result[i]));  // convert json object from string representation to json object
+                }
+                console.log(urls);
                 started = true;
                 setupAnimations(urls);
             }
