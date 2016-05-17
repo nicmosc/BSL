@@ -2,18 +2,264 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b97f7e79-b30a-4b61-b344-9ce904b8692f" name="Default" comment="">
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/res/animations/alphabet/blinking.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/res/animations/alphabet/idle.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/res/animations/blinking.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/res/animations/come-here.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/res/animations/hello.js" afterPath="" />
-      <change type="DELETED" beforePath="$PROJECT_DIR$/static/res/animations/idle.js" afterPath="" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/res/model/OJO UNO.png" afterPath="$PROJECT_DIR$/static/res/model/OJO UNO.png" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/res/model/OLLL1.png" afterPath="$PROJECT_DIR$/static/res/model/OLLL1.png" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/AnimationClipCreator.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/BlendCharacter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/BlendCharacterGui.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/BufferGeometryUtils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/Car.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/Cloth.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/CurveExtras.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/DAT-GUI.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/Detector.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/GPUParticleSystem.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/Gyroscope.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/ImprovedNoise.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/MD2Character.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/MD2CharacterComplex.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/MarchingCubes.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/Mirror.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/MorphAnimMesh.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/MorphAnimation.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/Ocean.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/Octree.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/PRNG.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/ParametricGeometries.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/ShaderGodRays.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/ShaderSkin.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/ShaderTerrain.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/ShaderToon.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/SimplexNoise.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/SimulationRenderer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/SkyShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/TimelinerController.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/TypedArrayUtils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/UCSCharacter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/WaterShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/animation/CCDIKSolver.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/animation/MMDPhysics.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/cameras/CinematicCamera.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/cameras/CombinedCamera.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/DeviceOrientationControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/DragControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/EditorControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/FirstPersonControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/FlyControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/MouseControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/OrbitControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/OrthographicTrackballControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/PointerLockControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/TrackballControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/TransformControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/controls/VRControls.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/crossfade/gui.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/crossfade/scenes.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/crossfade/transition.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/curves/NURBSCurve.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/curves/NURBSSurface.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/curves/NURBSUtils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/effects/AnaglyphEffect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/effects/AsciiEffect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/effects/CardboardEffect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/effects/ParallaxBarrierEffect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/effects/PeppersGhostEffect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/effects/StereoEffect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/effects/VREffect.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/exporters/OBJExporter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/exporters/STLBinaryExporter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/exporters/STLExporter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/exporters/TypedGeometryExporter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/geometries/ConvexGeometry.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/geometries/DecalGeometry.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/geometries/TeapotBufferGeometry.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/geometries/hilbert2D.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/geometries/hilbert3D.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/jquery.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/jquery.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/ammo.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/charsetencoder.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/dat.gui.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/earcut.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/jszip.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/msgpack-js.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/photons.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/pnltri.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/require.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/stats.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/system.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/timeliner_gui.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/libs/tween.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/3MFLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/AMFLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/AWDLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/AssimpJSONLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/BabylonLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/BinaryLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ColladaLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ColladaLoader2.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/DDSLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/FBXLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/KMZLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/MD2Loader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/MMDLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/MTLLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/OBJLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/PCDLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/PDBLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/PLYLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/PVRLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/PlayCanvasLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/RGBELoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/STLLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/SVGLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/TGALoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/UTF8Loader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/VRMLLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/VTKLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/collada/Animation.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/collada/AnimationHandler.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/collada/KeyFrameAnimation.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ctm/CTMLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ctm/CTMWorker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ctm/ctm.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ctm/license/OpenCTM.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ctm/license/js-lzma.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ctm/license/js-openctm.txt" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/ctm/lzma.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/deprecated/SceneLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/gltf/glTF-parser.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/gltf/glTFAnimation.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/gltf/glTFLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/gltf/glTFLoaderUtils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/sea3d/SEA3D.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/sea3d/SEA3DDeflate.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/sea3d/SEA3DLZMA.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/sea3d/SEA3DLegacy.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/loaders/sea3d/SEA3DLoader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/materials/ShadowMaterial.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/math/ColorConverter.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/math/Lut.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/modifiers/ExplodeModifier.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/modifiers/SubdivisionModifier.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/modifiers/TessellateModifier.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/BuilderNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/ConstNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/FunctionCallNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/FunctionNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/GLNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/InputNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/NodeLib.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/NodeMaterial.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/RawNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/TempNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/accessors/CameraNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/accessors/ColorsNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/accessors/LightNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/accessors/NormalNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/accessors/PositionNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/accessors/ReflectNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/accessors/ScreenUVNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/accessors/UVNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/ColorNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/CubeTextureNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/FloatNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/IntNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/ScreenNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/TextureNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/Vector2Node.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/Vector3Node.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/inputs/Vector4Node.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/materials/PhongNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/materials/PhongNodeMaterial.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/materials/StandardNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/materials/StandardNodeMaterial.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/math/Math1Node.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/math/Math2Node.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/math/Math3Node.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/math/OperatorNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/postprocessing/NodePass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/ColorAdjustmentNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/JoinNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/LuminanceNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/NoiseNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/NormalMapNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/ResolutionNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/RoughnessToBlinnExponentNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/SwitchNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/TimerNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/nodes/utils/VelocityNode.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/objects/ShadowMesh.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/AdaptiveToneMappingPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/BloomPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/BokehPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/ClearPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/DotScreenPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/EffectComposer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/FilmPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/GlitchPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/MaskPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/RenderPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/SMAAPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/SavePass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/ShaderPass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/postprocessing/TexturePass.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/CSS2DRenderer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/CSS3DRenderer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/CSS3DStereoRenderer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/CanvasRenderer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/Projector.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/RaytracingRenderer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/RaytracingWorker.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/SVGRenderer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/renderers/SoftwareRenderer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/BasicShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/BleachBypassShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/BlendShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/BokehShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/BokehShader2.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/BrightnessContrastShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/ColorCorrectionShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/ColorifyShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/ConvolutionShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/CopyShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/DOFMipMapShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/DigitalGlitch.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/DotScreenShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/EdgeShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/EdgeShader2.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/FXAAShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/FilmShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/FocusShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/FresnelShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/GammaCorrectionShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/HorizontalBlurShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/HorizontalTiltShiftShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/HueSaturationShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/KaleidoShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/LuminosityShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/MirrorShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/NormalMapShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/OceanShaders.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/ParallaxShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/RGBShiftShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/SMAAShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/SSAOShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/SepiaShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/TechnicolorShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/ToneMapShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/TriangleBlurShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/UnpackDepthRGBAShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/VerticalBlurShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/VerticalTiltShiftShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/shaders/VignetteShader.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/three.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/three.min.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/utils/GeometryUtils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/utils/ImageUtils.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/utils/ShadowMapViewer.js" afterPath="" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/static/threejs/js/utils/UVsDebug.js" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app.py" afterPath="$PROJECT_DIR$/app.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/py/nltk-demos.py" afterPath="$PROJECT_DIR$/static/py/nltk-demos.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/threejs/alphabet-interpreter.js" afterPath="$PROJECT_DIR$/static/threejs/alphabet-interpreter.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/indexPage.html" afterPath="$PROJECT_DIR$/templates/indexPage.html" />
     </list>
     <ignored path="BSL.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -28,8 +274,10 @@
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
     <SUITE FILE_PATH="coverage/BSL$html_scraper.coverage" NAME="html-scraper Coverage Results" MODIFIED="1463343280536" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
-    <SUITE FILE_PATH="coverage/BSL$tokeniser.coverage" NAME="tokeniser Coverage Results" MODIFIED="1463416349620" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
-    <SUITE FILE_PATH="coverage/BSL$BSL.coverage" NAME="BSL Coverage Results" MODIFIED="1463491889499" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/BSL$client.coverage" NAME="client Coverage Results" MODIFIED="1463497202844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/corenlp" />
+    <SUITE FILE_PATH="coverage/BSL$tokeniser.coverage" NAME="tokeniser Coverage Results" MODIFIED="1463510015810" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
+    <SUITE FILE_PATH="coverage/BSL$BSL.coverage" NAME="BSL Coverage Results" MODIFIED="1463510232583" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/BSL$corenlp.coverage" NAME="corenlp Coverage Results" MODIFIED="1463497208357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/corenlp" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
@@ -52,21 +300,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="alphabet-interpreter.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="alphabet-interpreter.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/threejs/alphabet-interpreter.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
-              <caret line="411" column="124" selection-start-line="411" selection-start-column="124" selection-end-line="411" selection-end-column="124" />
+            <state relative-caret-position="-3195">
+              <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="indexPage.html" pinned="false" current-in-tab="false">
+      <file leaf-file-name="indexPage.html" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/templates/indexPage.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="19" column="58" selection-start-line="19" selection-start-column="58" selection-end-line="19" selection-end-column="58" />
+            <state relative-caret-position="200">
+              <caret line="101" column="0" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -75,8 +323,8 @@
       <file leaf-file-name="nltk-demos.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/py/nltk-demos.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="510">
-              <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
+            <state relative-caret-position="-556">
+              <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
               <folding>
                 <element signature="e#0#11#0" expanded="true" />
               </folding>
@@ -100,12 +348,12 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/templates/index.html" />
-        <option value="$PROJECT_DIR$/templates/indexPage.html" />
         <option value="$PROJECT_DIR$/static/py/tokeniser.py" />
         <option value="$PROJECT_DIR$/static/py/html-scraper.py" />
-        <option value="$PROJECT_DIR$/static/py/nltk-demos.py" />
         <option value="$PROJECT_DIR$/app.py" />
         <option value="$PROJECT_DIR$/static/threejs/alphabet-interpreter.js" />
+        <option value="$PROJECT_DIR$/static/py/nltk-demos.py" />
+        <option value="$PROJECT_DIR$/templates/indexPage.html" />
       </list>
     </option>
   </component>
@@ -116,9 +364,9 @@
     <sorting>DEFINITION_ORDER</sorting>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="640" />
+    <option name="x" value="639" />
     <option name="y" value="23" />
-    <option name="width" value="640" />
+    <option name="width" value="641" />
     <option name="height" value="708" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -213,6 +461,10 @@
               <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -232,6 +484,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BSL" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BSL" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
         </subPane>
       </pane>
       <pane id="Scope" />
@@ -245,12 +511,6 @@
     <property name="settings.editor.splitter.proportion" value="0.2" />
   </component>
   <component name="RunManager" selected="Python.BSL">
-    <configuration default="false" name="index.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/BSL/templates/index.html">
-      <method />
-    </configuration>
-    <configuration default="false" name="mainpage.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/BSL/templates/mainpage.html">
-      <method />
-    </configuration>
     <configuration default="false" name="indexPage.html" type="JavascriptDebugType" factoryName="JavaScript Debug" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/BSL/templates/indexPage.html">
       <method />
     </configuration>
@@ -286,6 +546,42 @@
       <module name="BSL" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/static/py/html-scraper.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="client" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/corenlp" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="BSL" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/corenlp/client.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <method />
+    </configuration>
+    <configuration default="false" name="corenlp" type="PythonConfigurationType" factoryName="Python" temporary="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/corenlp" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="BSL" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/corenlp/corenlp.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <method />
@@ -518,19 +814,19 @@
     </configuration>
     <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Python.BSL" />
-      <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
-      <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.mainpage.html" />
-      <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.indexPage.html" />
-      <item index="4" class="java.lang.String" itemvalue="Python.tokeniser" />
-      <item index="5" class="java.lang.String" itemvalue="Python.html-scraper" />
+      <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.indexPage.html" />
+      <item index="2" class="java.lang.String" itemvalue="Python.tokeniser" />
+      <item index="3" class="java.lang.String" itemvalue="Python.html-scraper" />
+      <item index="4" class="java.lang.String" itemvalue="Python.client" />
+      <item index="5" class="java.lang.String" itemvalue="Python.corenlp" />
     </list>
     <recent_temporary>
       <list size="5">
         <item index="0" class="java.lang.String" itemvalue="Python.tokeniser" />
-        <item index="1" class="java.lang.String" itemvalue="JavaScript Debug.indexPage.html" />
-        <item index="2" class="java.lang.String" itemvalue="Python.html-scraper" />
-        <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.mainpage.html" />
-        <item index="4" class="java.lang.String" itemvalue="JavaScript Debug.index.html" />
+        <item index="1" class="java.lang.String" itemvalue="Python.corenlp" />
+        <item index="2" class="java.lang.String" itemvalue="Python.client" />
+        <item index="3" class="java.lang.String" itemvalue="JavaScript Debug.indexPage.html" />
+        <item index="4" class="java.lang.String" itemvalue="Python.html-scraper" />
       </list>
     </recent_temporary>
   </component>
@@ -551,16 +847,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="640" y="23" width="640" height="708" extended-state="0" />
-    <editor active="true" />
+    <frame x="639" y="23" width="641" height="708" extended-state="0" />
+    <editor active="false" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.0" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.2776911" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3255086" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3004695" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
@@ -764,24 +1060,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/templates/indexPage.html">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="19" column="58" selection-start-line="19" selection-start-column="58" selection-end-line="19" selection-end-column="58" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/static/py/nltk-demos.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="510">
-          <caret line="34" column="0" selection-start-line="34" selection-start-column="0" selection-end-line="34" selection-end-column="0" />
-          <folding>
-            <element signature="e#0#11#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/py/html-scraper.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="135">
@@ -800,10 +1078,68 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/corenlp/corenlp.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="28" column="14" selection-start-line="28" selection-start-column="14" selection-end-line="28" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/corenlp/client.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="20" column="0" selection-start-line="20" selection-start-column="0" selection-end-line="20" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stanford_parser/__init__.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/stanford_parser/parser.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="105">
+          <caret line="10" column="0" selection-start-line="10" selection-start-column="0" selection-end-line="10" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/py/stanford.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="97">
+          <caret line="426" column="25" selection-start-line="426" selection-start-column="25" selection-end-line="426" selection-end-column="25" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/py/nltk-demos.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-556">
+          <caret line="42" column="27" selection-start-line="42" selection-start-column="27" selection-end-line="42" selection-end-column="27" />
+          <folding>
+            <element signature="e#0#11#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/static/threejs/alphabet-interpreter.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="411" column="124" selection-start-line="411" selection-start-column="124" selection-end-line="411" selection-end-column="124" />
+        <state relative-caret-position="-3195">
+          <caret line="4" column="14" selection-start-line="4" selection-start-column="14" selection-end-line="4" selection-end-column="14" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/templates/indexPage.html">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="200">
+          <caret line="101" column="0" selection-start-line="101" selection-start-column="0" selection-end-line="101" selection-end-column="0" />
           <folding />
         </state>
       </provider>
