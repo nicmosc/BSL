@@ -26,11 +26,6 @@ class Parser:
             # set up necessary variables for local stanford parser
             os.environ['STANFORD_PARSER'] = '../lib/stanford-parser-full'
             os.environ['STANFORD_MODELS'] = '../lib/stanford-parser-full'
-            #os.environ['CLASSPATH'] = '../lib/stanford-parser-full'
-
-            # set up pos tagger
-            #self.tagger = StanfordPOSTagger(model_filename='../lib/stanford-parser-full/english-left3words-distsim.tagger',
-                                            #path_to_jar='../lib/stanford-parser-full/stanford-postagger.jar')
 
             # set up tree parser
             self.parser = StanfordParser()
@@ -51,14 +46,14 @@ class Parser:
 
             soup = BeautifulSoup(r.text, "html.parser")
 
-            tagging = ' '.join(soup.find("div", {"class": "parserOutputMonospace"}).text.split()).encode('ascii', 'ignore')
+            tagging = ' '.join(soup.find("div", {"class": "parserOutputMonospace"}).text.split())#.encode('ascii', 'ignore')
 
             parseTree = ' '.join(soup.find_all("pre", {"class": "spacingFree"})[0].text.split())
             parseTree = nltk.Tree.fromstring(parseTree)
 
             #ptree = ParentedTree.fromstring(parseTree)
 
-            dependencies = soup.find_all("pre", {"class": "spacingFree"})[1].text.encode('ascii', 'ignore').split('\n')
+            dependencies = soup.find_all("pre", {"class": "spacingFree"})[1].text.split('\n')
 
             return [tagging, parseTree, dependencies]   # return complete analysis
 
@@ -90,13 +85,14 @@ def triples_alt(dependency, node=None):
     """
     if not node:
         node = dependency.root
-        yield 'root' + '(' + 'ROOT-0, ' + node['word'].encode('ascii', 'ignore') + '-' + str(node['address']) + ')'
+        #yield 'root' + '(' + 'ROOT-0, ' + node['word'].encode('ascii', 'ignore') + '-' + str(node['address']) + ')'
+        yield 'root' + '(' + 'ROOT-0, ' + node['word'] + '-' + str(node['address']) + ')'
 
-    head = node['word'].encode('ascii', 'ignore') + '-' + str(node['address'])
+    #head = node['word'].encode('ascii', 'ignore') + '-' + str(node['address'])
+    head = node['word'] + '-' + str(node['address'])
     for i in sorted(chain.from_iterable(node['deps'].values())):
         dep = dependency.get_by_address(i)
-        yield dep['rel'].encode('ascii', 'ignore') + '(' + head + ', ' + dep['word'].encode('ascii',
-                                                                                           'ignore') + '-' + str(
-            dep['address']) + ')'
+        #yield dep['rel'].encode('ascii', 'ignore') + '(' + head + ', ' + dep['word'].encode('ascii', 'ignore') + '-' + str(dep['address']) + ')'
+        yield dep['rel'] + '(' + head + ', ' + dep['word'] + '-' + str(dep['address']) + ')'
         for triple in triples_alt(dependency, node=dep):
             yield triple
