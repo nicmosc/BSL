@@ -19,6 +19,8 @@ var clock = new THREE.Clock();
 var sorted, firstStep, continuousStep, finalStep = false;
 var fadeCounter = 1;
 
+var tween1, tween2;
+
 init();
 animate();
 
@@ -220,13 +222,11 @@ function updateClipList(clip, index){
 }
 
 function nextStep(){
-    //console.log(clips);
+    console.log(mixer.clipAction(clips[1]));
 
     // play idle and blinking first
     mixer.clipAction(clips[0]).play();  // play blinking and idle
     mixer.clipAction(clips[1]).play();
-
-    //console.log("started");
 }
 
 function onWindowResize() {
@@ -242,18 +242,13 @@ function onWindowResize() {
 }
 
 // WE CAN EITHER USE THE KEYBOARD FOR TESTING
-// function handleKeyDown(event) {
-//     if (event.keyCode == 66) { //66 is "b"
-//         window.isBDown = true;
-//     }
-//
-//     if(event.keyCode == 86){
-//         if(firstPerson) firstPerson = false;
-//         else firstPerson = true;
-//     }
-// }
-//
-// window.addEventListener('keydown', handleKeyDown, false);
+function handleKeyDown(event) {
+    if (event.keyCode == 66) { //66 is "b"
+        console.log("Press");
+    }
+}
+
+window.addEventListener('keydown', handleKeyDown, false);
 
 // OR WE CAN USE ONSCREEN BUTTONS
 
@@ -272,6 +267,17 @@ function playAnimationSequence(){
         mixer.clipAction(clips[fadeCounter+1]).reset();
         mixer.clipAction(clips[fadeCounter+1]).play();
         mixer.clipAction(clips[fadeCounter]).crossFadeTo(mixer.clipAction(clips[fadeCounter+1]), 0.6, false);
+
+        // testing some stuff
+        // let us pretend this animation is IK - all directional verbs are handled as IK -> we give a start and end pos
+        // the only thing that is animated is the hand i.e. the fingers
+        // the IK end effector is the wrist and last bone is the shoulder --> we want to apply modifications to those bones
+        // only
+
+        // timescale and weight need to be set with clipaction, length i.e. for hand configurations needs to be set earlier
+
+        //console.log(skinnedMesh);
+        tweenTest();
 
         fadeCounter++;
         firstStep = false;
@@ -309,14 +315,14 @@ function playAnimationSequence(){
 
     /** final step **/
     if(finalStep){
-        if(mixer.clipAction(clips[fadeCounter]).time > (clips[fadeCounter].duration-0.1)) { // this line is identical
+        if (mixer.clipAction(clips[fadeCounter]).time > (clips[fadeCounter].duration - 0.1)) { // this line is identical
             console.log("at final step");
             mixer.clipAction(clips[fadeCounter]).paused = true;
             mixer.clipAction(clips[1]).reset();     // assuming idle is the second clip ALWAYS
             mixer.clipAction(clips[fadeCounter]).crossFadeTo(mixer.clipAction(clips[1]), 0.6, false);
 
             finalStep = false;
-            done = true; // this way we also set the start button back
+            done = true; // this way we also set the start button back}
         }
     }
 }
@@ -334,7 +340,9 @@ function animate() {
 
     playAnimationSequence();
 
-    if(mixer) {mixer.update(clock.getDelta());
+    if(mixer) {
+
+        mixer.update(clock.getDelta());
 
         // should move all of this somewhere else
         if(firstStep || continuousStep || finalStep) {
@@ -372,6 +380,7 @@ function animate() {
     render();
 
     stats.update();
+    TWEEN.update();
 
 }
 
@@ -383,6 +392,33 @@ function render() {
     else{
         renderer.render(scene, camera);
     }
+}
+
+function tweenTest(){
+    var angles = {x1: skinnedMesh.skeleton.bones[43].rotation.x, y1: skinnedMesh.skeleton.bones[43].rotation.y, z1: skinnedMesh.skeleton.bones[43].rotation.z,
+                x2: skinnedMesh.skeleton.bones[44].rotation.x, y2: skinnedMesh.skeleton.bones[44].rotation.y, z2: skinnedMesh.skeleton.bones[44].rotation.z};
+
+    // THIS IS ME
+    tween1 = new TWEEN.Tween(angles)
+        .to({y1: Math.PI/6, x1: Math.PI/6, z1: -0.5, y2: Math.PI/2}, 200)
+        .onUpdate(function(){
+            skinnedMesh.skeleton.bones[43].setRotationFromEuler(new THREE.Euler(this.x1,this.y1,this.z1,'XYZ')); // for upper arm
+            skinnedMesh.skeleton.bones[44].setRotationFromEuler(new THREE.Euler(this.x2,this.y2,this.z2,'XYZ')); // for lower arm
+        }).easing(TWEEN.Easing.Quadratic.InOut);
+
+    // THIS IS YOU
+    tween2 = new TWEEN.Tween(angles)
+        .to({x1: Math.PI/3, z1: -Math.PI/2, y2: Math.PI/6}, 200)
+        .onUpdate(function(){
+            skinnedMesh.skeleton.bones[43].setRotationFromEuler(new THREE.Euler(this.x1,this.y1,this.z1,'XYZ'));
+            skinnedMesh.skeleton.bones[44].setRotationFromEuler(new THREE.Euler(this.x2,this.y2,this.z2,'XYZ'));
+        }).easing(TWEEN.Easing.Quadratic.InOut);
+
+    tween1.chain(tween2);
+
+    console.log(skinnedMesh);
+
+    tween1.start();
 }
 
 /// MAIN PAGE RELATED STUFF
@@ -401,25 +437,14 @@ $('#start-pause-play').on('click', function() {
 
         this.innerHTML = 'pause';
         // get the text from the textbox and send it to python
-        $.getJSON('/_process_text', {
-            input_text: $('input[name="input_text"]').val()
-        }, function(data) {
 
-            if(JSON.stringify(data.result) != JSON.stringify(urls)) {
-                console.log(data.result, urls);
-                resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
-                for(i = 0; i < data.result.length; i++){
-                    urls.push(JSON.parse(data.result[i]));  // convert json object from string representation to json object
-                }
-                console.log(urls);
-                started = true;
-                setupAnimations(urls);
-            }
-            else{
-                displayTranslation = true;
-                console.log("text is still the same");
-            }
-        });
+        resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
+
+        //urls = [{name: 'SEE', path: 'directional'}];
+        urls = [{name: 'ASK', path: 'directional'}];
+
+        started = true;
+        setupAnimations(urls);
     }
     else {
         paused = !paused;

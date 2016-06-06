@@ -1,0 +1,47 @@
+== trees ==
+
+NP -> DT - NN | NP -> DT NN -   // - means anything e.g. The/DT (small/JJ) man/NN
+
+VP -> VBD VP | _ -> _ VP   // will cover anything like "has died", "was born" i.e. auxiliaries
+VP -> VBZ VP | _ -> _ VP   // _ means empty, thus delete 
+VP -> VBP VP | _ -> _ VP
+VP -> VB VP | _ -> _ VP
+
+VP -> TO VP | _ -> _ VP
+ 
+VP -> VBD ADJP | _ -> _ ADJP   // covers "He was sick", "He is tall" etc
+VP -> VBZ ADJP | _ -> _ ADJP
+
+
+== dependencies == 
+
+
+== special cases ==
+
+will -> move to front??
+
+
+== direct ==
+
+DT
+a->_
+an->_
+some->_
+this->Index
+those->Index
+that->Index
+these->Index
+the->Index
+
+i->ME
+me->ME
+you->YOU
+he->Index
+him->Index
+she->Index
+her->Index
+it->Index
+we->WE
+us->WE
+they->THEM
+them->THEM

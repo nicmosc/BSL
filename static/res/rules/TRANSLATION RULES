@@ -1,0 +1,56 @@
+TRANSLATION RULES
+
+We want to take the basis of the verb and from the POS tag obtain the analysis to apply to the sentence e.g. 
+
+eats -> EAT [VBZ, present]
+
+is eating -> EAT [present]
+
+will eat -> EAT [future] 
+
+has eaten -> EAT [past]
+
+We only need to make 3 distinctions between past, present and future in order to set the time. Thus
+
+VBZ, VBP = present
+VBN, VBD = past
+MD + VB = future (except would)
+
+Grammar tree transformations
+
+NOUN PHRASES
+
+Determiners are removed
+e.g. The car = CAR, That man = MAN
+
+	NP				NP
+ ___|_____		  __|__
+DT 	X   NN	==	 NN	   X
+
+i.e. if a NP starts with DT and ends with NN, DT disappears and NN goes at the start
+
+PREPOSITIONAL PHRASES
+
+Basically anything with IN will become a predicate + classifier e.g. an animal on the table = TABLE CL-TABLE ANIMAL CL-ANIMAL[LOC]
+
+	PP			
+ ___|__		  	 
+IN 	   NP	==	?
+
+VERB PHRASES
+
+Direct translation
+
+Personal pronouns, they stay in the sentence
+
+I -> ME				-> Specific index
+YOU -> YOU			-> Specific index
+HE/HIM -> HE 		-> Index (space dependent)
+SHE/HER -> SHE		-> Index (space dependent)
+IT -> IT			-> Index (space dependent)
+WE/US -> WE			-> Specific index
+THEY/THEM -> THEM	-> Specific Index
+
+Verbs
+
+Any form of 'have'/'be' and modal MD (will) e.g. has eaten, was making i.e. have/be + VB(any form) we take the root of the verb and remove the word preceding

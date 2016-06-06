@@ -1,8 +1,7 @@
 from nltk.parse.stanford import StanfordParser, StanfordDependencyParser
-import nltk
 from nltk.tag.stanford import StanfordPOSTagger
 from nltk.internals import find_jars_within_path
-from nltk import ParentedTree
+import nltk.tree
 import requests
 import os
 from bs4 import BeautifulSoup
@@ -13,12 +12,18 @@ class Parser:
 
     def __init__(self):
         # first check if the stanford website is accessible
-        initRequest = requests.post("http://nlp.stanford.edu:8080/parser/index.jsp") # test if the parser is still at this address
+        status_code = 0
+        try:
+            initRequest = requests.post("http://nlp.stanford.edu:8080/parser/index.jsp") # test if the parser is still at this address
+            status_code = initRequest.status_code
+
+        except requests.ConnectionError:
+            print "Not online"
 
         # for testing
-        #initRequest.status_code = 1
+        # initRequest.status_code = 1
 
-        if (initRequest.status_code == 200): # if it's fine
+        if (status_code == 200): # if it's fine
             self.online = True
         else:
             self.online = False
@@ -75,6 +80,8 @@ class Parser:
             for pair in leaves:
                 txt = str(pair).strip("()").split() # remove brackets and split tag/word
                 tagging += txt[1]+'/'+txt[0] + ' '
+
+            tagging = tagging[:-1]
 
             return [tagging, parseTree, dependencies]
 
