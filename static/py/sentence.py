@@ -61,16 +61,24 @@ class EnglishSentence:
 
             self.words[index].setDependency((rel, source))  # make tuple
 
-    def removeDuplicates(self):     # replaces all tags in the tree so that they are unique
-        seenLabels = []
-
-
-    def traverseReplaceWords(self, tree):
+    def traverseReplaceWords(self, tree, seenLabels):
         for index, subtree in enumerate(tree):
             if type(subtree) == Tree:
-                self.traverseReplaceWords(subtree)
+
+                # if the label of the node already exists, make it unique
+                newLabel = subtree.label()
+                count = seenLabels.count(newLabel)
+                seenLabels.append(newLabel)
+                if count > 0:
+                    newLabel += '_' + str(count)
+                    tree[index].set_label(newLabel)
+
+                # continue traversing the tree
+                self.traverseReplaceWords(subtree, seenLabels)
+
             elif subtree in self.ignore or subtree == '?':
                 self.treeTraversalIndex += 1  # increase index
+
             else:        # if we reach the leaf
                 subtree = self.words[self.treeTraversalIndex]
                 self.treeTraversalIndex +=1 # increase index

@@ -1,6 +1,6 @@
 == trees ==
 
-NP -> DT - NN | NP -> DT NN -   // - means anything e.g. The/DT (small/JJ) man/NN
+NP -> DT <> NN | NP -> DT NN <>   // - means anything e.g. The/DT (small/JJ) man/NN
 
 VP -> VBD VP | _ -> _ VP   // will cover anything like "has died", "was born" i.e. auxiliaries
 VP -> VBZ VP | _ -> _ VP   // _ means empty, thus delete 
@@ -34,14 +34,10 @@ these->Index
 the->Index
 
 i->ME
-me->ME
-you->YOU
 he->Index
 him->Index
 she->Index
 her->Index
 it->Index
-we->WE
 us->WE
 they->THEM
-them->THEM
