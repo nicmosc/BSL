@@ -1,0 +1,12 @@
+NP -> DT <> NN | NP -> DT NN <>   // - means anything e.g. The/DT (small/JJ) man/NN
+
+VP -> VBD VP | VP -> _ VP   // will cover anything like "has died", "was born" i.e. auxiliaries
+VP -> VBZ VP | VP -> _ VP   // _ means empty, thus delete 
+VP -> VBP VP | VP -> _ VP
+VP -> VB VP | VP -> _ VP
+
+VP -> TO VP | VP -> _ VP
+
+VP -> VBD ADJP | VP -> _ ADJP   // covers "He was sick", "He is tall" etc
+VP -> VBZ ADJP | VP -> _ ADJP
+VP -> VBN ADJP | VP -> _ ADJP

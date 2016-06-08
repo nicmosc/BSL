@@ -1,10 +1,10 @@
 import re
 
-line = "NP -> DT PP XP NN_1"
+line = "NP_2 -> DT ADJ NN_1"
 
 rule = "NP -> DT <> NN"
 
-mapping = "NP -> <> NN DT"
+mapping = "NP -> DT NN <>"
 
 # modify the mapping before applying it (for unique tags
 
@@ -22,12 +22,16 @@ for i,map in enumerate(maps):
 
 mapping = ' '.join(maps)
 
+rule = re.sub(' <> ', '(.*)', rule)
+
 print rule
 print mapping
 
-rule = re.sub(' <> ', '(.*)', rule)
+new_line = re.sub('_\d\s?',' ',line)
 
-matchObj = re.match( r'%s' % rule, line)
+print 'new line',new_line
+
+matchObj = re.match( r'%s' % rule, new_line)
 
 #print matchObj.group()
 
@@ -38,18 +42,6 @@ if matchObj:
 
     else:
         match = matchObj.group(1).strip()    # will have to fix it to work with multiple <> <>
-
-    # modify the mapping to match the unique tags e.g. the second VP becomes VP_1
-
-    # maps = mapping.split(' ')
-    # tags = line.split(' ')
-    # print tags, maps
-    # for i,tag in enumerate(tags):
-    #     spl = tag.split('_')
-    #     if len(spl) > 1 and spl[0] == maps[i]:     # if the tag has a unique ID
-    #         maps[i]+='_'+ str(spl[1])
-    #
-    # mapping = ' '.join(maps)
 
     res = re.sub(r'<>', match, mapping)
 

@@ -11,42 +11,56 @@ class Rules:
     #     for line in file:
     #         print(line)
 
-    mappings = []
+    tree_transforms = []    # rules to be applied to the syntax trees
+    direct_translation = [] # rules for direct translation
+
+    dependency_transforms = []  # to be applied to dependencies, not used for now
 
     def __init__(self):
 
         # read the rules from the file
 
+        # first open tree transforms
+        dir = '../res/rules/'
+
+        f_name = 'tree_transforms.txt'
+        try:
+            file = open(dir + f_name, 'r')
+            for line in file:
+                if not line.isspace():      # if the line is not empty
+                    sections = line.split('|')
+                    source = sections[0].strip()
+                    target = sections[1].split('//')[0].strip()    # remove comments from second part
+
+                    print source, " | ", target
+                    self.tree_transforms.append(Mapping(source, target))    # add new rule
+
+        except IOError:
+            print 'File '+f_name+' not found'
+
         # all the stuff below happens after reading the file
-        source = 'NP -> DT <> NN'
-        target = 'NP -> DT NN <>'
-
-        self.mappings.append(Mapping(source, target))
-
-        source = 'VP -> VBD VP'
-        target = 'VP -> _ VP'
-
-        self.mappings.append(Mapping(source, target))
+        # source = 'NP -> DT <> NN'
+        # target = 'NP -> DT NN <>'
+        #
+        # self.tree_transforms.append(Mapping(source, target))
+        #
+        # source = 'VP -> VBD VP'
+        # target = 'VP -> _ VP'
+        #
+        # self.tree_transforms.append(Mapping(source, target))
 
     def applyRules(self, sentence):  # tree here is just for testing, remove later
         # would normally need a rules object for now we just test it
 
-        production = sentence.augTree.productions()  # get the context free grammar for this tree, which we then modify
-
-        # TESTING
-        for prod in production:
-            print prod
+        productions = sentence.augTree.productions()  # get the context free grammar for this tree, which we then modify
 
         newProductions = []
 
         # the [:] is because we may want to modify the list
-        for prod in production:      # for each tree generation rule (in the CFG)
+        for prod in productions:      # for each tree generation rule (in the CFG)
 
-            modApplied = False         # if no modification is applied to the rule we add it back normally
-            for m in self.mappings:  # for each mapping rule
-
-                target = m.target       # we don't want to modify the original rules otherwise
-                source = m.source       # the next sentence will be affected
+            modApplied = False       # if no modification is applied to the rule we add it back normally
+            for m in self.tree_transforms:  # for each mapping rule
 
                 # before doing anything we need to replace any occurrence of NN_1 in the target
 
@@ -61,10 +75,12 @@ class Rules:
                                 maps[i] += '_' + str(spl[1])
                             p.remove(sec)
                             break
-                m.target = ' '.join(maps)
+                target = ' '.join(maps)
+
+                clean_prod = re.sub('_\d\s?', ' ', str(prod))   # remove any _x to match
 
                 source = re.sub(' <> ', '(.*)', m.source)  # build the source
-                match = re.match(r'%s' % source, str(prod))  # check if the rule matches the current CFG rule
+                match = re.match(r'%s' % source, clean_prod)  # check if the rule matches the current CFG rule
 
                 if match:
 
@@ -73,9 +89,9 @@ class Rules:
                     else:
                         rep = match.group(1).strip()
 
-                    target = re.sub(r'<>',rep, m.target)  # build the target from the source
+                    target = re.sub(r'<>',rep, target)  # build the target from the source
                     modApplied = True
-                    print "match", prod, target
+                    #print "match", prod, target
 
                     # construct nonterminal objects from target
                     target = target.replace('->', '')
@@ -84,7 +100,7 @@ class Rules:
                     productionObjects = []
                     for section in target_sections:
                         if len(section) > 0 and section != '_':
-                            print section
+                            #print section
                             productionObjects.append(Nonterminal(section))
 
                     # now construct the production object from the nonterminals
@@ -96,7 +112,12 @@ class Rules:
             if not modApplied:
                 newProductions.append(prod)      # if no modification is applied, push the rule to the new list
 
-        # THEN REBUILD THE TREE
+
+        # testing - print old vs new production
+        for i in range(len(productions)):
+            print productions[i], "\t \t \t", newProductions[i]
+
+        # THEN REBUILD THE SENTENCE
         grammar = CFG(newProductions[0].lhs(), newProductions)
 
         for sent in generate(grammar, n=1):  # only 1 sentence can be generated
