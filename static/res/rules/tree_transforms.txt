@@ -1,4 +1,5 @@
 NP -> DT <> NN | NP -> DT NN <>   // - means anything e.g. The/DT (small/JJ) man/NN
+NP -> JJ NN | NP -> NN JJ	// swap adjective and noun (specific case)
 
 VP -> VBD VP | VP -> _ VP   // will cover anything like "has died", "was born" i.e. auxiliaries
 VP -> VBZ VP | VP -> _ VP   // _ means empty, thus delete 

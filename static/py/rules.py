@@ -38,80 +38,48 @@ class Rules:
         except IOError:
             print 'File '+f_name+' not found'
 
-        # all the stuff below happens after reading the file
-        # source = 'NP -> DT <> NN'
-        # target = 'NP -> DT NN <>'
-        #
-        # self.tree_transforms.append(Mapping(source, target))
-        #
-        # source = 'VP -> VBD VP'
-        # target = 'VP -> _ VP'
-        #
-        # self.tree_transforms.append(Mapping(source, target))
 
-    def applyRules(self, sentence):  # tree here is just for testing, remove later
-        # would normally need a rules object for now we just test it
+
+
+    def applyRules(self, sentence):  # apply all rules in order
+        self.treeTranforms(sentence)
+
+    def treeTranforms(self, sentence):
 
         productions = sentence.augTree.productions()  # get the context free grammar for this tree, which we then modify
 
         newProductions = []
 
         # the [:] is because we may want to modify the list
-        for prod in productions:      # for each tree generation rule (in the CFG)
+        for prod in productions:  # for each tree generation rule (in the CFG)
 
-            modApplied = False       # if no modification is applied to the rule we add it back normally
+            modApplied = False  # if no modification is applied to the rule we add it back normally
             for m in self.tree_transforms:  # for each mapping rule
 
-                # before doing anything we need to replace any occurrence of NN_1 in the target
-
-                p = str(prod).split(' ')
+                p = str(prod).split(' ')  # split both CFG and target rules into separate chunks
                 maps = m.target.split(' ')
 
-                for i, map in enumerate(maps):
-                    for sec in p[:]:  # for each section in the line
-                        spl = sec.split('_')  # len is 2 if the tag is unique
-                        if spl[0] == map:  # if the two are identical
-                            if len(spl) > 1:  # if the tag is unique modify the other end
-                                maps[i] += '_' + str(spl[1])
-                            p.remove(sec)
-                            break
-                target = ' '.join(maps)
+                target = self.rebuildTarget(maps, p)  # rebuild the target with unique tags
 
-                clean_prod = re.sub('_\d\s?', ' ', str(prod))   # remove any _x to match
-
-                source = re.sub(' <> ', '(.*)', m.source)  # build the source
-                match = re.match(r'%s' % source, clean_prod)  # check if the rule matches the current CFG rule
+                match = self.performMatch(prod, m)  # check for match
 
                 if match:
 
                     if len(match.groups()) == 0:
-                        rep = match.group()      # if the match is exact (no in between stuff) then just use it as is
+                        rep = match.group()         # if the match is exact (no in between stuff) then just use it as is
                     else:
-                        rep = match.group(1).strip()
+                        rep = match.group(1).strip()    # for now we assume there can be 1 group max, may have to upgrade later
 
-                    target = re.sub(r'<>',rep, target)  # build the target from the source
+                    target = re.sub(r'<>', rep, target)  # build the target from the source (special case)
+
                     modApplied = True
-                    #print "match", prod, target
 
-                    # construct nonterminal objects from target
-                    target = target.replace('->', '')
-                    target_sections = target.split(' ')
+                    newProductions.append(self.constructProduction(target))     # append new production from target
 
-                    productionObjects = []
-                    for section in target_sections:
-                        if len(section) > 0 and section != '_':
-                            #print section
-                            productionObjects.append(Nonterminal(section))
-
-                    # now construct the production object from the nonterminals
-
-                    newProductions.append(Production(productionObjects[0], productionObjects[1:])) # add the modified rule to the list
-
-                    break       # once a matching rule is found, no need to keep going
+                    break  # once a matching rule is found, no need to keep going
 
             if not modApplied:
-                newProductions.append(prod)      # if no modification is applied, push the rule to the new list
-
+                newProductions.append(prod)  # if no modification is applied, push the rule to the new list
 
         # testing - print old vs new production
         for i in range(len(productions)):
@@ -124,6 +92,37 @@ class Rules:
             for word in sent:
                 print word,
             print
+
+    def constructProduction(self, target):
+        # construct nonterminal objects from target
+        target = target.replace('->', '')
+        target_sections = target.split(' ')
+
+        productionObjects = []
+        for section in target_sections:
+            if len(section) > 0 and section != '_':
+                # print section
+                productionObjects.append(Nonterminal(section))
+        # now construct the production object from the nonterminals
+        return Production(productionObjects[0], productionObjects[1:])  # return the modified rule to the list
+
+    def performMatch(self, prod, m):
+        # before doing anything we need to replace any occurrence of NN_1 in the target
+        clean_prod = re.sub('_\d\s?', ' ', str(prod))  # remove any _x to match
+        source = re.sub(' <> ', '(.*)', m.source)  # build the source
+        return re.match(r'%s' % source, clean_prod)  # check if the rule matches the current CFG rule
+
+    def rebuildTarget(self, maps, p):
+        # rebuild the target with new tags
+        for i, map in enumerate(maps):
+            for sec in p[:]:  # for each section in the line
+                spl = sec.split('_')  # len is 2 if the tag is unique
+                if spl[0] == map:  # if the two are identical
+                    if len(spl) > 1:  # if the tag is unique modify the other end
+                        maps[i] += '_' + str(spl[1])
+                    p.remove(sec)
+                    break
+        return ' '.join(maps)
 
 class Mapping:
     def __init__(self, s, t):
