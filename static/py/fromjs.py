@@ -1,8 +1,7 @@
 from parser import Parser
 from rules import Rules
-from sentence import EnglishSentence
-from nltk import CFG, Tree, Nonterminal, Production
-from nltk.parse.generate import generate
+from sentence import EnglishSentence, IntermediateSentence
+import re
 
 class Analyser:
 
@@ -11,11 +10,24 @@ class Analyser:
         self.rules = Rules()    # a rules object to apply the transfer and direct translation
 
     def buildSent(self, sentence):
-        result = self.parser.parse(sentence.stringRep)  # send the text to stanford parser
+
+        no_punctuation = re.sub(r'[%s]' % ''.join(sentence.ignore), '', sentence.stringRep)     # remove punctuation to ease parse trees
+
+        result = self.parser.parse(no_punctuation)  # send the text to stanford parser
 
         sentence.updateWords(result[0], result[1], result[2])
 
         sentence.traverseReplaceWords(sentence.augTree, [])  # replace words with word objects for modification and make tags unique
+
+    def applyRules(self, sentence):
+        mod_sentence = self.rules.treeTranforms(sentence)   # return modified original
+
+        i_sentence = IntermediateSentence(mod_sentence)  # create intermediate sentence representation from result
+
+
+
+        # don't forget to clear once we're done
+        i_sentence.clear()
 
 def main():     # this method is used for testing, normally the sentence is sent directly to the analyser from the frontend
 
@@ -28,11 +40,11 @@ def main():     # this method is used for testing, normally the sentence is sent
 
         e_sentence = EnglishSentence(sent)
         analyser.buildSent(e_sentence)  # build sentence object with all relationships etc
+        e_sentence.toString()           # print to see result
 
-        e_sentence.toString()
+        analyser.applyRules(e_sentence)   # apply rules to modify the sentence and return result
 
-        analyser.rules.applyRules(e_sentence)
-
+        # dont forget to clear once we're done
         e_sentence.clear()
 
 main()

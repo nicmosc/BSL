@@ -13,7 +13,7 @@ class EnglishSentence:
 
     lemmatizer = WordNetLemmatizer()
 
-    ignore = ['#', "''", '(', ')', ',', '.', ':', '``']     # these are possible tags we want to ignore
+    ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';']     # these are possible tags we want to ignore
 
     treeTraversalIndex = 1  # only used to traverse the tree
 
@@ -91,10 +91,30 @@ class EnglishSentence:
         for k, v in self.words.iteritems():
             v.toString()
 
-    def clear(self):    # / reset
+    def clear(self):    # reset
         self.words.clear()
         self.question = False
         self.treeTraversalIndex = 1
+
+
+# this object will hold the intermediate representation of the sentence i.e. after applying the
+# tree transform rules we give the result to this object
+# the analyser will then use the original and intermediate representation to perform additional
+# analysis, e.g. for dependencies
+
+class IntermediateSentence:
+    def __init__(self, words):
+        self.words = defaultdict(Word)  # a dictionary of word objects
+
+        for i, word in enumerate(words):              # add words to the dictionary
+            self.words[i] = word
+
+    def toString(self):
+        for k, v in self.words.iteritems():
+            v.toString()
+
+    def clear(self):  # reset
+        self.words.clear()
 
 # this object will represent an english word with constructions such as
 # - text: actual word
