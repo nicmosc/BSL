@@ -24,10 +24,13 @@ class Analyser:
 
         i_sentence = IntermediateSentence(mod_sentence)  # create intermediate sentence representation from result
 
+        self.rules.directTranslation(i_sentence)
 
+        i_sentence.toUpper()
+        i_sentence.toString()
 
-        # don't forget to clear once we're done
-        i_sentence.clear()
+    def updateRules(self):      # for testing, we may re-read the file to make it quicker
+        self.rules = Rules()
 
 def main():     # this method is used for testing, normally the sentence is sent directly to the analyser from the frontend
 
@@ -38,13 +41,16 @@ def main():     # this method is used for testing, normally the sentence is sent
         if sent == '0':
             break
 
-        e_sentence = EnglishSentence(sent)
-        analyser.buildSent(e_sentence)  # build sentence object with all relationships etc
-        e_sentence.toString()           # print to see result
+        if sent == 'update':
+            analyser.updateRules()
+        else:
+            e_sentence = EnglishSentence(sent)
+            analyser.buildSent(e_sentence)  # build sentence object with all relationships etc
+            e_sentence.toString()           # print to see result
 
-        analyser.applyRules(e_sentence)   # apply rules to modify the sentence and return result
+            analyser.applyRules(e_sentence)   # apply rules to modify the sentence and return result
 
-        # dont forget to clear once we're done
-        e_sentence.clear()
+            # dont forget to clear once we're done
+            e_sentence.clear()
 
 main()

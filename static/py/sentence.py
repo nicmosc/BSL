@@ -13,7 +13,7 @@ class EnglishSentence:
 
     lemmatizer = WordNetLemmatizer()
 
-    ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';']     # these are possible tags we want to ignore
+    ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';', '!']     # these are possible tags we want to ignore
 
     treeTraversalIndex = 1  # only used to traverse the tree
 
@@ -57,7 +57,10 @@ class EnglishSentence:
             rel = fst.split('(')[0] # get the relation
             source = fst.split('(')[1]  # and source node
 
-            index = int(snd.split('-')[1][:-1]) # get the receiving node's index in the list of words
+            print fst, snd
+
+            split = snd.split('-')
+            index = int(split[len(split)-1][:-1]) # get the receiving node's index in the list of words
 
             self.words[index].setDependency((rel, source))  # make tuple
 
@@ -104,17 +107,19 @@ class EnglishSentence:
 
 class IntermediateSentence:
     def __init__(self, words):
-        self.words = defaultdict(Word)  # a dictionary of word objects
 
-        for i, word in enumerate(words):              # add words to the dictionary
-            self.words[i] = word
+        if type(words[-1]) == unicode:     # if the last element is a question mark e.g. remove it
+            words = words[:-1]
+
+        self.words = words  # a list of word objects
+
+    def toUpper(self):
+        for i,word in enumerate(self.words):
+            if word.root != 'Index':    # do not uppercase Index
+                self.words[i].root = word.root.upper()
 
     def toString(self):
-        for k, v in self.words.iteritems():
-            v.toString()
-
-    def clear(self):  # reset
-        self.words.clear()
+        print ' '.join(map(lambda s: str(s), self.words))
 
 # this object will represent an english word with constructions such as
 # - text: actual word

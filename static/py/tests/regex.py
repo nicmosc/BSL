@@ -1,16 +1,14 @@
 import re
 
-line = "NP -> NP_1 JJ NN_1"
+line = "NP -> DT JJ NNP"
 
-source = "NP -> <> JJ NN"
+source = "NP -> DT <> NN*"
 
-target = "NP -> <> NN JJ"
+target = "NP -> DT NN* <>"
 
 # we want to see NP -> NP_1 NN_1 JJ
 
 # modify the mapping before applying it (for unique tags
-
-source = re.sub(' <> ', '(.*)', source)
 
 ln = line.split(' ')
 targ = target.split(' ')
@@ -18,8 +16,9 @@ targ = target.split(' ')
 for i,map in enumerate(targ):
     for l in ln[:]:  # for each section in the line
         spl = l.split('_')      # len is 2 if the tag is unique
+        any = map[:-1] == '*'   # if asterisc is found at the end of the tag, it means any tag with extra at the end will match
         print map,l
-        if spl[0] == map:       # if the two are identical
+        if spl[0] == map or map == '_':       # if the two are identical or if the map is _ i.e. nothing
             if len(spl) > 1:    # if the tag is unique modify the other end
                 targ[i] += '_' + str(spl[1])
             ln.remove(l)
@@ -30,18 +29,20 @@ for i,map in enumerate(targ):
 
 target = ' '.join(targ)
 
-source = re.sub(' <> ', '(.*)', source)
+source = re.sub('\s?<>\s?', '(.*)', source)
 
 print "\nRESULTS BELOW"
 
-print source
-print target
+print "source: ",source
+print "target: ",target
 
 new_line = re.sub('_\d\s?',' ',line)
 
-print 'new line',new_line
+print 'new line: ',new_line
 
 matchObj = re.match( r'%s' % source, new_line)
+
+print ln
 
 if matchObj:
 
@@ -53,7 +54,7 @@ if matchObj:
         match = ' '.join(list(reversed(ln)))
 
 
-    print match
+    print 'match: ', match
 
     res = re.sub(r'<>', match, target)
 

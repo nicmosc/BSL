@@ -8,7 +8,7 @@ class Rules:
     def __init__(self):
 
         self.tree_transforms = []  # rules to be applied to the syntax trees
-        self.direct_translation = defaultdict(Category)  # rules for direct translation
+        self.direct_translation = defaultdict(lambda: defaultdict(str))  # rules for direct translation
 
         self.dependency_transforms = []  # to be applied to dependencies, not used for now
 
@@ -27,7 +27,8 @@ class Rules:
                     target = sections[1].split('//')[0].strip()    # remove comments from second part
 
                     # REMEMBER TO MAYBE CREATE CATEGORIES FOR TREE TRANSFORMS TOO
-                    print source, " | ", target
+                    if source[:2] != '//':  # if the rule is not commented out, print
+                        print source, " | ", target
                     self.tree_transforms.append(Mapping(source, target))    # add new rule
 
         except IOError:
@@ -36,16 +37,28 @@ class Rules:
         # obtain direct translation rules
         f_name = 'direct_translation.txt'
         new_cat = True          # when this is true, we start a new category of direct rules
+        current_cat = ''        # the category we are in at the moment
         try:
             file = open(dir + f_name, 'r')
             for line in file:
-                if new_cat:
-                    o=1
-
-
+                if line.isspace():      # whenever a new category is introduced (space)
+                    new_cat = True
+                else:
+                    if new_cat:
+                        #print 'new category:',line
+                        current_cat = line.strip()
+                        new_cat = False
+                    else:               # add rules to the dictionary, no need for Mapping cause we don't change the source
+                        src = line.split('->')[0]
+                        tgt = line.split('->')[1].strip()
+                        self.direct_translation[current_cat][src] = tgt
         except IOError:
             print 'File ' + f_name + ' not found'
 
+        for k,v in self.direct_translation.iteritems():
+            print k
+            for k1,v1 in v.iteritems():
+                print k1,v1
 
     def treeTranforms(self, sentence):
 
@@ -60,6 +73,7 @@ class Rules:
         for prod in productions:  # for each tree generation rule (in the CFG)
 
             modApplied = False  # if no modification is applied to the rule we add it back normally
+
             for m in self.tree_transforms:  # for each mapping rule
 
                 p_list = str(prod).split(' ')  # split both CFG and target rules into separate chunks
@@ -110,9 +124,18 @@ class Rules:
         print result
         return result
 
-    def directTranslation(self):
-        print
+    def directTranslation(self, i_sentence):
 
+        for i,word in enumerate(i_sentence.words):       # go through all the words in the sentence
+            new_word = self.direct_translation[word.POStag][str(word)]
+            if len(new_word) != 0:      # if there is a rule
+                if new_word == '_':     # if the rule maps to nothing, remove the word
+                    i_sentence.words.remove(word)
+                else:
+                    i_sentence.words[i].root = new_word
+
+
+    # all the stuff below is for the tree transformation
     def constructProduction(self, target):
         # construct nonterminal objects from target
         target = target.replace('->', '')
@@ -130,7 +153,7 @@ class Rules:
         # before doing anything we need to replace any occurrence of NN_1 in the target
         clean_prod = re.sub('_\d\s?', ' ', str(prod))  # remove any _x to match
         #clean_prod = str(prod)
-        source = re.sub(' <> ', '(.*)', mapping.source)  # build the source
+        source = re.sub('\s?<>\s?', '(.*)', mapping.source)  # build the source
         return re.match(r'%s' % source, clean_prod)  # check if the rule matches the current CFG rule
 
     def rebuildTarget(self, maps, production):
@@ -138,10 +161,9 @@ class Rules:
         for i, map in enumerate(maps):
             for sec in production[:]:  # for each section in the line (production)
                 spl = sec.split('_')  # len is 2 if the tag is unique
-                if spl[0] == map:  # if the two are identical
-                    if len(spl) > 1:  # if the tag is unique modify the other end
-                        #print spl, map, '!!! ALERT !!!'
-                        maps[i] += '_' + str(spl[1])
+                any = map[-1] == '*'  # if asterisk is found at the end of the tag, it means any tag with extra at the end will match
+                if spl[0] == map or map == '_' or (any and map[:-1] in spl[0]):
+                    maps[i] = sec
                     production.remove(sec)
                     break
             if map == '<>':  # if we find this symbol, change direction
@@ -154,7 +176,7 @@ class Rules:
 
 class Category:
     def __init__(self, cat, dict):
-        self.category = cat
+        self.name = cat
         if dict:
             self.mappings = defaultdict(str)
         else:

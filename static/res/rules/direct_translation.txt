@@ -6,7 +6,7 @@ this->Index
 those->Index
 that->Index
 these->Index
-the->Index
+the->_
 
 PRP
 i->ME

@@ -9,6 +9,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b97f7e79-b30a-4b61-b344-9ce904b8692f" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/py/fromjs.py" afterPath="$PROJECT_DIR$/static/py/fromjs.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/py/rules.py" afterPath="$PROJECT_DIR$/static/py/rules.py" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/py/sentence.py" afterPath="$PROJECT_DIR$/static/py/sentence.py" />
@@ -28,11 +29,11 @@
   </component>
   <component name="ChangesViewManager" flattened_view="true" show_ignored="false" />
   <component name="CoverageDataManager">
-    <SUITE FILE_PATH="coverage/BSL$regex.coverage" NAME="regex Coverage Results" MODIFIED="1465405285083" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py/tests" />
+    <SUITE FILE_PATH="coverage/BSL$regex.coverage" NAME="regex Coverage Results" MODIFIED="1465495669428" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py/tests" />
     <SUITE FILE_PATH="coverage/BSL$html_scraper.coverage" NAME="html-scraper Coverage Results" MODIFIED="1463343280536" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
     <SUITE FILE_PATH="coverage/BSL$client.coverage" NAME="client Coverage Results" MODIFIED="1463497202844" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/corenlp" />
     <SUITE FILE_PATH="coverage/BSL$tokeniser.coverage" NAME="tokeniser Coverage Results" MODIFIED="1464290193480" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
-    <SUITE FILE_PATH="coverage/BSL$fromjs.coverage" NAME="fromjs Coverage Results" MODIFIED="1465410288059" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
+    <SUITE FILE_PATH="coverage/BSL$fromjs.coverage" NAME="fromjs Coverage Results" MODIFIED="1465495173120" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
     <SUITE FILE_PATH="coverage/BSL$BSL.coverage" NAME="BSL Coverage Results" MODIFIED="1464542227837" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/BSL$corenlp.coverage" NAME="corenlp Coverage Results" MODIFIED="1463497208357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/corenlp" />
     <SUITE FILE_PATH="coverage/BSL$word_similarity.coverage" NAME="word-similarity Coverage Results" MODIFIED="1463580819484" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
@@ -49,8 +50,8 @@
       <file leaf-file-name="fromjs.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/py/fromjs.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="195">
-              <caret line="13" column="66" selection-start-line="13" selection-start-column="66" selection-end-line="13" selection-end-column="66" />
+            <state relative-caret-position="474">
+              <caret line="45" column="13" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="13" />
               <folding>
                 <element signature="e#0#25#0" expanded="true" />
               </folding>
@@ -61,8 +62,8 @@
       <file leaf-file-name="sentence.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/py/sentence.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="330">
-              <caret line="27" column="56" selection-start-line="27" selection-start-column="56" selection-end-line="27" selection-end-column="56" />
+            <state relative-caret-position="279">
+              <caret line="110" column="37" selection-start-line="110" selection-start-column="37" selection-end-line="110" selection-end-column="37" />
               <folding>
                 <element signature="e#0#21#0" expanded="true" />
               </folding>
@@ -70,21 +71,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="regex.py" pinned="false" current-in-tab="false">
+      <file leaf-file-name="regex.py" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/static/py/tests/regex.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-30">
-              <caret line="12" column="39" selection-start-line="12" selection-start-column="39" selection-end-line="12" selection-end-column="39" />
+            <state relative-caret-position="330">
+              <caret line="22" column="44" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="rules.py" pinned="false" current-in-tab="true">
+      <file leaf-file-name="rules.py" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/py/rules.py">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="450">
-              <caret line="42" column="23" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
+            <state relative-caret-position="435">
+              <caret line="29" column="85" selection-start-line="29" selection-start-column="85" selection-end-line="29" selection-end-column="85" />
               <folding>
                 <element signature="e#0#9#0" expanded="true" />
               </folding>
@@ -122,10 +123,10 @@
         <option value="$PROJECT_DIR$/static/py/tests/Rules.py" />
         <option value="$PROJECT_DIR$/static/py/tests/rules.py" />
         <option value="$PROJECT_DIR$/static/py/parser.py" />
-        <option value="$PROJECT_DIR$/static/py/tests/regex.py" />
-        <option value="$PROJECT_DIR$/static/py/fromjs.py" />
         <option value="$PROJECT_DIR$/static/py/sentence.py" />
+        <option value="$PROJECT_DIR$/static/py/fromjs.py" />
         <option value="$PROJECT_DIR$/static/py/rules.py" />
+        <option value="$PROJECT_DIR$/static/py/tests/regex.py" />
       </list>
     </option>
   </component>
@@ -139,9 +140,10 @@
     <scope name="LOC" pattern="(file:app.py||file[BSL]:static/threejs/*||file[BSL]:static/py/*||file[BSL]:templates/*)&amp;&amp;!file:templates/index.html&amp;&amp;!file:static/threejs/IK.js" />
   </component>
   <component name="ProjectFrameBounds">
+    <option name="x" value="1280" />
     <option name="y" value="23" />
     <option name="width" value="1280" />
-    <option name="height" value="708" />
+    <option name="height" value="1348" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
     <OptionsSetting value="true" id="Add" />
@@ -570,8 +572,8 @@
     </list>
     <recent_temporary>
       <list size="5">
-        <item index="0" class="java.lang.String" itemvalue="Python.fromjs" />
-        <item index="1" class="java.lang.String" itemvalue="Python.regex" />
+        <item index="0" class="java.lang.String" itemvalue="Python.regex" />
+        <item index="1" class="java.lang.String" itemvalue="Python.fromjs" />
         <item index="2" class="java.lang.String" itemvalue="JavaScript Debug.indexPage.html" />
         <item index="3" class="java.lang.String" itemvalue="Python.tokeniser" />
         <item index="4" class="java.lang.String" itemvalue="Python.word-similarity" />
@@ -595,14 +597,14 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="23" width="1280" height="708" extended-state="6" />
+    <frame x="1280" y="23" width="1280" height="1348" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.63693273" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" x="-1283" y="407" width="1283" height="408" />
+      <window_info id="Run" active="true" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.28616107" sideWeight="0.5" order="11" side_tool="true" content_ui="tabs" x="-1283" y="407" width="1283" height="408" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.18046875" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Metrics" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.32994527" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
@@ -917,18 +919,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/py/tests/regex.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-30">
-          <caret line="12" column="39" selection-start-line="12" selection-start-column="39" selection-end-line="12" selection-end-column="39" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/py/fromjs.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="195">
-          <caret line="13" column="66" selection-start-line="13" selection-start-column="66" selection-end-line="13" selection-end-column="66" />
+        <state relative-caret-position="474">
+          <caret line="45" column="13" selection-start-line="45" selection-start-column="13" selection-end-line="45" selection-end-column="13" />
           <folding>
             <element signature="e#0#25#0" expanded="true" />
           </folding>
@@ -937,8 +931,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/py/sentence.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="330">
-          <caret line="27" column="56" selection-start-line="27" selection-start-column="56" selection-end-line="27" selection-end-column="56" />
+        <state relative-caret-position="279">
+          <caret line="110" column="37" selection-start-line="110" selection-start-column="37" selection-end-line="110" selection-end-column="37" />
           <folding>
             <element signature="e#0#21#0" expanded="true" />
           </folding>
@@ -947,11 +941,19 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/static/py/rules.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="450">
-          <caret line="42" column="23" selection-start-line="42" selection-start-column="23" selection-end-line="42" selection-end-column="23" />
+        <state relative-caret-position="435">
+          <caret line="29" column="85" selection-start-line="29" selection-start-column="85" selection-end-line="29" selection-end-column="85" />
           <folding>
             <element signature="e#0#9#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/py/tests/regex.py">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="330">
+          <caret line="22" column="44" selection-start-line="22" selection-start-column="44" selection-end-line="22" selection-end-column="44" />
+          <folding />
         </state>
       </provider>
     </entry>
