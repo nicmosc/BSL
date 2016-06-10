@@ -162,7 +162,7 @@ class Rules:
             for sec in production[:]:  # for each section in the line (production)
                 spl = sec.split('_')  # len is 2 if the tag is unique
                 any = map[-1] == '*'  # if asterisk is found at the end of the tag, it means any tag with extra at the end will match
-                if spl[0] == map or map == '_' or (any and map[:-1] in spl[0]):
+                if spl[0] == map or map == '_' or (any and map[:-1] in spl[0]):     # fix this doesnt work
                     maps[i] = sec
                     production.remove(sec)
                     break
