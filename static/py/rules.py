@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
 from nltk import CFG, Nonterminal, Production
-from nltk.parse.generate import generate
+from nltk.parse.generate import generate, demo
 
 class Rules:
 
@@ -21,7 +21,7 @@ class Rules:
         try:
             file = open(dir + f_name, 'r')
             for line in file:
-                if not line.isspace():      # if the line is not empty
+                if not line.isspace() and line[0] != '/':      # if the line is not empty
                     sections = line.split('|')
                     source = sections[0].strip()
                     target = sections[1].split('//')[0].strip()    # remove comments from second part
@@ -64,8 +64,10 @@ class Rules:
 
         productions = sentence.augTree.productions()  # get the context free grammar for this tree, which we then modify
 
-        for i in range(len(productions)):
-           print productions[i]
+        # for i in range(len(productions)):
+        #    print productions[i]
+
+        print '\nTREE TRANSFORM'
 
         newProductions = []
 
@@ -74,44 +76,46 @@ class Rules:
 
             modApplied = False  # if no modification is applied to the rule we add it back normally
 
+            prod_string = str(prod)
+
             for m in self.tree_transforms:  # for each mapping rule
 
-                p_list = str(prod).split(' ')  # split both CFG and target rules into separate chunks
-                maps = m.target.split(' ')
+                source_chunks = m.source.split(' ')   # split the source to apply regex rules
 
-                result = self.rebuildTarget(maps, p_list)  # rebuild the target with unique tags
+                source_copy = source_chunks[:]        # make a copy
 
-                target = result[0]
-                p_list = result[1]
+                source = self.rebuildSource(source_copy)  # rebuild the target with unique tags
 
-                match = self.performMatch(prod, m)  # check for match
+                match = re.match( r'%s' % source, prod_string) # check for match between source and the current rule
 
                 if match:
+                    # if a match exists, create linkage between the source and target for the match groups
+                    # (so that correct tags ids and <> can be placed properly)
 
-                    #print p_list, 'LOOK HERE'
+                    print 'Match:', match.group(), ' | ', m.source
 
-                    if len(match.groups()) == 0:
-                        rep = match.group()         # if the match is exact (no in between stuff) then just use it as is
-                    else:
-                        #rep = match.group(1).strip()    # for now we assume there can be 1 group max, may have to upgrade later
-                        rep = ' '.join(list(reversed(p_list)))      # whatever was not matched earlier is what we need to replace
+                    target_chunks = m.target.split(' ')     # split the target rule so reassign correct tags
+                    # index of each element in the source
+                    source_i = self.makeSourceGroupIndexes(source_chunks)
+                    # mapping of the above e.g.
+                    target_i = self.linkSourceTarget(source_chunks, target_chunks, source_i)
 
-                    target = re.sub(r'<>', rep, target)  # build the target from the source (special case)
-
-                    print 'Match:',match.group(),' | ',target
+                    # get the new target using the object groups from the match
+                    new_target_chunks = self.constructNewTarget(target_chunks, match ,target_i)
 
                     modApplied = True
 
-                    newProductions.append(self.constructProduction(target))     # append new production from target
+                    # create new production from the new target
+                    newProductions.append(self.constructProduction(new_target_chunks))     # append new production from target
 
                     break  # once a matching rule is found, no need to keep going
 
             if not modApplied:
-                newProductions.append(prod)  # if no modification is applied, push the rule to the new list
+                    newProductions.append(prod)  # if no modification is applied, push the rule to the new list
 
-        # testing - print old vs new production
-        # for i in range(len(productions)):
-        #    print productions[i], "\t \t \t", newProductions[i]
+        #testing - print old vs new production
+        for i in range(len(productions)):
+           print productions[i], "\t \t \t", newProductions[i]
 
         # THEN REBUILD THE SENTENCE
         grammar = CFG(newProductions[0].lhs(), newProductions)
@@ -126,6 +130,8 @@ class Rules:
 
     def directTranslation(self, i_sentence):
 
+        print '\nDIRECT TRANSLATION'
+
         for i,word in enumerate(i_sentence.words):       # go through all the words in the sentence
             new_word = self.direct_translation[word.POStag][str(word)]
             if len(new_word) != 0:      # if there is a rule
@@ -134,41 +140,105 @@ class Rules:
                 else:
                     i_sentence.words[i].root = new_word
 
+    # all the stuff below is for the TREE TRANSFORMATION
 
-    # all the stuff below is for the tree transformation
+    def rebuildSource(self, source_copy):
+        for i, s in enumerate(source_copy):  # iterate through all tags in the source
+            if s != '<>' and s != '->':
+                source_copy[i] += '(_?\d?)'  # every tag which is not -> or <> set a regex match for
+                # possible unique id
+        source = ' '.join(source_copy)
+
+        source = re.sub('\s?<>\s?', '(.*)', source)  # set regex match for anything where <> is found
+
+        source += '$'  # match end of string exactly
+
+        return re.sub('~', '([A-Z]*)', source)  # set regex match for tag endings e.g. NN~ can match NNS, NNPS etc
+
+    def makeSourceGroupIndexes(self, source):
+        source_i = []
+        i = 1
+        for s in source:
+            if s != '->':
+                if s[-1] == '~':  # if tag can be matched to anything, make tuple for match groups
+                    source_i.append((i, i + 1))
+                    i += 1
+                else:
+                    source_i.append(i)
+                i += 1
+
+        return source_i
+
+    def linkSourceTarget(self, source, target, source_i):
+        print source, target, source_i
+        target_i = []
+        i = -1
+        backtrace = 0  # used if our match is further on in the rule
+        needs_backtrace = False
+        for t in target:  # iterate through all target tags
+            for s in source[:]:  # for each source tag
+                if t == '->':  # ignore ->
+                    continue
+                if s != '->':  # if the source tag is not -> increase index by one (to obtain group index from source_i)
+                    i += 1
+                else:
+                    source.remove(s)  # otherwise remove it as it's not needed
+                    continue  # skip the stuff below
+                #print t, s, i, backtrace
+                if t == s or t == '_':  # if the two tags match
+                    target_i.append(source_i[i])  # add the corresponding group index to the target position
+                    if needs_backtrace:  # if the tag was found further in the list, reset the backtrace
+                        i = i - backtrace - 1
+                        backtrace = 0
+                        #print 'resetting index and backtrace', i, backtrace
+                    source.remove(s)  # remove the source tag found
+                    needs_backtrace = False
+                    #print target_i, source
+                    break
+                else:
+                    if s != '->' and t != '->':  # if both source and target tags are not -> then it means the tag we're looking for is further awat
+                        #print 'setting backtrace'
+                        needs_backtrace = True
+                        backtrace += 1
+                #print target_i, source
+
+        return target_i
+
+    def constructNewTarget(self, target, match, target_i):
+        # go through each group and assign it to the target as explained
+        i = 0  # this index is used to get the index of the group
+        new_target = []
+        for j, t in enumerate(target):  # for each target tag
+            if t != '->':  # if the tag is not ->
+                #print t
+                if t[-1] == '~':
+                    new_target.append(t[:-1] + match.group(target_i[i][0]) + match.group(
+                        target_i[i][1]))  # set the tuple (tag + tuple)
+                elif t == '<>':
+                    #target[j] = match.group(target_i[i]).strip()  # replace all the tags in the group as it's a <>
+                    tags = match.group(target_i[i]).split(' ')
+                    new_target.extend(tags)
+                else:
+                    #print 'tar: ', target_i[i]
+                    if t != '_':
+                        new_target.append(t + match.group(target_i[i]))  # append the id to the tag
+                i += 1
+            else:
+                new_target.append(t)
+        return new_target
+
     def constructProduction(self, target):
         # construct nonterminal objects from target
-        target = target.replace('->', '')
-        target_sections = target.split(' ')
+
+        print 'New target', ' '.join(target)
 
         productionObjects = []
-        for section in target_sections:
-            if len(section) > 0 and section != '_':
+        for tag in target:
+            if len(tag) > 0 and tag != '_' and tag != '->':
                 # print section
-                productionObjects.append(Nonterminal(section))
+                productionObjects.append(Nonterminal(tag))
         # now construct the production object from the nonterminals
         return Production(productionObjects[0], productionObjects[1:])  # return the modified rule to the list
-
-    def performMatch(self, prod, mapping):
-        # before doing anything we need to replace any occurrence of NN_1 in the target
-        clean_prod = re.sub('_\d\s?', ' ', str(prod))  # remove any _x to match
-        #clean_prod = str(prod)
-        source = re.sub('\s?<>\s?', '(.*)', mapping.source)  # build the source
-        return re.match(r'%s' % source, clean_prod)  # check if the rule matches the current CFG rule
-
-    def rebuildTarget(self, maps, production):
-        # rebuild the target with new tags
-        for i, map in enumerate(maps):
-            for sec in production[:]:  # for each section in the line (production)
-                spl = sec.split('_')  # len is 2 if the tag is unique
-                any = map[-1] == '*'  # if asterisk is found at the end of the tag, it means any tag with extra at the end will match
-                if spl[0] == map or map == '_' or (any and map[:-1] in spl[0]):     # fix this doesnt work
-                    maps[i] = sec
-                    production.remove(sec)
-                    break
-            if map == '<>':  # if we find this symbol, change direction
-                production = list(reversed(production))
-        return (' '.join(maps), production)
 
 # used for direct translation -> some POS tags need to be modified directly
 # may modify tree transforms to this as well (improves performance if we have many rules)

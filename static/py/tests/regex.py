@@ -1,22 +1,17 @@
 import re
 
-line = "VP_2 -> PP ADJP NN PP_1"
+line = "SQ -> VBZ_1 JJ NN_2"
 
-source = "VP -> VB~ ADJP <>"
+source = "SQ -> VB~ <> NN"
 
-target = "VP -> _ ADJP <>"
+target = "SQ -> _ <> _"
 
-# we want to see NP -> NP_1 NN_1 JJ
 
 # modify the mapping before applying it (for unique tags
 
 
 src = source.split(' ')
 source_copy = src[:]
-trg = target.split(' ')
-
-source_i = []   # index of each element in the source
-target_i = []   # mapping of the above e.g.
 
 for i, s in enumerate(source_copy):
     if s != '<>' and s != '->':
@@ -27,6 +22,8 @@ source = ' '.join(source_copy)
 source = re.sub('\s?<>\s?', '(.*)', source)
 
 source = re.sub('~', '([A-Z]*)', source)
+
+source += '$'   # match end of string exactly
 
 # replace the * with   to specify letters
 #source = re.sub('~', '(\w*)', source)
@@ -49,6 +46,10 @@ matchObj = re.match( r'%s' % source, line)
 if matchObj:
 
     print matchObj.groups()
+    trg = target.split(' ')
+
+    source_i = []  # index of each element in the source
+    target_i = []  # mapping of the above e.g.
 
     #  1     2  3 (4,5)      1    2(4,5) 3
     # NP -> DT <> NN~   =  NP -> DT NN~ <>
@@ -101,20 +102,25 @@ if matchObj:
 
     # go through each group and assign it to the target as explained
     i = 0       # this index is used to get the index of the group
+    new_target = []
     for j,t in enumerate(trg):  # for each target tag
-        if t != '->':           # if the tag is not ->
+        if t != '->':
             print t
             if t[-1] == '~':
-                trg[j] = t[:-1] + matchObj.group(target_i[i][0]) + matchObj.group(target_i[i][1])   # set the tuple (tag + tuple)
+                new_target.append(t[:-1] + matchObj.group(target_i[i][0]) + matchObj.group(target_i[i][1]))   # set the tuple (tag + tuple)
             elif t == '<>':
-                trg[j] = matchObj.group(target_i[i]).strip()        # replace all the tags in the group as it's a <>
+                #trg[j] = matchObj.group(target_i[i]).strip()        # replace all the tags in the group as it's a <>
+                tags = matchObj.group(target_i[i]).strip().split(' ')
+                print tags
+                new_target.extend(tags)
             else:
                 print 'tar: ',target_i[i]
                 if t != '_':
-                    trg[j] = t + matchObj.group(target_i[i])        # append the id to the tag
+                    new_target.append(t + matchObj.group(target_i[i]) )       # append the id to the tag
             i+=1
-    target = ' '.join(trg)
-
+        else:
+            new_target.append(t)
+    target = ' '.join(new_target)
 
     print 'final target: ', target
 
