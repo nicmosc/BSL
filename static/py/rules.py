@@ -1,7 +1,7 @@
 import re
 from collections import defaultdict
-from nltk import CFG, Nonterminal, Production
-from nltk.parse.generate import generate, demo
+from nltk import CFG, Nonterminal, Production, parse
+from nltk.parse.generate import generate
 
 class Rules:
 
@@ -67,7 +67,7 @@ class Rules:
         # for i in range(len(productions)):
         #    print productions[i]
 
-        print '\nTREE TRANSFORM'
+        print '\nTREE TRANSFORM\n'
 
         newProductions = []
 
@@ -130,7 +130,7 @@ class Rules:
 
     def directTranslation(self, i_sentence):
 
-        print '\nDIRECT TRANSLATION'
+        print '\nDIRECT TRANSLATION\n'
 
         for i,word in enumerate(i_sentence.words):       # go through all the words in the sentence
             new_word = self.direct_translation[word.POStag][str(word)]

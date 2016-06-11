@@ -9,7 +9,19 @@ VP -> VB~ VP | VP -> _ VP   // will cover anything like "has died", "was born" i
 
 VP -> VB~ ADJP <> | VP -> _ ADJP <>		// covers "He was sick", "He is tall" etc
 
-VP -> TO VP | VP -> _ VP
+VP -> TO <> | VP -> _ <>
+VP -> MD <> | VP -> _ <>
+
+PP -> TO NP | PP -> _ NP
 
 SQ -> VB~ <> | SQ -> _ <>  // removes the "have", "did" etc in questions
 SQ -> MD <> | SQ -> _ <>
+
+SBARQ -> WH~ <> . | SBARQ -> <> WH~ _  // handles direct questions introduced by a wh- word or wh-phrase
+SBAR~ -> WH~ <> | SBAR~ -> <> WH~
+SBAR -> IN <> | SBAR -> _ <>
+
+WHNP -> WDT NN | WHNP -> NN WDT 	// handles "which book..."
+WHNP -> WHNP <> | WHNP -> <> WHNP
+
+// how to handle existential there?

@@ -1,10 +1,10 @@
 import re
 
-line = "SQ -> VBZ_1 JJ NN_2"
+line = "VP -> VB VP_2 ADJP NNS_3"
 
-source = "SQ -> VB~ <> NN"
+source = "VP -> VB <> NN~"
 
-target = "SQ -> _ <> _"
+target = "VP -> _ NN~ <>"
 
 
 # modify the mapping before applying it (for unique tags
@@ -91,35 +91,34 @@ if matchObj:
                     print 'resetting index and backtrace', i, backtrace
                 temp_source.remove(s)           # remove the source tag found
                 needs_backtrace = False
-                print target_i, temp_source
+                print '\t\t\t',target_i, temp_source
                 break
             else:
                 if s != '->' and t != '->':     # if both source and target tags are not -> then it means the tag we're looking for is further awat
                     print 'setting backtrace'
                     needs_backtrace = True
                     backtrace += 1
-            print target_i, temp_source
+            print '\t\t\t',target_i, temp_source
 
     # go through each group and assign it to the target as explained
     i = 0       # this index is used to get the index of the group
     new_target = []
     for j,t in enumerate(trg):  # for each target tag
         if t != '->':
-            print t
             if t[-1] == '~':
                 new_target.append(t[:-1] + matchObj.group(target_i[i][0]) + matchObj.group(target_i[i][1]))   # set the tuple (tag + tuple)
             elif t == '<>':
                 #trg[j] = matchObj.group(target_i[i]).strip()        # replace all the tags in the group as it's a <>
                 tags = matchObj.group(target_i[i]).strip().split(' ')
-                print tags
                 new_target.extend(tags)
             else:
-                print 'tar: ',target_i[i]
                 if t != '_':
                     new_target.append(t + matchObj.group(target_i[i]) )       # append the id to the tag
+            print new_target, t, target_i[i]
             i+=1
         else:
             new_target.append(t)
+
     target = ' '.join(new_target)
 
     print 'final target: ', target
