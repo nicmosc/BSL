@@ -15,43 +15,18 @@ class Rules:
         # read the rules from the file
 
         # first open tree transforms
-        dir = '../res/rules/'
+        self.dir = '../res/rules/'
 
         f_name = 'tree_transforms.txt'
         try:
-            file = open(dir + f_name, 'r')
-            for line in file:
-                if not line.isspace() and line[0] != '/':      # if the line is not empty
-                    sections = line.split('|')
-                    source = sections[0].strip()
-                    target = sections[1].split('//')[0].strip()    # remove comments from second part
-
-                    # REMEMBER TO MAYBE CREATE CATEGORIES FOR TREE TRANSFORMS TOO
-                    if source[:2] != '//':  # if the rule is not commented out, print
-                        print source, " | ", target
-                    self.tree_transforms.append(Mapping(source, target))    # add new rule
-
+            self.readTreeRules(f_name)
         except IOError:
             print 'File '+f_name+' not found'
 
         # obtain direct translation rules
         f_name = 'direct_translation.txt'
-        new_cat = True          # when this is true, we start a new category of direct rules
-        current_cat = ''        # the category we are in at the moment
         try:
-            file = open(dir + f_name, 'r')
-            for line in file:
-                if line.isspace():      # whenever a new category is introduced (space)
-                    new_cat = True
-                else:
-                    if new_cat:
-                        #print 'new category:',line
-                        current_cat = line.strip()
-                        new_cat = False
-                    else:               # add rules to the dictionary, no need for Mapping cause we don't change the source
-                        src = line.split('->')[0]
-                        tgt = line.split('->')[1].strip()
-                        self.direct_translation[current_cat][src] = tgt
+            self.readDirectRules(f_name)
         except IOError:
             print 'File ' + f_name + ' not found'
 
@@ -60,7 +35,38 @@ class Rules:
             for k1,v1 in v.iteritems():
                 print k1,v1
 
-    def treeTranforms(self, sentence):
+    def readTreeRules(self, f_name):
+        file = open(self.dir + f_name, 'r')
+        for line in file:
+            if not line.isspace() and line[0] != '/':  # if the line is not empty
+                sections = line.split('|')
+                source = sections[0].strip()
+                target = sections[1].split('//')[0].strip()  # remove comments from second part
+
+                # REMEMBER TO MAYBE CREATE CATEGORIES FOR TREE TRANSFORMS TOO
+                if source[:2] != '//':  # if the rule is not commented out, print
+                    print source, " | ", target
+                self.tree_transforms.append(Mapping(source, target))  # add new rule
+
+    def readDirectRules(self, f_name):
+        new_cat = True  # when this is true, we start a new category of direct rules
+        current_cat = ''  # the category we are in at the moment
+        file = open(self.dir + f_name, 'r')
+        for line in file:
+            if line.isspace():  # whenever a new category is introduced (space)
+                new_cat = True
+            else:
+                if new_cat:
+                    # print 'new category:',line
+                    current_cat = line.strip()
+                    new_cat = False
+                else:  # add rules to the dictionary, no need for Mapping cause we don't change the source
+                    src = line.split('->')[0]
+                    tgt = line.split('->')[1].split("//")[0].strip()
+                    self.direct_translation[current_cat][src] = tgt
+
+
+    def applyTreeTranforms(self, sentence):
 
         productions = sentence.augTree.productions()  # get the context free grammar for this tree, which we then modify
 
@@ -128,10 +134,14 @@ class Rules:
         print result
         return result
 
-    def directTranslation(self, i_sentence):
+    def applyDirectTranslation(self, i_sentence):
 
         print '\nDIRECT TRANSLATION\n'
 
+        # go by SPECIAl category, includes word swapping, multiple words etc
+        for
+
+        # go by POS tag category, solely word to word
         for i,word in enumerate(i_sentence.words):       # go through all the words in the sentence
             new_word = self.direct_translation[word.POStag][str(word)]
             if len(new_word) != 0:      # if there is a rule

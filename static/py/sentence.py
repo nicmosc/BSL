@@ -13,19 +13,19 @@ class EnglishSentence:
 
     lemmatizer = WordNetLemmatizer()
 
-    ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';', '!']     # these are possible tags we want to ignore
+    #ignore = ['.']
 
-    treeTraversalIndex = 1  # only used to traverse the tree
+    treeTraversalIndex = 0  # only used to traverse the tree
 
     def __init__(self, text):
         self.stringRep = text   # keep a reference to the original text
-        self.words = defaultdict(Word)  # a dictionary of word objects
+        self.words = []  # list of word objects
         self.syntaxTree = Tree  # syntax tree (unaltered, for reference)
         self.augTree = Tree     # will hold the word objects directly
         self.question = False  # if true then it is a question, false by default
         #.tense = 'present' # can be present, past or future (used to set the time at the start)
 
-    def updateWords(self, posTags, synTree, dependencies):
+    def updateWords(self, posTags, synTree, dependencies, ignore):
 
         pos = posTags.split(' ')
 
@@ -35,10 +35,10 @@ class EnglishSentence:
             text = pair.split('/')[0]
             tag = pair.split('/')[1]
 
-            if(tag not in self.ignore):     # do not count punctuation as words
+            if tag not in ignore:     # do not count punctuation as words
                 word = Word(text, tag, i, self.lemmatizer)
                 #self.words.append(word)
-                self.words[i] = word    # add new word
+                self.words.append(word)    # add new word
 
             i+=1
 
@@ -50,7 +50,7 @@ class EnglishSentence:
         self.syntaxTree = deepcopy(synTree)     # we don't want to modify syntax tree (not by reference, by value)
         self.augTree = synTree
 
-        for dep in dependencies:
+        for i,dep in enumerate(dependencies):
             fst = dep.split(',')[0] # get source node and relation
             snd = dep.split(',')[1] # get target node
 
@@ -59,10 +59,28 @@ class EnglishSentence:
 
             print fst, snd
 
-            split = snd.split('-')
-            index = int(split[len(split)-1][:-1]) # get the receiving node's index in the list of words
+            #split = snd.split('-')
+            #index = int(split[len(split)-1][:-1]) # get the receiving node's index in the list of words
 
-            self.words[index].setDependency((rel, source))  # make tuple
+            #temp_words[index].setDependency((rel, source))  # make tuple
+
+            index = int(source.split('-')[1])
+
+            source_pos = -1
+
+            for word in self.words:
+                if word == '?':
+                    break
+                elif word.index == index:
+                    source_pos = self.words.index(word)
+                    break
+
+            self.words[i].setDependency((rel, source_pos))
+
+    def updateWordIndexes(self, word_dict):
+        for k,v in word_dict.iteritems():
+            dep = v.dependency.split('-')[1]
+            print v, dep, word_dict
 
     def traverseReplaceWords(self, tree, seenLabels):
         for index, subtree in enumerate(tree):
@@ -79,11 +97,12 @@ class EnglishSentence:
                 # continue traversing the tree
                 self.traverseReplaceWords(subtree, seenLabels)
 
-            elif subtree in self.ignore or subtree == '?':
-                self.treeTraversalIndex += 1  # increase index
+            #elif subtree == '?':
+            #    self.treeTraversalIndex += 1  # increase index
 
             else:        # if we reach the leaf
                 subtree = self.words[self.treeTraversalIndex]
+                print subtree
                 self.treeTraversalIndex +=1 # increase index
                 tree[index] = subtree
 
@@ -91,11 +110,11 @@ class EnglishSentence:
         print 'Is it a question? ', self.question
         self.augTree.pretty_print()
 
-        for k, v in self.words.iteritems():
-            v.toString()
+        for w in self.words:
+            w.toString()
 
     def clear(self):    # reset
-        self.words.clear()
+        #self.words.clear()
         self.question = False
         self.treeTraversalIndex = 1
 
@@ -170,7 +189,7 @@ class Word:
 
     def toString(self):
         print self.text.encode('ascii'), self.POStag.encode('ascii'), self.index, self.root.encode('ascii'), \
-            self.dependency[0].encode('ascii'), '-->', self.dependency[1].encode('ascii')
+            self.dependency[0].encode('ascii'), '-->', self.dependency[1]
 
     # override print method for pretty_print
     def __str__(self):

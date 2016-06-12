@@ -1,3 +1,14 @@
+SWAP
+if -> if // moves the sentence after the if before the cause
+
+TAG
+be /IN -> _ /IN 				// removes the 'is' when a preposition follows
+be /NN~ -> _ /NN~ 				// removes the 'is' when any noun follows
+
+WORDS
+there be -> _ 					// removes the existential there + is
+if it -> _ 						// removes the it in question (cannot do tree, as 'if you' would match)
+
 DT
 a->_
 an->_
@@ -20,3 +31,6 @@ they->THEM
 
 POS
 's->_
+
+IN
+if->_
