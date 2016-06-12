@@ -21,8 +21,6 @@ class Analyser:
 
         sentence.updateWords(result[0], no_punctuation_tree, result[2], Analyser.ignore)
 
-        sentence.toString()
-
         sentence.traverseReplaceWords(sentence.augTree, [])  # replace words with word objects for modification and make tags unique
 
     def applyRules(self, sentence):

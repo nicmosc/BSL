@@ -57,8 +57,6 @@ class EnglishSentence:
             rel = fst.split('(')[0] # get the relation
             source = fst.split('(')[1]  # and source node
 
-            print fst, snd
-
             #split = snd.split('-')
             #index = int(split[len(split)-1][:-1]) # get the receiving node's index in the list of words
 
@@ -77,11 +75,6 @@ class EnglishSentence:
 
             self.words[i].setDependency((rel, source_pos))
 
-    def updateWordIndexes(self, word_dict):
-        for k,v in word_dict.iteritems():
-            dep = v.dependency.split('-')[1]
-            print v, dep, word_dict
-
     def traverseReplaceWords(self, tree, seenLabels):
         for index, subtree in enumerate(tree):
             if type(subtree) == Tree:
@@ -96,13 +89,8 @@ class EnglishSentence:
 
                 # continue traversing the tree
                 self.traverseReplaceWords(subtree, seenLabels)
-
-            #elif subtree == '?':
-            #    self.treeTraversalIndex += 1  # increase index
-
             else:        # if we reach the leaf
                 subtree = self.words[self.treeTraversalIndex]
-                print subtree
                 self.treeTraversalIndex +=1 # increase index
                 tree[index] = subtree
 
@@ -131,6 +119,10 @@ class IntermediateSentence:
             words = words[:-1]
 
         self.words = words  # a list of word objects
+        self.updateString()  # string representation of the current sentence
+
+    def updateString(self):
+        self.word_strings = map(lambda x: str(x), self.words)
 
     def toUpper(self):
         for i,word in enumerate(self.words):

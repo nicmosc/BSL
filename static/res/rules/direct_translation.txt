@@ -6,8 +6,8 @@ be /IN -> _ /IN 				// removes the 'is' when a preposition follows
 be /NN~ -> _ /NN~ 				// removes the 'is' when any noun follows
 
 WORDS
-there be -> _ 					// removes the existential there + is
-if it -> _ 						// removes the it in question (cannot do tree, as 'if you' would match)
+there be -> _ _					// removes the existential there + is
+if it -> _ _						// removes the it in question (cannot do tree, as 'if you' would match)
 
 DT
 a->_

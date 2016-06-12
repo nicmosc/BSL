@@ -61,7 +61,7 @@ class Rules:
                     current_cat = line.strip()
                     new_cat = False
                 else:  # add rules to the dictionary, no need for Mapping cause we don't change the source
-                    src = line.split('->')[0]
+                    src = line.split('->')[0].strip()
                     tgt = line.split('->')[1].split("//")[0].strip()
                     self.direct_translation[current_cat][src] = tgt
 
@@ -120,8 +120,8 @@ class Rules:
                     newProductions.append(prod)  # if no modification is applied, push the rule to the new list
 
         #testing - print old vs new production
-        for i in range(len(productions)):
-           print productions[i], "\t \t \t", newProductions[i]
+        # for i in range(len(productions)):
+        #    print productions[i], "\t \t \t", newProductions[i]
 
         # THEN REBUILD THE SENTENCE
         grammar = CFG(newProductions[0].lhs(), newProductions)
@@ -131,7 +131,7 @@ class Rules:
         for sent in generate(grammar, n=1):  # only 1 sentence can be generated
             result = sent
 
-        print result
+        #print result
         return result
 
     def applyDirectTranslation(self, i_sentence):
@@ -139,7 +139,32 @@ class Rules:
         print '\nDIRECT TRANSLATION\n'
 
         # go by SPECIAl category, includes word swapping, multiple words etc
-        for
+        # first apply swap rules
+
+        # will need to be refined for multiple rules, this is not enough
+        for i, word in enumerate(i_sentence.words):
+            if self.direct_translation['SWAP'][str(word)]:
+                i_sentence.words = i_sentence.words[i:]+i_sentence.words[:i]
+
+        print i_sentence.words
+        i_sentence.updateString()
+
+        # now by multiple words
+        for k,v in self.direct_translation['WORDS'].iteritems():
+            indexes = subfinder(i_sentence.word_strings, k.split(' '))  # the index in the original sentence of the words we need to map
+            print indexes
+            if len(indexes) == len(k.split(' ')):
+                backtrace = 0
+                for i,target in enumerate(v.split(' ')):
+                    if target == '_':       # remove word
+                        i_sentence.words.pop(indexes[i]-backtrace)
+                        backtrace =+ 1
+                    else:
+                        i_sentence.words[indexes[i]-backtrace].root = target
+
+                i_sentence.updateString()   # update the string representation
+
+        print i_sentence.words
 
         # go by POS tag category, solely word to word
         for i,word in enumerate(i_sentence.words):       # go through all the words in the sentence
@@ -249,6 +274,11 @@ class Rules:
                 productionObjects.append(Nonterminal(tag))
         # now construct the production object from the nonterminals
         return Production(productionObjects[0], productionObjects[1:])  # return the modified rule to the list
+
+
+def subfinder(mylist, pattern):
+    pattern = set(pattern)
+    return [i for i, x in enumerate(mylist) if x in pattern]
 
 # used for direct translation -> some POS tags need to be modified directly
 # may modify tree transforms to this as well (improves performance if we have many rules)
