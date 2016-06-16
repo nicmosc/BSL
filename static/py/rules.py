@@ -48,6 +48,8 @@ class Rules:
                     print source, " | ", target
                 self.tree_transforms.append(Mapping(source, target))  # add new rule
 
+        file.close()
+
     def readDirectRules(self, f_name):
         new_cat = True  # when this is true, we start a new category of direct rules
         current_cat = ''  # the category we are in at the moment
@@ -64,6 +66,8 @@ class Rules:
                     src = line.split('->')[0].strip()
                     tgt = line.split('->')[1].split("//")[0].strip()
                     self.direct_translation[current_cat][src] = tgt
+
+        file.close()
 
 
     def applyTreeTranforms(self, sentence):
@@ -120,8 +124,8 @@ class Rules:
                     newProductions.append(prod)  # if no modification is applied, push the rule to the new list
 
         #testing - print old vs new production
-        # for i in range(len(productions)):
-        #    print productions[i], "\t \t \t", newProductions[i]
+        for i in range(len(productions)):
+            print productions[i], "\t \t \t", newProductions[i]
 
         # THEN REBUILD THE SENTENCE
         grammar = CFG(newProductions[0].lhs(), newProductions)
@@ -149,31 +153,41 @@ class Rules:
         print i_sentence.words
         i_sentence.updateString()
 
+        # for the special case TAGS
+        #for k, v in self.direct_translation['TAG'].iteritems():
+
         # now by multiple words
         for k,v in self.direct_translation['WORDS'].iteritems():
-            indexes = subfinder(i_sentence.word_strings, k.split(' '))  # the index in the original sentence of the words we need to map
-            print indexes
-            if len(indexes) == len(k.split(' ')):
+            indexes = subfinder(i_sentence.word_strings, k.split(' '))
+            if len(indexes) != 0:
                 backtrace = 0
-                for i,target in enumerate(v.split(' ')):
-                    if target == '_':       # remove word
-                        i_sentence.words.pop(indexes[i]-backtrace)
-                        backtrace =+ 1
-                    else:
-                        i_sentence.words[indexes[i]-backtrace].root = target
-
+                target = v.split(' ')
+                for seq in indexes:
+                    j = 0   #index for the target
+                    for i in range (seq[0],seq[1]):     # replace those words in the given range
+                        t = target[j].strip()
+                        if t == '_':       # remove word
+                            i_sentence.words.pop(i-backtrace)
+                            backtrace += 1
+                        else:
+                            i_sentence.words[i-backtrace].root = t
+                        j+=1
                 i_sentence.updateString()   # update the string representation
-
         print i_sentence.words
 
         # go by POS tag category, solely word to word
-        for i,word in enumerate(i_sentence.words):       # go through all the words in the sentence
+        i = 0
+        for word in i_sentence.words[:]:       # go through all the words in the sentence
             new_word = self.direct_translation[word.POStag][str(word)]
             if len(new_word) != 0:      # if there is a rule
                 if new_word == '_':     # if the rule maps to nothing, remove the word
                     i_sentence.words.remove(word)
+                    i-=1
                 else:
                     i_sentence.words[i].root = new_word
+            if word.POStag == 'NNP' or word.POStag == 'NNPS' or word.isUpper:   # if the word is proper or stands for something (is all caps)
+                word.fingerSpell()
+            i+=1
 
     # all the stuff below is for the TREE TRANSFORMATION
 
@@ -210,6 +224,8 @@ class Rules:
         i = -1
         backtrace = 0  # used if our match is further on in the rule
         needs_backtrace = False
+        last_point = 0
+        skip = 0
         for t in target:  # iterate through all target tags
             for s in source[:]:  # for each source tag
                 if t == '->':  # ignore ->
@@ -222,8 +238,12 @@ class Rules:
                 #print t, s, i, backtrace
                 if t == s or t == '_':  # if the two tags match
                     target_i.append(source_i[i])  # add the corresponding group index to the target position
+                    if i == last_point and skip > 0:
+                        i += skip - 1
+                        skip = 0
                     if needs_backtrace:  # if the tag was found further in the list, reset the backtrace
                         i = i - backtrace - 1
+                        skip = backtrace
                         backtrace = 0
                         #print 'resetting index and backtrace', i, backtrace
                     source.remove(s)  # remove the source tag found
@@ -233,7 +253,9 @@ class Rules:
                 else:
                     if s != '->' and t != '->':  # if both source and target tags are not -> then it means the tag we're looking for is further awat
                         #print 'setting backtrace'
-                        needs_backtrace = True
+                        if not needs_backtrace:
+                            needs_backtrace = True
+                            last_point = i + 1
                         backtrace += 1
                 #print target_i, source
 
@@ -275,10 +297,8 @@ class Rules:
         # now construct the production object from the nonterminals
         return Production(productionObjects[0], productionObjects[1:])  # return the modified rule to the list
 
-
 def subfinder(mylist, pattern):
-    pattern = set(pattern)
-    return [i for i, x in enumerate(mylist) if x in pattern]
+    return [(i, i + len(pattern)) for i in range(len(mylist)) if mylist[i:i + len(pattern)] == pattern]
 
 # used for direct translation -> some POS tags need to be modified directly
 # may modify tree transforms to this as well (improves performance if we have many rules)

@@ -1,8 +1,12 @@
 // available symbols: <> = 0 or more of anything, _ = rhs mapping to empty, ~ = follows a tag, means any subclass of the tag
 
-NP -> DT <> NN | NP -> DT NN <>   // <> means anything e.g. The/DT (small/JJ) man/NN
-NP -> <> JJ NN | NP -> <> NN JJ	// swap adjective and noun (specific case)
-NP -> <> ADJP NN | NP -> <> NN ADJP	// more generic case of the above 
+
+//NP -> DT <> NN | NP -> DT NN <>   // <> means anything e.g. The/DT (small/JJ) man/NN
+NP -> <> NN~ NN~ | NP -> <> NN~ NN~ 	// specific case, prevents e.g. IT Manager (NNP, NN)
+NP -> <> JJ NN~ CC <> NN~ | NP -> NN~ <> JJ CC NN~ <> 	// very specific case
+NP -> JJ JJ NN~ | NP -> NN~ JJ JJ
+NP -> JJ NN~ | NP -> NN~ JJ
+NP -> DT <> NN~ | NP -> DT NN~ <>		// generic case to swap any adjective modifier
 
 VP -> VB~ VP | VP -> _ VP   // will cover anything like "has died", "was born" i.e. auxiliaries
 // _ means empty, thus delete 
@@ -10,20 +14,18 @@ VP -> VB~ VP | VP -> _ VP   // will cover anything like "has died", "was born" i
 VP -> VB~ ADJP <> | VP -> _ ADJP <>		// covers "He was sick", "He is tall" etc
 
 VP -> TO <> | VP -> _ <>
-VP -> MD <> | VP -> _ <>
 
 PP -> TO NP | PP -> _ NP
 
 SQ -> VB~ <> | SQ -> _ <>  // removes the "have", "did" etc in questions
 SQ -> MD <> | SQ -> _ <>
 
-SBARQ -> WH~ <> . | SBARQ -> <> WH~ _  // handles direct questions introduced by a wh- word or wh-phrase
-SBAR~ -> WH~ <> | SBAR~ -> <> WH~
+SBARQ -> WH~ <> | SBARQ -> <> WH~  // handles direct questions introduced by a wh- word or wh-phrase
 //SBAR -> IN <> | SBAR -> _ <>
 
 SINV -> MD <> | SINV -> _ <>
 
-WHNP -> WDT NN | WHNP -> NN WDT 	// handles "which book..."
+WHNP -> WDT NN~ | WHNP -> NN~ WDT 	// handles "which book..."
 WHNP -> WHNP <> | WHNP -> <> WHNP
 
 // how to handle existential there?

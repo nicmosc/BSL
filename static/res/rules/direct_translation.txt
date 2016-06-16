@@ -2,12 +2,17 @@ SWAP
 if -> if // moves the sentence after the if before the cause
 
 TAG
-be /IN -> _ /IN 				// removes the 'is' when a preposition follows
-be /NN~ -> _ /NN~ 				// removes the 'is' when any noun follows
+it /JJ -> _ JJ 		// removes the it after the 'it is JJ', be has been removed
+in /CD -> _ CD 		// any number following in e.g married in 1994 removes it
 
 WORDS
 there be -> _ _					// removes the existential there + is
-if it -> _ _						// removes the it in question (cannot do tree, as 'if you' would match)
+if it -> _ _						// removes the it in SBAR (cannot do tree, as 'if you' would match)
+as a -> _ _ 
+as an -> _ _
+facial expression -> facial-expression _ 	// some words are stuck together
+time last -> past time
+how much -> how-much _
 
 DT
 a->_
@@ -20,17 +25,51 @@ these->Index
 the->_
 
 PRP
-i->ME
+i->me
 he->Index
 him->Index
 she->Index
 her->Index
-it->Index
-us->WE
-they->THEM
+it->_
+us->we
+they->them
 
 POS
 's->_
+'->_
 
 IN
 if->_
+because->why
+
+NNS
+parent->-m-f-
+glass->glasses
+
+NN
+mom->-m-m-
+mum->-m-m-
+mother->-m-m-
+dad->-d-d-
+father->-d-d-
+
+CC
+and->_ 			// remove and conjunction
+
+VB
+be->_ 			// no verb BE in BSL
+
+VBD
+be->_
+
+VBG
+be->_
+
+VBN
+be->_
+
+VBP
+be->_
+
+VBZ
+be->_

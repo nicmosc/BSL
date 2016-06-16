@@ -58,4 +58,15 @@ def adjectives():   # this kind of works
 
     print(word2 + " ? " + 'time' + " = " + str(maxSim1) + " | "+ word2 + " ? " + 'place' + " = " + str(maxSim2))
 
-adjectives()
+def times():
+
+    while(True):
+        sentence = raw_input('Type sentence: ')
+        sent = sentence.split(' ')
+
+        for s in sent:
+            syn = wn.synsets(s, pos='v')
+            if len(syn) > 0:
+                print s, syn[0].lexname()
+
+times()

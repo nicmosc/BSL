@@ -1,6 +1,6 @@
 from nltk import Tree
 from nltk.stem.wordnet import WordNetLemmatizer
-from collections import defaultdict
+from nltk.corpus import wordnet as wn
 from copy import deepcopy
 
 # this class will have objects describing a sentence from English
@@ -130,7 +130,7 @@ class IntermediateSentence:
                 self.words[i].root = word.root.upper()
 
     def toString(self):
-        print ' '.join(map(lambda s: str(s), self.words))
+        return ' '.join(map(lambda s: str(s), self.words))
 
 # this object will represent an english word with constructions such as
 # - text: actual word
@@ -143,10 +143,13 @@ class IntermediateSentence:
 class Word:
 
     dependency = ''
+    modifier = ''   # such as 'very' for adjectives, or 'quickly' for verbs
+    category = 'undefined'  # by default
 
     def __init__(self, text, tag, i, lemmatizer):
         self.POStag = tag
         self.index = i
+        self.isUpper = text.isupper() and len(text)>1   # text is considered upper e.g. BBC, but 'I' is not considered
         self.text = text.lower()
 
         # get roots
@@ -154,11 +157,21 @@ class Word:
             self.rebuild(text)
         elif text.lower() == 'wo':  # should the word be won't -> leads to wo / n't
             self.root = 'will'
+        elif self.POStag == 'IN':
+            self.root = self.text
         else:
             wn_tag = penn_to_wn(tag)
-            self.root = lemmatizer.lemmatize(text, pos=wn_tag).lower()
+            self.root = lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
+            self.setCategory(wn_tag)
 
         # do dependencies
+
+    # using wordnet and the postag
+    def setCategory(self, postag):
+        syn = wn.synsets(self.root, pos=postag)
+        if len(syn) > 0:
+            #print s, syn[0].lexname()
+            self.category = syn[0].lexname()
 
     def setDependency(self, dep):
         self.dependency = dep
@@ -180,8 +193,16 @@ class Word:
         # we ignore 's and 'd since we don't gain anything from rebuilding them, the important part is the POS tag
 
     def toString(self):
-        print self.text.encode('ascii'), self.POStag.encode('ascii'), self.index, self.root.encode('ascii'), \
+        print self.text.encode('ascii'), self.POStag.encode('ascii'), self.category, self.index, self.root.encode('ascii'), \
             self.dependency[0].encode('ascii'), '-->', self.dependency[1]
+
+    # this method will transform any proper noun into fingerspelled format (no need for rules as there are only a coupl
+    def fingerSpell(self):
+        fingerspell = '-'
+        for ch in self.root:
+            fingerspell += ch + '-'
+
+        self.root = fingerspell
 
     # override print method for pretty_print
     def __str__(self):
@@ -197,7 +218,7 @@ def penn_to_wn(tag):
         return 'n'
     elif tag in ['RB', 'RBR', 'RBS']:
         return 'r'
-    elif tag in ['VBD', 'VBG', 'VBN', 'VBP', 'VBZ']:
+    elif tag in ['VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'VB']:
         return 'v'
     return 'n'
 

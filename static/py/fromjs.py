@@ -5,7 +5,7 @@ from nltk import Tree
 
 class Analyser:
 
-    ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';', '!']  # these are possible tags we want to ignore
+    ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';', '!', "''", "'"]  # these are possible tags we want to ignore
 
     def __init__(self):
         self.parser = Parser()
@@ -28,10 +28,15 @@ class Analyser:
 
         i_sentence = IntermediateSentence(mod_sentence)  # create intermediate sentence representation from result
 
+        # use dependencies to apply modifications to the nouns/verbs
+        #self.applyDependencies(i_sentence)
+
         self.rules.applyDirectTranslation(i_sentence)
 
         i_sentence.toUpper()
-        i_sentence.toString()
+        #i_sentence.toString()
+
+        return i_sentence.toString()
 
     def removePunctuation(self, tree):
         for subtree in tree[:]:
@@ -45,28 +50,9 @@ class Analyser:
 
         return tree
 
+    #def applyDependencies(self, sentence):
+    #    for word in sentence.words:
+
+
     def updateRules(self):      # for testing, we may re-read the file to make it quicker
         self.rules = Rules()
-
-def main():     # this method is used for testing, normally the sentence is sent directly to the analyser from the frontend
-
-    analyser = Analyser()
-
-    while (True):
-        sent = raw_input('Type sentence: ')
-        if sent == '0':
-            break
-
-        if sent == 'update':
-            analyser.updateRules()
-        else:
-            e_sentence = EnglishSentence(sent)
-            analyser.buildSent(e_sentence)  # build sentence object with all relationships etc
-            e_sentence.toString()           # print to see result
-
-            analyser.applyRules(e_sentence)   # apply rules to modify the sentence and return result
-
-            # dont forget to clear once we're done
-            e_sentence.clear()
-
-main()
