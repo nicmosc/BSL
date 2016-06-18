@@ -10,9 +10,8 @@ there be -> _ _					// removes the existential there + is
 if it -> _ _						// removes the it in SBAR (cannot do tree, as 'if you' would match)
 as a -> _ _ 
 as an -> _ _
-facial expression -> facial-expression _ 	// some words are stuck together
 time last -> past time
-how much -> how-much _
+year old -> _ age
 
 DT
 a->_
@@ -41,6 +40,10 @@ POS
 IN
 if->_
 because->why
+at->_
+
+MD
+will->_
 
 NNS
 parent->-m-f-
@@ -52,6 +55,8 @@ mum->-m-m-
 mother->-m-m-
 dad->-d-d-
 father->-d-d-
+bsl->-B-S-L-
+asl->-A-S-L-
 
 CC
 and->_ 			// remove and conjunction

@@ -15,12 +15,13 @@ VP -> VB~ ADJP <> | VP -> _ ADJP <>		// covers "He was sick", "He is tall" etc
 
 VP -> TO <> | VP -> _ <>
 
+PP -> TO NP NP | PP -> _ NP NP
 PP -> TO NP | PP -> _ NP
 
 SQ -> VB~ <> | SQ -> _ <>  // removes the "have", "did" etc in questions
 SQ -> MD <> | SQ -> _ <>
 
-SBARQ -> WH~ <> | SBARQ -> <> WH~  // handles direct questions introduced by a wh- word or wh-phrase
+SBAR~ -> WH~ <> | SBAR~ -> <> WH~  // handles direct questions introduced by a wh- word or wh-phrase
 //SBAR -> IN <> | SBAR -> _ <>
 
 SINV -> MD <> | SINV -> _ <>

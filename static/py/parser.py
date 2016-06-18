@@ -1,5 +1,4 @@
 from nltk.parse.stanford import StanfordParser, StanfordDependencyParser
-from nltk.tag.stanford import StanfordPOSTagger
 from nltk.internals import find_jars_within_path
 import nltk.tree
 import requests
@@ -21,7 +20,7 @@ class Parser:
             print "Not online"
 
         # for testing
-        # initRequest.status_code = 1
+        #status_code = 1
 
         if (status_code == 200): # if it's fine
             self.online = True

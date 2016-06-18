@@ -134,3 +134,5 @@ def regex():
 
     else:
        print "No match!!"
+
+regex()

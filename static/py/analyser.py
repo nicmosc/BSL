@@ -1,6 +1,6 @@
 from parser import Parser
 from rules import Rules
-from sentence import EnglishSentence, IntermediateSentence
+from sentence import IntermediateSentence
 from nltk import Tree
 
 class Analyser:
@@ -23,15 +23,19 @@ class Analyser:
 
         sentence.traverseReplaceWords(sentence.augTree, [])  # replace words with word objects for modification and make tags unique
 
+        sentence.setSentenceGroups(sentence.augTree) # set the sentence groups to each word
+
     def applyRules(self, sentence):
         mod_sentence = self.rules.applyTreeTranforms(sentence)   # return modified original
 
-        i_sentence = IntermediateSentence(mod_sentence)  # create intermediate sentence representation from result
+        i_sentence = IntermediateSentence(mod_sentence, sentence)  # create intermediate sentence representation from result
 
-        # use dependencies to apply modifications to the nouns/verbs
-        #self.applyDependencies(i_sentence)
+        # before applying direct translation we may want to find multiple words that make up 1 sign e.g. now and then = NOW-AND-THEN
 
         self.rules.applyDirectTranslation(i_sentence)
+
+        # special cases are handled separately e.g. in + location = WHERE? LOCATION
+        i_sentence.specialCases()
 
         i_sentence.toUpper()
         #i_sentence.toString()

@@ -1,6 +1,6 @@
 import re
 from collections import defaultdict
-from nltk import CFG, Nonterminal, Production, parse
+from nltk import CFG, Nonterminal, Production
 from nltk.parse.generate import generate
 
 class Rules:
@@ -10,7 +10,7 @@ class Rules:
         self.tree_transforms = []  # rules to be applied to the syntax trees
         self.direct_translation = defaultdict(lambda: defaultdict(str))  # rules for direct translation
 
-        self.dependency_transforms = []  # to be applied to dependencies, not used for now
+        self.combined_words = defaultdict(list)
 
         # read the rules from the file
 
@@ -29,6 +29,8 @@ class Rules:
             self.readDirectRules(f_name)
         except IOError:
             print 'File ' + f_name + ' not found'
+
+        self.combinedWords()    # load combined words from signbank
 
         for k,v in self.direct_translation.iteritems():
             print k
@@ -142,6 +144,8 @@ class Rules:
 
         print '\nDIRECT TRANSLATION\n'
 
+        print i_sentence.words
+
         # go by SPECIAl category, includes word swapping, multiple words etc
         # first apply swap rules
 
@@ -185,7 +189,7 @@ class Rules:
                     i-=1
                 else:
                     i_sentence.words[i].root = new_word
-            if word.POStag == 'NNP' or word.POStag == 'NNPS' or word.isUpper:   # if the word is proper or stands for something (is all caps)
+            if word.POStag == 'NNP' or word.POStag == 'NNPS' and word.isUpper:   # if the word is proper or stands for something (is all caps)
                 word.fingerSpell()
             i+=1
 
@@ -198,7 +202,7 @@ class Rules:
                 # possible unique id
         source = ' '.join(source_copy)
 
-        source = re.sub('\s?<>\s?', '(.*)', source)  # set regex match for anything where <> is found
+        source = re.sub('\s?<>\s?', '\s?(.*)\s?', source)  # set regex match for anything where <> is found
 
         source += '$'  # match end of string exactly
 
@@ -296,6 +300,18 @@ class Rules:
                 productionObjects.append(Nonterminal(tag))
         # now construct the production object from the nonterminals
         return Production(productionObjects[0], productionObjects[1:])  # return the modified rule to the list
+
+    # this method returns a list of of list of words (words that have multiple combinations)
+    def combinedWords(self):
+        f_name = 'signbank_multi.txt'
+        try:
+            f = open('../res/rules/' + f_name, 'r')
+            for line in f:
+                split = line.strip().split(' ')
+                self.combined_words[split[0]].append(split[1:])
+            f.close()
+        except IOError:
+            print 'File ' + f_name + ' not found'
 
 def subfinder(mylist, pattern):
     return [(i, i + len(pattern)) for i in range(len(mylist)) if mylist[i:i + len(pattern)] == pattern]

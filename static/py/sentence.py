@@ -2,6 +2,7 @@ from nltk import Tree
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from copy import deepcopy
+from terminaltables import AsciiTable
 
 # this class will have objects describing a sentence from English
 # it will have:
@@ -23,6 +24,9 @@ class EnglishSentence:
         self.syntaxTree = Tree  # syntax tree (unaltered, for reference)
         self.augTree = Tree     # will hold the word objects directly
         self.question = False  # if true then it is a question, false by default
+
+        self.subSentences = []  # will contain the sentence groups words belong to
+
         #.tense = 'present' # can be present, past or future (used to set the time at the start)
 
     def updateWords(self, posTags, synTree, dependencies, ignore):
@@ -94,12 +98,35 @@ class EnglishSentence:
                 self.treeTraversalIndex +=1 # increase index
                 tree[index] = subtree
 
+    # assigns the sentence tag to the words that fall within it -> used to modify sentence sections individually
+    def setSentenceGroups(self, tree):
+        for subtree in tree:
+            if type(subtree) == Tree:
+                group = subtree.label().split('_')[0]
+                if group in ['S', 'SBAR', 'SBARQ', 'SINV', 'SQ']:
+                    if subtree.label() not in self.subSentences:
+                        self.subSentences.append(subtree.label())
+                    for word in subtree.leaves():
+                        word.sent_group = subtree.label()
+
+                self.setSentenceGroups(subtree)
+
+
     def toString(self):
         print 'Is it a question? ', self.question
+        print 'Subsentence groups ', self.subSentences
         self.augTree.pretty_print()
 
+        # nicely prints all the details of the words
+        table_data = [['i','Word', 'POS', 'S-group', 'WN Category', 'Root','dep', 'target']]
+
         for w in self.words:
-            w.toString()
+            info = w.toString()
+            info[-1] = str(info[-1])+'-'+self.words[info[-1]].root    # get the word the dependency is related to (only for display clarity)
+            table_data.append(info)
+
+        table = AsciiTable(table_data)
+        print table.table
 
     def clear(self):    # reset
         #self.words.clear()
@@ -113,13 +140,32 @@ class EnglishSentence:
 # analysis, e.g. for dependencies
 
 class IntermediateSentence:
-    def __init__(self, words):
+    def __init__(self, words, e_sentence):
+
+        self.question = e_sentence.question
 
         if type(words[-1]) == unicode:     # if the last element is a question mark e.g. remove it
             words = words[:-1]
 
         self.words = words  # a list of word objects
         self.updateString()  # string representation of the current sentence
+
+    # this method will cover anything which couldnt be handled with external rules
+    def specialCases(self):
+        for i, word in enumerate(self.words):
+
+            # this handles the case that the noun is a location and the previous word is 'in', we need WHERE
+            if word.category == 'noun.location' and i > 0:
+                if self.words[i-1].root == 'in':
+                    self.words[i-1].root = 'where'
+                    #self.facial_expression = '[q]'      # set it as a question
+
+            # this handles the case of age
+            if word.POStag == 'CD' and i < len(self.words)-1:
+                if self.words[i+1].root == 'age':
+                    #self.words[i+1].facial_expression = '[q]'  # also set this as a question
+                    self.words[i] = self.words[i+1]
+                    self.words[i+1] = word
 
     def updateString(self):
         self.word_strings = map(lambda x: str(x), self.words)
@@ -145,6 +191,9 @@ class Word:
     dependency = ''
     modifier = ''   # such as 'very' for adjectives, or 'quickly' for verbs
     category = 'undefined'  # by default
+    sent_group = ''         # the 'sub' sentence the word belongs to
+
+    facial_expr = ''        # the facial expression associated with the word
 
     def __init__(self, text, tag, i, lemmatizer):
         self.POStag = tag
@@ -157,10 +206,15 @@ class Word:
             self.rebuild(text)
         elif text.lower() == 'wo':  # should the word be won't -> leads to wo / n't
             self.root = 'will'
+        elif text.lower() == 'ca':
+            self.root = 'can'
         elif self.POStag == 'IN':
             self.root = self.text
         else:
             wn_tag = penn_to_wn(tag)
+            #if tag == 'NNP' or tag == 'NNPS':
+            #    self.root = text
+            #else:
             self.root = lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
             self.setCategory(wn_tag)
 
@@ -181,20 +235,23 @@ class Word:
         if text == "'t" or text == "n't":
             self.root = 'not'
         elif text == "'m":
-            self.root = 'am'
+            self.root = 'be'
         elif text == "'ll":
             self.root = 'will'
         elif text == "'re":
-            self.root = 'are'
+            self.root = 'be'
         elif text == "'ve":
             self.root = 'have'
+        elif text == "'s" and self.POStag == 'VBZ':
+            self.root = 'be'
         else:
             self.root = text.lower()
         # we ignore 's and 'd since we don't gain anything from rebuilding them, the important part is the POS tag
 
     def toString(self):
-        print self.text.encode('ascii'), self.POStag.encode('ascii'), self.category, self.index, self.root.encode('ascii'), \
-            self.dependency[0].encode('ascii'), '-->', self.dependency[1]
+
+        return [self.index, self.text.encode('ascii'), self.POStag.encode('ascii'), self.sent_group, self.category, self.root.encode('ascii'), \
+            self.dependency[0].encode('ascii'), self.dependency[1]]
 
     # this method will transform any proper noun into fingerspelled format (no need for rules as there are only a coupl
     def fingerSpell(self):
