@@ -65,7 +65,7 @@ def times():
         sent = sentence.split(' ')
 
         for s in sent:
-            syn = wn.synsets(s, pos='v')
+            syn = wn.synsets(s, pos='n')
             if len(syn) > 0:
                 print s, syn[0].lexname()
 

@@ -13,7 +13,7 @@ class Parser:
         # first check if the stanford website is accessible
         status_code = 0
         try:
-            initRequest = requests.post("http://nlp.stanford.edu:8080/parser/index.jsp") # test if the parser is still at this address
+            initRequest = requests.post("http://nlp.stanford.edu:8080/parser/index.jsp", timeout=1) # test if the parser is still at this address
             status_code = initRequest.status_code
 
         except requests.ConnectionError:

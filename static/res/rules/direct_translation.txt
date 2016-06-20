@@ -47,7 +47,6 @@ will->_
 
 NNS
 parent->-m-f-
-glass->glasses
 
 NN
 mom->-m-m-

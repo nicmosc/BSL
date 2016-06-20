@@ -3,6 +3,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from copy import deepcopy
 from terminaltables import AsciiTable
+from utils import text2int
 
 # this class will have objects describing a sentence from English
 # it will have:
@@ -66,7 +67,7 @@ class EnglishSentence:
 
             #temp_words[index].setDependency((rel, source))  # make tuple
 
-            index = int(source.split('-')[1])
+            index = int(source.split('-')[-1])
 
             source_pos = -1
 
@@ -107,7 +108,8 @@ class EnglishSentence:
                     if subtree.label() not in self.subSentences:
                         self.subSentences.append(subtree.label())
                     for word in subtree.leaves():
-                        word.sent_group = subtree.label()
+                        if word.sent_group.split('_')[0] == 'S' or word.sent_group == '':    # if the word gorup is a generic sentence, update, otherwise
+                            word.sent_group = subtree.label()       # leave it (we want to keep everything under SBAR etc)
 
                 self.setSentenceGroups(subtree)
 
@@ -152,6 +154,11 @@ class IntermediateSentence:
 
     # this method will cover anything which couldnt be handled with external rules
     def specialCases(self):
+
+        # for testing
+        print "\nSPECIAL CASES\n"
+        print map(lambda x: str(x.sent_group), self.words)
+
         for i, word in enumerate(self.words):
 
             # this handles the case that the noun is a location and the previous word is 'in', we need WHERE
@@ -166,6 +173,17 @@ class IntermediateSentence:
                     #self.words[i+1].facial_expression = '[q]'  # also set this as a question
                     self.words[i] = self.words[i+1]
                     self.words[i+1] = word
+
+            # this handles the time case i.e. whenever we mention yesterday, today, in a week etc
+            if word.category == 'noun.time' and i > 0:
+                # move the word (or word group) to the beginning of the sentence group
+                s_group = word.sent_group
+                for j, w in reversed(list(enumerate(self.words[:i]))):
+                    if w.sent_group != s_group or j == 1:     # if we reached the end of the sentence group or the beginning of the sentence
+                        print j, w, i, word
+                        self.words.insert(j-1, self.words.pop(i))     # move word to the desired location
+                        print self.words
+                        break
 
     def updateString(self):
         self.word_strings = map(lambda x: str(x), self.words)

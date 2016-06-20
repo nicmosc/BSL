@@ -1,1 +1,3 @@
 static/lib
+*.pyc
+*.pyo

@@ -18,7 +18,7 @@ My parents are middle aged. | MY -M-F- AGE MIDDLE
 They got married in 1986. | THEM MARRIED 1986
 I have 2 sisters, Emma and Isabel. | ME HAVE 2 SISTER 1 -E-M-M-MA- 2 -I-S-A-B-E-L-
 Emma is 21 years old. | -E-M-M-A- AGE 21
-She lives in Nottingham because she is studying at the university. | Index LIVE ?? WHY Index STUDY UNIVERSITY
+She lives in London because she is studying at the university. | Index LIVE -L-O-N-D-O-N- WHY Index STUDY UNIVERSITY
 She's studying theatre design. | Index STUDY WHAT THEATRE DESIGN
 She has long brown hair and blue eyes, and glasses. | Index HAVE HAIR LONG BROWN EYE BLUE GLASSES
 Isabel is 18. | -I-S-A-B-E-L- AGE 18
