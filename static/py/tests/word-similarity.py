@@ -69,4 +69,9 @@ def times():
             if len(syn) > 0:
                 print s, syn[0].lexname()
 
-times()
+def readWN():
+    for ss in wn.all_synsets(pos='n'):
+        if ss.lexname() == 'noun.time':
+            print ss
+
+readWN()

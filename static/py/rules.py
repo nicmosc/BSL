@@ -30,7 +30,8 @@ class Rules:
         except IOError:
             print 'File ' + f_name + ' not found'
 
-        self.combinedWords()    # load combined words from signbank
+        self.readCombinedWords()    # load combined words from signbank
+        print self.combined_words
 
         for k,v in self.direct_translation.iteritems():
             print k
@@ -70,6 +71,18 @@ class Rules:
                     self.direct_translation[current_cat][src] = tgt
 
         file.close()
+
+    # this method returns a list of of list of words (words that have multiple combinations)
+    def readCombinedWords(self):
+        f_name = 'signbank_multi.txt'
+        try:
+            f = open('../res/rules/' + f_name, 'r')
+            for line in f:
+                split = line.strip().split(' ')
+                self.combined_words[split[0]].append(split[1:])
+            f.close()
+        except IOError:
+            print 'File ' + f_name + ' not found'
 
 
     def applyTreeTranforms(self, sentence):
@@ -171,7 +184,7 @@ class Rules:
                     for i in range (seq[0],seq[1]):     # replace those words in the given range
                         t = target[j].strip()
                         if t == '_':       # remove word
-                            i_sentence.words.pop(i-backtrace)
+                            del i_sentence.words[i-backtrace]
                             backtrace += 1
                         else:
                             i_sentence.words[i-backtrace].root = t
@@ -202,7 +215,7 @@ class Rules:
                 # possible unique id
         source = ' '.join(source_copy)
 
-        source = re.sub('\s?<>\s?', '\s?(.*)\s?', source)  # set regex match for anything where <> is found
+        source = re.sub('\s?<>\s?', '(\s.*\s)', source)  # set regex match for anything where <> is found
 
         source += '$'  # match end of string exactly
 
@@ -301,17 +314,30 @@ class Rules:
         # now construct the production object from the nonterminals
         return Production(productionObjects[0], productionObjects[1:])  # return the modified rule to the list
 
-    # this method returns a list of of list of words (words that have multiple combinations)
-    def combinedWords(self):
-        f_name = 'signbank_multi.txt'
-        try:
-            f = open('../res/rules/' + f_name, 'r')
-            for line in f:
-                split = line.strip().split(' ')
-                self.combined_words[split[0]].append(split[1:])
-            f.close()
-        except IOError:
-            print 'File ' + f_name + ' not found'
+    def applyCombinedWords(self, words):
+
+        print '\nCOMBINED WORDS\n'
+
+        i = 0
+        while i < len(words)-1:
+            if self.combined_words[words[i].root]:  # if the first word is found in the file, check if the following matches
+                for sequence in self.combined_words[words[i].root]:
+                    match = True
+                    for j, word in enumerate(sequence):  # one sequence may have more than 1 word e.g. Not [give, a , damn]
+                        if 1+i+j < len(words):  # prevent index error
+                            if word != words[1 + i + j].root:
+                                match = False
+                                break
+                        else:
+                            match = False
+                            break
+                    if match:
+                        words[i].root += '-' + '-'.join(sequence)  # create new combined word
+                        # then delete all the ones that are in the sequence
+                        for j in range(len(sequence)):
+                            del words[1+i]
+                        break
+            i+=1
 
 def subfinder(mylist, pattern):
     return [(i, i + len(pattern)) for i in range(len(mylist)) if mylist[i:i + len(pattern)] == pattern]

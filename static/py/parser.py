@@ -17,7 +17,9 @@ class Parser:
             status_code = initRequest.status_code
 
         except requests.ConnectionError:
-            print "Not online"
+            print "Not online, using offline parser"
+        except requests.exceptions.Timeout:
+            print "Response too slow, using offline parser"
 
         # for testing
         #status_code = 1

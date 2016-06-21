@@ -8,8 +8,10 @@ NP -> JJ JJ NN~ | NP -> NN~ JJ JJ
 NP -> JJ NN~ | NP -> NN~ JJ
 NP -> DT <> NN~ | NP -> DT NN~ <>		// generic case to swap any adjective modifier
 
+NP -> <> ADJP NN~ | NP -> <> NN~ ADJP
+
 VP -> VB~ VP | VP -> _ VP   // will cover anything like "has died", "was born" i.e. auxiliaries
-// _ means empty, thus delete 
+VP -> VB~ <> VP | VP -> _ <> VP
 
 VP -> VB~ ADJP <> | VP -> _ ADJP <>		// covers "He was sick", "He is tall" etc
 
@@ -21,7 +23,7 @@ PP -> TO NP | PP -> _ NP
 SQ -> VB~ <> | SQ -> _ <>  // removes the "have", "did" etc in questions
 SQ -> MD <> | SQ -> _ <>
 
-SBAR~ -> WH~ <> | SBAR~ -> <> WH~  // handles direct questions introduced by a wh- word or wh-phrase
+SBARQ -> WH~ <> | SBARQ -> <> WH~  // handles direct questions introduced by a wh- word or wh-phrase
 //SBAR -> IN <> | SBAR -> _ <>
 
 SINV -> MD <> | SINV -> _ <>

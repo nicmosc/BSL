@@ -26,21 +26,27 @@ class Analyser:
         sentence.setSentenceGroups(sentence.augTree) # set the sentence groups to each word
 
     def applyRules(self, sentence):
+
         mod_sentence = self.rules.applyTreeTranforms(sentence)   # return modified original
 
         i_sentence = IntermediateSentence(mod_sentence, sentence)  # create intermediate sentence representation from result
 
         # before applying direct translation we may want to find multiple words that make up 1 sign e.g. now and then = NOW-AND-THEN
+        self.rules.applyCombinedWords(i_sentence.words)
 
+        # direct translation
         self.rules.applyDirectTranslation(i_sentence)
+
 
         # special cases are handled separately e.g. in + location = WHERE? LOCATION
         i_sentence.specialCases()
 
+        i_sentence.toString()
+
         i_sentence.toUpper()
         #i_sentence.toString()
 
-        return i_sentence.toString()
+        return i_sentence.getGloss()
 
     def removePunctuation(self, tree):
         for subtree in tree[:]:

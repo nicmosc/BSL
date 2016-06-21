@@ -77,3 +77,6 @@ be->_
 
 VBZ
 be->_
+
+$
+$->dollar
