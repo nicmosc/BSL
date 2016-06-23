@@ -62,12 +62,16 @@ def process(sent):
 
     e_sentence.toString()  # print to see result
 
-    result = analyser.applyRules(e_sentence)  # apply rules to modify the sentence and return result
+    bsl_skeleton = analyser.applyRules(e_sentence)  # apply rules to modify the sentence and return result
+
+    ''' AFTER THIS POINT WE WANT TO PROCESS FACIAL EXPRESSIONS ETC '''
+
+
 
     # dont forget to clear once we're done
     e_sentence.clear()
 
-    return result
+    return bsl_skeleton.getGloss()
 
 if __name__ == '__main__':
     main()

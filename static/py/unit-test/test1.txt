@@ -7,26 +7,26 @@ Today, I will practice the topic "family". | TODAY ME PRACTICE TOPIC FAMILY
 Who is my family? | MY FAMILY WHO
 My parents live in Essex. | MY -M-F- LIVE WHERE -E-S-S-E-X-
 My dad's name is Mark. | MY -D-D- NAME -M-A-R-K-
-He works as a teacher part time. | Index WORK TEACHER PART TIME
-Before, he was an IT manager. | BEFORE Index -I-T- MANAGER
+He works as a teacher part time. | index WORK TEACHER PART TIME
+Before, he was an IT manager. | BEFORE index -I-T- MANAGER
 My dad is quite tall with grey hair, glasses and blue eyes. | MY -D-D- QUITE TALL HAIR GRAY GLASSES EYE BLUE
-He likes football and computers. | Index LIKE FOOTBALL COMPUTER
+He likes football and computers. | index LIKE FOOTBALL COMPUTER
 My mum's name is Jenny. | MY -M-M- NAME -J-E-N-N-Y-
-She works as a speech therapist at a school with disabled children. | Index WORK SPEECH THERAPIST WHERE SCHOOL WITH DISABLED CHILD
+She works as a speech therapist at a school with disabled children. | index WORK SPEECH THERAPIST WHERE SCHOOL WITH DISABLED CHILD
 Her hobbies are dancing, yoga and gardening. | HER HOBBY WHAT DANCE YOGA GARDENING
 My parents are middle aged. | MY -M-F- AGE MIDDLE
 They got married in 1986. | THEM MARRIED -1-9-8-6-
 I have 2 sisters, Emma and Isabel. | ME HAVE 2 SISTER 1 -E-M-M-MA- 2 -I-S-A-B-E-L-
-Emma is 21 years old. | -E-M-M-A- AGE -2-1-
-She lives in London because she is studying at the university. | Index LIVE -L-O-N-D-O-N- WHY Index STUDY UNIVERSITY
-She's studying theatre design. | Index STUDY WHAT THEATRE DESIGN
-She has long brown hair and blue eyes, and glasses. | Index HAVE HAIR LONG BROWN EYE BLUE GLASSES
-Isabel is 18. | -I-S-A-B-E-L- AGE 18
-She studies maths and science at school. | Index STUDY MATH SCIENCE SCHOOL
-She has very long brown hair and blue eyes. | Index HAVE HAIR VERY LONG BROWN EYE BLUE
+Emma is 21 years old. | -E-M-M-A- index AGE -2-1-
+She lives in London because she is studying at the university. | index LIVE -L-O-N-D-O-N- WHY index STUDY UNIVERSITY
+She's studying theatre design. | index STUDY WHAT THEATRE DESIGN
+She has long brown hair and blue eyes, and glasses. | index HAVE HAIR LONG BROWN EYE BLUE GLASSES
+Isabel is 18. | -I-S-A-B-E-L- index AGE 18
+She studies maths and science at school. | index STUDY MATH SCIENCE SCHOOL
+She has very long brown hair and blue eyes. | index HAVE HAIR VERY LONG BROWN EYE BLUE
 How would I describe my sisters? | ME DESCRIBE SISTER HOW
 They are happy and very clever. | THEM HAPPY VERY CLEVER
 I live with a friend named Dom. | ME LIVE WITH FRIEND NAME -D-O-M-
-Dom is tall and slim and has blonde hair. | -D-O-M- TALL SLIM HAVE HAIR BLONDE
-Dom works as an engineer. | -D-O-M- WORK ENGINEER
-I love living with Dom because he is very funny and nice. | ME LOVE LIVE WITH -D-O-M- WHY Index VERY FUNNY NICE
+Dom is tall and slim and has blonde hair. | -D-O-M- index TALL SLIM HAVE HAIR BLONDE
+Dom works as an engineer. | -D-O-M- index WORK ENGINEER
+I love living with Dom because he is very funny and nice. | ME LOVE LIVE WITH -D-O-M- WHY index VERY FUNNY NICE

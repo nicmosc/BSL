@@ -37,16 +37,15 @@ class Analyser:
         # direct translation
         self.rules.applyDirectTranslation(i_sentence)
 
-
         # special cases are handled separately e.g. in + location = WHERE? LOCATION
         i_sentence.specialCases()
 
-        i_sentence.toString()
+        i_sentence.toString()       # print once to see results
 
-        i_sentence.toUpper()
+        i_sentence.toUpper()        # set everything to upper as required
         #i_sentence.toString()
 
-        return i_sentence.getGloss()
+        return i_sentence
 
     def removePunctuation(self, tree):
         for subtree in tree[:]:
@@ -60,9 +59,9 @@ class Analyser:
 
         return tree
 
-    #def applyDependencies(self, sentence):
-    #    for word in sentence.words:
-
+    # this method will take the skeleton of the BSL output, that is something like MY -M-F- LIVE WHERE -E-S-S-E-X-
+    # and add necessary info, as well as
+    #def generateOutput(self):
 
     def updateRules(self):      # for testing, we may re-read the file to make it quicker
         self.rules = Rules()

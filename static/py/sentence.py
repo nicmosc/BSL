@@ -42,7 +42,7 @@ class EnglishSentence:
             tag = pair.split('/')[-1]
 
             if tag not in ignore:     # do not count punctuation as words
-                word = Word(text, tag, i, self.lemmatizer)
+                word = Word(text, tag, i)
                 #self.words.append(word)
                 self.words.append(word)    # add new word
 
@@ -152,7 +152,7 @@ class IntermediateSentence:
 
     def toUpper(self):
         for i,word in enumerate(self.words):
-            if word.root != 'Index':    # do not uppercase Index
+            if word.root != 'index':    # do not uppercase Index
                 self.words[i].root = word.root.upper()
 
     def toString(self):
@@ -181,13 +181,17 @@ class IntermediateSentence:
         # first look for other CDs in case the number is a combination of words e.g. thirty five
         self.formatNumbers()
 
-
-        for i, word in enumerate(self.words):
+        i = 0
+        for word in self.words:
 
             # this handles the case that the noun is a location and the previous word is 'in', we need WHERE
             if word.category == 'noun.location' and i > 0:
                 if self.words[i - 1].root == 'in':
-                    self.words[i - 1].root = 'where'
+                    if word.sent_group not in ['SBARQ', 'SQ']:
+                        self.words[i - 1].root = 'where'
+                    else:
+                        del self.words[i-1]
+                        i -=1
                     # self.facial_expression = '[q]'      # set it as a question
 
             # this handles the case of numbers + other elements
@@ -201,11 +205,28 @@ class IntermediateSentence:
                 if i > 0:                       # if not the first element of the sentence
                     if self.words[i-1].POStag == 'IN':
                         del self.words[i-1]
+                        i -=1
+
+            # handles subordinating conjunction 'that'
+            if word.root == 'that' and word.sent_group == 'SBAR':
+                del self.words[i]
+                i -= 1
+
+            # we also insert a 'Index' whenever a name is the subject
+            if word.POStag == 'NNP' and word.dependency[0] == 'nsubj':
+                print 'INSERTING INDEX'
+                new_word = Word('index', 'PRP', -word.index)     # create new index word object
+                new_word.dep_group = word.dep_group
+                new_word.dependency = word.dependency
+                new_word.sent_group = word.sent_group
+                word.dependency = ('name', word.dependency[1])
+                self.words.insert(i+1, new_word)          # insert at correct index
 
             # this handles the time case i.e. whenever we mention yesterday, today, in a week etc
             if word.category == 'noun.time' and i > 0:
-                if self.words[i-1].POStag == 'IN':      # remove the "on monday", "during march"
-                   del self.words[i-1]
+                if self.words[i-1].root in ['in', 'on']:      # remove the "on monday", "during march"
+                    del self.words[i-1]
+                    i -=1
                 # move the word (or word group) to the beginning of the sentence group
                 s_group = word.sent_group
                 for j, w in reversed(list(enumerate(self.words[:i]))):
@@ -213,9 +234,24 @@ class IntermediateSentence:
                     if w.sent_group != s_group or j == 0:  # if we reached the end of the sentence group or the beginning of the sentence
                         if j != 0:  # if we didnt reach the end of the sentence, set j up 1
                             j += 1
-                        self.words.insert(j, self.words.pop(i))  # move word to the desired location
+                        # we insert the dependency group / word at j
+                        group = [word]
+                        self.words.remove(word) #remove from words
+                        for _w in self.words[:]:
+                            print 'checking',_w
+                            if _w.dep_group == word.dep_group and word.dep_group != None:  # if the word is in the same sentence group, the group is not null and it's not the same word
+                                print word,'in group',_w
+                                group.append(_w)
+                                print 'removing',_w
+                                self.words.remove(_w)
+
+                        print 'dep group',group
+                        # now insert the group of words at the correct position
+                        #self.words.insert(j, self.words.pop(i))  # move word to the desired location
+                        self.words = self.words[:j] + group + self.words[j:]
                         print self.words
                         break
+            i+=1
 
     def formatNumbers(self):
         numFound = False
@@ -257,7 +293,7 @@ class Word:
     #facial_expr = ''        # the facial expression associated with the word
     is_negated = False      # if the word is connected to a neg, it is negated (used for nouns, verbs, adjectives)
 
-    def __init__(self, text, tag, i, lemmatizer):
+    def __init__(self, text, tag, i):
         self.POStag = tag
         self.index = i
         self.isUpper = text.isupper() and len(text)>1   # text is considered upper e.g. BBC, but 'I' is not considered
@@ -275,7 +311,7 @@ class Word:
         else:
             wn_tag = penn_to_wn(tag)
             if wn_tag != None:
-                self.root = lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
+                self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
                 self.setCategory(wn_tag)
             else:
                 self.root = self.text

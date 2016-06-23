@@ -215,7 +215,9 @@ class Rules:
                 # possible unique id
         source = ' '.join(source_copy)
 
-        source = re.sub('\s?<>\s?', '(\s.*\s)', source)  # set regex match for anything where <> is found
+        source = re.sub('\s<>\s', '(\s.*\s)', source)
+        source = re.sub('<>\s', '(.*\s)', source)
+        source = re.sub('\s<>', '(\s.*)', source)  # set regex match for anything where <> is found
 
         source += '$'  # match end of string exactly
 
