@@ -1,11 +1,11 @@
 import re
 
 def regex():
-    line = "VP -> VB NP ADVP VP"
+    line = "VP -> VB NP ADVP"
 
-    source = "VP -> VB~ <>"
+    source = "VP -> VB~ <> VP"
 
-    target = "VP -> _ <>"
+    target = "VP -> _ <> VP"
 
 
     # modify the mapping before applying it (for unique tags
@@ -20,9 +20,8 @@ def regex():
 
     source = ' '.join(source_copy)
 
-    source = re.sub('\s<>\s', '(\s.*\s)', source)
-    source = re.sub('<>\s', '(.*\s)', source)
-    source = re.sub('\s<>', '(\s.*)', source)
+    source = re.sub('\s<>\s', '(.*\s)', source)
+    source = re.sub('\s<>', '(\s?.*)', source)
 
     source = re.sub('~', '([A-Z]*)', source)
 

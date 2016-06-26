@@ -24,7 +24,7 @@ She has long brown hair and blue eyes, and glasses. | index HAVE HAIR LONG BROWN
 Isabel is 18. | -I-S-A-B-E-L- index AGE 18
 She studies maths and science at school. | index STUDY MATH SCIENCE SCHOOL
 She has very long brown hair and blue eyes. | index HAVE HAIR VERY LONG BROWN EYE BLUE
-How would I describe my sisters? | ME DESCRIBE SISTER HOW
+How would I describe my sisters? | ME DESCRIBE MY SISTER HOW
 They are happy and very clever. | THEM HAPPY VERY CLEVER
 I live with a friend named Dom. | ME LIVE WITH FRIEND NAME -D-O-M-
 Dom is tall and slim and has blonde hair. | -D-O-M- index TALL SLIM HAVE HAIR BLONDE

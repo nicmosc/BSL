@@ -2,16 +2,17 @@
 
 
 //NP -> DT <> NN | NP -> DT NN <>   // <> means anything e.g. The/DT (small/JJ) man/NN
-NP -> <> NN~ NN~ | NP -> <> NN~ NN~ 	// specific case, prevents e.g. IT Manager (NNP, NN)
+//NP -> <> NN~ NN~ | NP -> <> NN~ NN~ 	// specific case, prevents e.g. IT Manager (NNP, NN)
+NP -> PDT <> | NP -> _ <>
 NP -> <> JJ NN~ CC <> NN~ | NP -> NN~ <> JJ CC NN~ <> 	// very specific case
 NP -> JJ JJ NN~ | NP -> NN~ JJ JJ
 NP -> JJ NN~ | NP -> NN~ JJ
-NP -> DT <> NN~ | NP -> DT NN~ <>		// generic case to swap any adjective modifier
+//NP -> DT <> NN~ | NP -> DT NN~ <>		// generic case to swap any adjective modifier
 
+NP -> <> JJ NN~ | NP -> <> NN~ JJ
 NP -> <> ADJP NN~ | NP -> <> NN~ ADJP
 
-VP -> VB~ VP | VP -> _ VP   // will cover anything like "has died", "was born" i.e. auxiliaries
-VP -> VB~ <> VP | VP -> _ <> VP
+VP -> VB~ <> VP | VP -> _ <> VP 		// will cover anything like "has died", "was born" i.e. auxiliaries
 
 VP -> VB~ ADJP <> | VP -> _ ADJP <>		// covers "He was sick", "He is tall" etc
 

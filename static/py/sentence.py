@@ -4,6 +4,7 @@ from nltk.corpus import wordnet as wn
 from copy import deepcopy
 from terminaltables import AsciiTable
 from utils import formatNumber, abbreviateMonth
+from collections import defaultdict
 
 # this class will have objects describing a sentence from English
 # it will have:
@@ -26,7 +27,8 @@ class EnglishSentence:
         self.augTree = Tree     # will hold the word objects directly
         self.question = False  # if true then it is a question, false by default
 
-        self.subSentences = []  # will contain the sentence groups words belong to
+        self.subSentences = defaultdict(list)  # will contain the sentence groups words belong to
+        self.sentence_tenses = []   # specify the tenses of the above group
         self.dependency_groups = []     # contains the dependency group ids (so we dont repeat them)
 
         #.tense = 'present' # can be present, past or future (used to set the time at the start)
@@ -101,17 +103,65 @@ class EnglishSentence:
             if type(subtree) == Tree:
                 group = subtree.label().split('_')[0]
                 if group in ['S', 'SBAR', 'SBARQ', 'SINV', 'SQ']:
-                    if subtree.label() not in self.subSentences:
-                        self.subSentences.append(subtree.label())
+                    #if subtree.label() not in self.subSentences:
+                    #    self.subSentences.append(subtree.label())
                     for word in subtree.leaves():
                         if word.sent_group.split('_')[0] == 'S' or word.sent_group == '':    # if the word gorup is a generic sentence, update, otherwise
                             word.sent_group = subtree.label()       # leave it (we want to keep everything under SBAR etc)
 
                 self.setSentenceGroups(subtree)
 
+    def updateSentGroupList(self):
+        temp_group = ''
+        for word in self.words:
+            if word.sent_group != temp_group:
+                self.subSentences.append(word.sent_group)
+            temp_group = word.sent_group
+
+    def setTenses(self):
+        # for each word we encounter, while we're still in the same sentence group, we check what combination of verbs there are
+        # to determine the temporal topic of the sentence
+
+        sequence = []       # this will go inside the other
+        seq_verbs = []      # takes the verb roots
+        pos_sequence = []
+        current_sent = None
+        for word in self.words:
+            if word.POStag[:2] == 'VB' or word.POStag == 'MD':
+                print word.POStag
+                if current_sent != word.sent_group and current_sent != None:
+                    pos_sequence.append((sequence, seq_verbs))
+                    sequence = []
+                    seq_verbs = []
+                sequence.append(word.POStag)
+                seq_verbs.append(word.root)
+                current_sent = word.sent_group
+
+
+        pos_sequence.append((sequence, seq_verbs))
+
+        print pos_sequence
+
+        # now check for tense specific constructs
+        for combi, v in pos_sequence:
+            tense = 'present'
+            if combi == ['VBD', 'VBG'] or combi == ['VBZ', 'VBN','VBG']:
+                tense = 'past-not_finished'
+            elif combi == ['VBD'] or combi == ['VBP', 'VBN']:
+                tense = 'past-finished'
+            elif combi == ['VBZ', 'VBN']:
+                if v[-1] == 'be':           # special be + ADJP case
+                    tense = 'past-not_finished'
+                else:
+                    tense = 'past-finished'
+            elif combi[0] == 'MD':
+                tense = 'future'
+            self.sentence_tenses.append(tense)
+
     def toString(self):
         print 'Is it a question? ', self.question
         print 'Subsentence groups ', self.subSentences
+        print 'Tenses ', self.sentence_tenses
         self.augTree.pretty_print()
 
         # nicely prints all the details of the words
@@ -182,7 +232,9 @@ class IntermediateSentence:
         self.formatNumbers()
 
         i = 0
-        for word in self.words:
+        while i < len(self.words):
+
+            word = self.words[i]
 
             # this handles the case that the noun is a location and the previous word is 'in', we need WHERE
             if word.category == 'noun.location' and i > 0:
@@ -202,15 +254,19 @@ class IntermediateSentence:
                         # self.words[i+1].facial_expression = '[q]'  # also set this as a question
                         self.words[i] = self.words[i + 1]
                         self.words[i + 1] = word
-                if i > 0:                       # if not the first element of the sentence
-                    if self.words[i-1].POStag == 'IN':
-                        del self.words[i-1]
-                        i -=1
+                #if i > 0:                       # if not the first element of the sentence
+                #   if self.words[i-1].root in ['in', 'on']:
+                #        del self.words[i-1]
+                #        i -=1
 
             # handles subordinating conjunction 'that'
             if word.root == 'that' and word.sent_group == 'SBAR':
                 del self.words[i]
                 i -= 1
+
+            # as 'that' is changed to index, if that is not a determiner, we want to keep the sign for that
+            if word.root == 'index' and word.text == 'that' and word.dependency[0] != 'det':
+                word.root = 'that'
 
             # we also insert a 'Index' whenever a name is the subject
             if word.POStag == 'NNP' and word.dependency[0] == 'nsubj':

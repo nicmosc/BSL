@@ -128,15 +128,18 @@ class Rules:
                     # get the new target using the object groups from the match
                     new_target_chunks = self.constructNewTarget(target_chunks, match ,target_i)
 
+                    #print new_target_chunks
+
                     modApplied = True
 
-                    # create new production from the new target
-                    newProductions.append(self.constructProduction(new_target_chunks))     # append new production from target
+                    prod_string = ' '.join(filter(lambda x: len(x) > 0, new_target_chunks))
+                    #break  # once a matching rule is found, no need to keep going
 
-                    break  # once a matching rule is found, no need to keep going
-
-            if not modApplied:
-                    newProductions.append(prod)  # if no modification is applied, push the rule to the new list
+            if modApplied:
+                # create new production from the new target
+                newProductions.append(self.constructProduction(prod_string.split(' ')))  # append new production from target
+            else:
+                newProductions.append(prod)  # if no modification is applied, push the rule to the new list
 
         #testing - print old vs new production
         for i in range(len(productions)):
@@ -215,9 +218,8 @@ class Rules:
                 # possible unique id
         source = ' '.join(source_copy)
 
-        source = re.sub('\s<>\s', '(\s.*\s)', source)
-        source = re.sub('<>\s', '(.*\s)', source)
-        source = re.sub('\s<>', '(\s.*)', source)  # set regex match for anything where <> is found
+        source = re.sub('\s<>\s', '(.*\s)', source)
+        source = re.sub('\s<>', '(\s?.*)', source)  # set regex match for anything where <> is found
 
         source += '$'  # match end of string exactly
 

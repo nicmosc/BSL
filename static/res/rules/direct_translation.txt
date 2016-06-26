@@ -61,23 +61,5 @@ asl->-A-S-L-
 CC
 and->_ 			// remove and conjunction
 
-VB
-be->_ 			// no verb BE in BSL
-
-VBD
-be->_
-
-VBG
-be->_
-
-VBN
-be->_
-
-VBP
-be->_
-
-VBZ
-be->_
-
 $
 $->dollar
