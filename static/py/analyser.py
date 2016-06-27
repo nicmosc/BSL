@@ -24,7 +24,6 @@ class Analyser:
         sentence.traverseReplaceWords(sentence.augTree, [])  # replace words with word objects for modification and make tags unique
 
         sentence.setSentenceGroups(sentence.augTree) # set the sentence groups to each word
-        sentence.updateSentGroupList()
 
         # find tenses for the sentences in order to establish temporal topic
         # this is done before moving the time related words as we nned all the words for this

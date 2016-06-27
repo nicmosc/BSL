@@ -111,57 +111,39 @@ class EnglishSentence:
 
                 self.setSentenceGroups(subtree)
 
-    def updateSentGroupList(self):
-        temp_group = ''
-        for word in self.words:
-            if word.sent_group != temp_group:
-                self.subSentences.append(word.sent_group)
-            temp_group = word.sent_group
-
     def setTenses(self):
         # for each word we encounter, while we're still in the same sentence group, we check what combination of verbs there are
         # to determine the temporal topic of the sentence
 
-        sequence = []       # this will go inside the other
-        seq_verbs = []      # takes the verb roots
-        pos_sequence = []
-        current_sent = None
+        sequence = []
+        seq_verbs = []
+        temp_verb_dict = defaultdict(list)      # will hold the roots
         for word in self.words:
             if word.POStag[:2] == 'VB' or word.POStag == 'MD':
                 print word.POStag
-                if current_sent != word.sent_group and current_sent != None:
-                    pos_sequence.append((sequence, seq_verbs))
-                    sequence = []
-                    seq_verbs = []
-                sequence.append(word.POStag)
-                seq_verbs.append(word.root)
-                current_sent = word.sent_group
-
-
-        pos_sequence.append((sequence, seq_verbs))
-
-        print pos_sequence
+                self.subSentences[word.sent_group]+=[word.POStag]
+                temp_verb_dict[word.sent_group]+=[word.root]
 
         # now check for tense specific constructs
-        for combi, v in pos_sequence:
+        # rework this - BROKEN
+        for k,v in self.subSentences.iteritems():
             tense = 'present'
-            if combi == ['VBD', 'VBG'] or combi == ['VBZ', 'VBN','VBG']:
+            if v == ['VBD', 'VBG'] or v == ['VBZ', 'VBN','VBG']:
                 tense = 'past-not_finished'
-            elif combi == ['VBD'] or combi == ['VBP', 'VBN']:
+            elif v == ['VBD'] or v == ['VBP', 'VBN']:
                 tense = 'past-finished'
-            elif combi == ['VBZ', 'VBN']:
+            elif v == ['VBZ', 'VBN']:
                 if v[-1] == 'be':           # special be + ADJP case
                     tense = 'past-not_finished'
                 else:
                     tense = 'past-finished'
-            elif combi[0] == 'MD':
+            elif v[0] == 'MD':
                 tense = 'future'
-            self.sentence_tenses.append(tense)
+            self.subSentences[k] = tense
 
     def toString(self):
         print 'Is it a question? ', self.question
         print 'Subsentence groups ', self.subSentences
-        print 'Tenses ', self.sentence_tenses
         self.augTree.pretty_print()
 
         # nicely prints all the details of the words
@@ -190,6 +172,7 @@ class IntermediateSentence:
     def __init__(self, words, e_sentence):
 
         self.question = e_sentence.question
+        self.sentenceGroups = e_sentence.subSentences
 
         #if type(words[-1]) == unicode:     # if the last element is a question mark e.g. remove it
         #    words = words[:-1]
