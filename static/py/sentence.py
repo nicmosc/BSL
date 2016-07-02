@@ -3,7 +3,7 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from copy import deepcopy
 from terminaltables import AsciiTable
-from utils import formatNumber, abbreviateMonth
+from utils import formatNumber, abbreviateMonth, findGender
 from collections import defaultdict
 
 # this class will have objects describing a sentence from English
@@ -27,7 +27,8 @@ class EnglishSentence:
         self.augTree = Tree     # will hold the word objects directly
         self.question = False  # if true then it is a question, false by default
 
-        self.subSentences = defaultdict(list)  # will contain the sentence groups words belong to
+        self.subSentences = defaultdict(list)  # will contain the sentence groups words belong to as well as the tense of the subsentence
+        # it will be kept for the JS data, not for the simple gloss
         self.sentence_tenses = []   # specify the tenses of the above group
         self.dependency_groups = []     # contains the dependency group ids (so we dont repeat them)
 
@@ -58,25 +59,30 @@ class EnglishSentence:
         self.syntaxTree = deepcopy(synTree)     # we don't want to modify syntax tree (not by reference, by value)
         self.augTree = synTree
 
-        for i,dep in enumerate(dependencies):
+        for dep in dependencies:
             fst = dep.split(',')[0] # get target node and relation
+
+            snd = dep.split(',')[1] # get the source node
 
             rel = fst.split('(')[0] # get the relation
             target = fst.split('(')[1]  # and target node
 
-            index = int(target.split('-')[-1])
+            target_index = int(target.split('-')[-1])
+            source_index = int(snd.split('-')[-1].strip(')'))
 
             target_pos = -1
+            source_pos = -1
 
-            for word in self.words:
+            for word in self.words:     # look for the target
                 if word == '?':
                     break
-                elif word.index == index:
-                    target_pos = self.words.index(word)
-                    break
+                elif word.index == target_index:
+                    target_pos = self.words.index(word)     # get the target position
+                elif word.index == source_index:
+                    source_pos = self.words.index(word)     # get the source position
 
             # we set the dependency for the word, and pass it the already existing dependency groups to avoid repetition
-            self.words[i].setDependency(rel, self.words[target_pos], self.dependency_groups)
+            self.words[source_pos].setDependency(rel, self.words[target_pos], self.dependency_groups)
 
     def traverseReplaceWords(self, tree, seenLabels):
         for index, subtree in enumerate(tree):
@@ -115,8 +121,6 @@ class EnglishSentence:
         # for each word we encounter, while we're still in the same sentence group, we check what combination of verbs there are
         # to determine the temporal topic of the sentence
 
-        sequence = []
-        seq_verbs = []
         temp_verb_dict = defaultdict(list)      # will hold the roots
         for word in self.words:
             if word.POStag[:2] == 'VB' or word.POStag == 'MD':
@@ -137,6 +141,8 @@ class EnglishSentence:
                     tense = 'past-not_finished'
                 else:
                     tense = 'past-finished'
+            elif v == ['VBZ', 'VBG']:
+                tense = 'future'
             elif v[0] == 'MD':
                 tense = 'future'
             self.subSentences[k] = tense
@@ -147,7 +153,7 @@ class EnglishSentence:
         self.augTree.pretty_print()
 
         # nicely prints all the details of the words
-        table_data = [['i','Word', 'POS', 'S-group', 'WN Category', 'Root','dep', 'dep-group','target']]
+        table_data = [['i','Word', 'POS', 'S-group', 'WN Category', 'Root','dep', 'dep-group','target', 'num_modified','negated']]
 
         for w in self.words:
             info = w.toString()
@@ -183,14 +189,9 @@ class IntermediateSentence:
     def updateString(self):
         self.word_strings = map(lambda x: str(x), self.words)
 
-    def toUpper(self):
-        for i,word in enumerate(self.words):
-            if word.root != 'index':    # do not uppercase Index
-                self.words[i].root = word.root.upper()
-
     def toString(self):
         # nicely prints all the details of the words
-        table_data = [['i', 'Word', 'POS', 'S-group', 'WN Category', 'Root', 'dep', 'dep-group','target']]
+        table_data = [['i', 'Word', 'POS', 'S-group', 'WN Category', 'Root', 'dep', 'dep-group','target','num_modified', 'negated']]
 
         for w in self.words:
             info = w.toString()
@@ -200,7 +201,7 @@ class IntermediateSentence:
         print table.table
 
     def getGloss(self):
-        return ' '.join(map(lambda s: str(s), self.words))
+        return map(lambda s: str(s), self.words)
 
     # this method will cover anything which couldnt be handled with external rules
     def specialCases(self):
@@ -219,15 +220,20 @@ class IntermediateSentence:
 
             word = self.words[i]
 
-            # this handles the case that the noun is a location and the previous word is 'in', we need WHERE
-            if word.category == 'noun.location' and i > 0:
-                if self.words[i - 1].root == 'in':
+            # this handles the case that the noun is a location and the previous word is 'in' or 'at', we need WHERE
+            #if word.category in ['noun.location', 'noun.artifact', 'noun.object', 'noun.group'] and i > 0:
+            if word.category in ['noun.location'] and i > 0:
+                if self.words[i - 1].root in ['in', 'at']:
                     if word.sent_group not in ['SBARQ', 'SQ']:
                         self.words[i - 1].root = 'where'
                     else:
                         del self.words[i-1]
                         i -=1
                     # self.facial_expression = '[q]'      # set it as a question
+            else:
+                if self.words[i - 1].root == 'at':
+                    del self.words[i-1]
+                    i -= 1
 
             # this handles the case of numbers + other elements
             if word.POStag == 'CD':
@@ -237,10 +243,11 @@ class IntermediateSentence:
                         # self.words[i+1].facial_expression = '[q]'  # also set this as a question
                         self.words[i] = self.words[i + 1]
                         self.words[i + 1] = word
-                #if i > 0:                       # if not the first element of the sentence
-                #   if self.words[i-1].root in ['in', 'on']:
-                #        del self.words[i-1]
-                #        i -=1
+
+                if i > 0:                       # if not the first element of the sentence
+                   if self.words[i-1].root in ['in', 'on']:
+                        del self.words[i-1]
+                        i -=1
 
             # handles subordinating conjunction 'that'
             if word.root == 'that' and word.sent_group == 'SBAR':
@@ -263,7 +270,7 @@ class IntermediateSentence:
 
             # this handles the time case i.e. whenever we mention yesterday, today, in a week etc
             if word.category == 'noun.time' and i > 0:
-                if self.words[i-1].root in ['in', 'on']:      # remove the "on monday", "during march"
+                if self.words[i-1].root in ['in', 'on']:      # remove the "on monday"
                     del self.words[i-1]
                     i -=1
                 # move the word (or word group) to the beginning of the sentence group
@@ -313,6 +320,46 @@ class IntermediateSentence:
 
         print self.words
 
+    def countIndexes(self):     # this function sets the index numbers e.g. index_1 index_2 if those are separate entities
+        print '\nCOUNTING INDEXES\n'
+
+        indexes = []        # will be of the form [(1, male, False), (1, male True), (2, None, False)] where False means...
+
+        for word in self.words:
+            if word.root == 'index':
+                # if word.dependency[0] == 'det':
+                #     word.root+='_'+str(indexes[-1])      # set the index to the last found id
+                #     indexes.append(indexes[-1]+1)
+                new_id = 0
+                if word.index < 0:      # if the index refers to someone's name
+                    for n in self.words:
+                        if n.index == -word.index:
+                            gender = findGender(n.text)
+                            print word.root,gender
+                            addIndex(indexes, gender)
+                else:   # if the index represents a determiner or a personal pronoun
+                    gender = None
+                    if word.text in ['he', 'him']:
+                        gender = 'male'
+                    elif word.text in ['she', 'her']:
+                        gender = 'female'
+                    # else the word is an object (determiner)
+                    addIndex(indexes, gender)
+
+                word.root += '_'+str(indexes[-1][0])      # set the index to the last found id
+
+def addIndex(indexes, gender):
+    latest = 0
+    print indexes
+    for tpl in indexes:
+        if tpl[0] > latest:
+            latest = tpl[0]
+        if gender == tpl[1] and gender != None:
+            indexes.append(tpl)
+            return
+    # if we don't find the same info, add a new entity
+    indexes.append((latest+1, gender))
+
 # this object will represent an english word with constructions such as
 # - text: actual word
 # - POS tag: as from Stanford
@@ -328,6 +375,8 @@ class Word:
     category = 'undefined'  # by default
     sent_group = ''         # the 'sub' sentence the word belongs to
     dep_group = None          # the dependency group the word belongs to
+    num_modified = False    # the number modification that a word has on this particular word
+    direct_translation = False
 
     #facial_expr = ''        # the facial expression associated with the word
     is_negated = False      # if the word is connected to a neg, it is negated (used for nouns, verbs, adjectives)
@@ -374,9 +423,10 @@ class Word:
 
         # if it's a negation, we modify the source word, saying it is negated
         if rel == 'neg':
-            target.isNegated = True
+            target.is_negated = True       # set both the target and the negation as facially negated
+            self.is_negated = True
 
-        elif rel == 'amod' or rel == 'advmod' or rel == 'case':
+        elif rel == 'amod' or rel == 'advmod' or rel == 'case': # (maybe also conj?)
             if target.dep_group:    # if a group already exists, use the same
                 self.dep_group = target.dep_group
             elif self.dep_group:        # similarly the other way around
@@ -389,7 +439,14 @@ class Word:
                 target.dep_group = self.dep_group
                 dep_groups.append(self.dep_group)       # update the total groups
 
+        elif rel == 'nummod':
+            target.num_modified = True
+
         self.dependency = (rel, target)
+
+        # this must happen afterwards, otherwise we don't record the change correctly
+        if rel == 'conj':  # if the word is directly related to another one, we basically copy them
+            self.dependency = target.dependency
 
     # IMPORTANT!!! remember to fix the problem "I was born" = "I be bear" == WRONG!!
     def rebuild(self, text):  # should a word begin with ' like 'm, or 'll we rebuild the original i.e. am, will
@@ -412,12 +469,12 @@ class Word:
     def toString(self):
 
         return [self.index, self.text.encode('ascii'), self.POStag.encode('ascii'), self.sent_group, self.category, self.root.encode('ascii'), \
-            self.dependency[0].encode('ascii'),self.dep_group, self.dependency[1].root]
+            self.dependency[0].encode('ascii'),self.dep_group, self.dependency[1].root, self.num_modified ,self.is_negated]
 
     # this method will transform any proper noun into fingerspelled format (no need for rules as there are only a coupl
     def fingerSpell(self):
         fingerspell = '-'
-        for ch in self.root:
+        for ch in self.text:
             fingerspell += ch + '-'
 
         self.root = fingerspell

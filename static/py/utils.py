@@ -1,6 +1,7 @@
 # some useful method I did not know where else to put
 
 from datetime import date
+from nltk.corpus import names
 
 # formats numbers in the way we want them
 def formatNumber(textnum):
@@ -80,3 +81,17 @@ def text2int(textnum, numwords={}):
             current = 0
 
     return result + current
+
+def findGender(name):
+    if name.title() in names.words('male.txt'):
+        return 'male'
+    elif name.title() in names.words('female.txt'):
+        return 'female'
+    else:
+        return None
+
+def toUpper(words):
+    for i, word in enumerate(words):
+        if 'index' not in word:  # do not uppercase Index
+            words[i] = word.upper()
+    return words

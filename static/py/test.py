@@ -34,16 +34,16 @@ def main():
                     result = process(input)
 
                     # now get the similarity score from the website
-                    r = requests.post("https://www.tools4noobs.com",
-                                      data={'action': 'ajax_string_similarity', 'text': output.strip(), 'text2': result.strip(),
-                                            'limit': 0.4})
-                    similarity = '.'.join(r.text.split()[-1].split('.')[:-1])
+                    #r = requests.post("https://www.tools4noobs.com",
+                                      #data={'action': 'ajax_string_similarity', 'text': output.strip(), 'text2': result.strip(),
+                                      #      'limit': 0.4})
+                    #similarity = '.'.join(r.text.split()[-1].split('.')[:-1])
 
                     # do the test evaluation here...
                     color = 'green'
                     if result.strip() != output.strip():
                         color = 'red'
-                    table_data.append([input, output, similarity, colored(result, color)])
+                    table_data.append([input, output, colored(result, color)])
 
                 table = AsciiTable(table_data)
                 print table.table
@@ -66,12 +66,12 @@ def process(sent):
 
     ''' AFTER THIS POINT WE WANT TO PROCESS FACIAL EXPRESSIONS ETC '''
 
-
+    output = analyser.generateOutput(bsl_skeleton)
 
     # dont forget to clear once we're done
     e_sentence.clear()
 
-    return bsl_skeleton.getGloss()
+    return output[0]
 
 if __name__ == '__main__':
     main()

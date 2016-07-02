@@ -41,7 +41,6 @@ POS
 IN
 if->_
 because->why
-at->_
 
 MD
 will->_
@@ -63,3 +62,18 @@ and->_ 			// remove and conjunction
 
 $
 $->dollar
+
+VB
+be->_
+
+VBD
+be->_
+
+VBZ
+be->_
+
+VBG
+be->_
+
+VBP
+be->_

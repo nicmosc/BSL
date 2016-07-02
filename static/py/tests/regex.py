@@ -1,11 +1,11 @@
 import re
 
 def regex():
-    line = "VP -> VB NP ADVP"
+    line = "VP_1 -> VBG S_1"
 
-    source = "VP -> VB~ <> VP"
+    source = "VP -> VBG S"
 
-    target = "VP -> _ <> VP"
+    target = "VP -> _ S"
 
 
     # modify the mapping before applying it (for unique tags
@@ -88,6 +88,7 @@ def regex():
                     continue                # skip the stuff below
                 print t, s, i, backtrace, 'skip',skip
                 if t == s or t == '_':                  # if the two tags match
+                    print source_i, len(source_i), i
                     target_i.append(source_i[i])    # add the corresponding group index to the target position
                     if i == last_point and skip > 0:
                         i += skip-1

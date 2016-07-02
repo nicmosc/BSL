@@ -205,8 +205,10 @@ class Rules:
                     i-=1
                 else:
                     i_sentence.words[i].root = new_word
-            if word.POStag == 'NNP' or word.POStag == 'NNPS' and word.isUpper:   # if the word is proper or stands for something (is all caps)
+                    i_sentence.words[i].direct_translation = True
+            if word.POStag == 'NNP' or word.POStag == 'NNPS' or word.isUpper:   # if the word is proper or stands for something (is all caps)
                 word.fingerSpell()
+                word.direct_translation = True
             i+=1
 
     # all the stuff below is for the TREE TRANSFORMATION
@@ -258,6 +260,7 @@ class Rules:
                     continue  # skip the stuff below
                 #print t, s, i, backtrace
                 if t == s or t == '_':  # if the two tags match
+                    #print source_i, len(source_i), i
                     target_i.append(source_i[i])  # add the corresponding group index to the target position
                     if i == last_point and skip > 0:
                         i += skip - 1

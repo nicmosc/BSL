@@ -5,21 +5,26 @@
 //NP -> <> NN~ NN~ | NP -> <> NN~ NN~ 	// specific case, prevents e.g. IT Manager (NNP, NN)
 NP -> PDT <> | NP -> _ <>
 NP -> <> JJ NN~ CC <> NN~ | NP -> NN~ <> JJ CC NN~ <> 	// very specific case
-NP -> JJ JJ NN~ | NP -> NN~ JJ JJ
+NP -> <> JJ JJ NN~ | NP -> <> NN~ JJ JJ
 NP -> JJ NN~ | NP -> NN~ JJ
 //NP -> DT <> NN~ | NP -> DT NN~ <>		// generic case to swap any adjective modifier
 
+NP -> DT RB JJ NN~ | NP -> DT NN~ RB JJ 
 NP -> <> JJ NN~ | NP -> <> NN~ JJ
 NP -> <> ADJP NN~ | NP -> <> NN~ ADJP
 
+//VP -> VBG S | VB -> _ S	// e.g. going to be ... FIX THIS!!!!!!!!
+
 VP -> VB~ <> VP | VP -> _ <> VP 		// will cover anything like "has died", "was born" i.e. auxiliaries
-
 VP -> VB~ ADJP <> | VP -> _ ADJP <>		// covers "He was sick", "He is tall" etc
-
 VP -> TO <> | VP -> _ <>
+
+//VP -> VB~ NP PP | VP -> VB~ PP NP
 
 PP -> TO NP NP | PP -> _ NP NP
 PP -> TO NP | PP -> _ NP
+
+S -> NP ADVP VP | S -> NP VP ADVP
 
 SQ -> VB~ <> | SQ -> _ <>  // removes the "have", "did" etc in questions
 SQ -> MD <> | SQ -> _ <>
