@@ -1,30 +1,34 @@
-What happened? | HAPPEN WHAT
-Do you need help? | YOU NEED HELP
-How do you feel? | HOW YOU FEEL?
-How old are you? | YOU HOW OLD [q]
-I was just about to leave when you phoned me. | ME ALMOST LEAVE, YOU CALL-ME
+What happened? | ((HAPPEN)[hn] WHAT)[q]
+Do you need help? | ((YOU)[hn] NEED HELP)[q]
+How do you feel? | (HOW (YOU)[hn] FEEL)[q]
+How old are you? | ((YOU)[hn] HOW OLD)[q]
+I was just about to leave when you phoned me. | (ME)[hn] ALMOST LEAVE (YOU)[hn] CALL-ME
 Please fingerspell slowly. | PLEASE FINGERSPELL SLOWLY
-I am learning ASL a little bit. | ME LEARN -A-S-L- A-LITTLE-BIT
+I am learning ASL a little bit. | (ME)[hn] LEARN -A-S-L- A-LITTLE-BIT
 Please slow down. | PLASE SLOW-DOWN
-Have you got any story? | HAVE ANY STORY [q]
-Do you have any story? | HAVE ANY STORY [q]
-Are you hurt? | YOU HURT [q]
-Are you cold? | YOU FEEL COLD [q]
-Are you feeling cold? | YOU FEEL COLD [q]
-Where did you take ASL class? | YOU TAKE -A-S-L- CLASS WHERE [q]
-Where did you study ASL? | YOU STUDY -A-S-L- /\WHERE/\ [q]
-Where does it hurt? | HURT WHERE [q]
-Where are you from? | YOU FROM WHERE [q]
-Who is your instructor? | /\YOUR INSTRUCTOR/\ WHO [q]
+Have you got any story? | (HAVE ANY STORY)[q]
+Do you have any story? | (HAVE ANY STORY)[q]
+Are you hurt? | ((YOU)[hn]) HURT)[q]
+Are you cold? | ((YOU)[hn] FEEL COLD)[q]
+Are you feeling cold? | ((YOU)[hn] FEEL COLD)[q]
+Where did you take ASL class? | (YOU)[hn] TAKE -A-S-L- CLASS (WHERE)[q]
+Where did you study ASL? | (YOU)[hn] STUDY -A-S-L- (WHERE)[q]
+Where does it hurt? | HURT (WHERE)[q]
+Where are you from? | YOU FROM (WHERE)[q]
+Who is your instructor? | (YOUR INSTRUCTOR)[hn] (WHO)[q]
 
-When did/do you move in? | when you move-in q
-Do you mind the noise? / Do you object to the noise? | noise (topicalization) you object (to) q (facial expression/tone).
-Your answer agrees with mine. | your answer agree same-you-me
-Give me a straight answer. | tell-me answer clear
-Draw a straight line. | straight line (to) draw [modified].
-What time does a/the class end? [or] At what time is the class over? | what time class finish q
-I'm truly grateful for your help. | indexing-oneself grateful [that] you-help-me
-how are you? | how you?
+When did/do you move in? | (YOU)[hn] MOVE-IN (WHEN)[q]
+Do you mind the noise? | (NOISE)[hn] YOU OBJECT (TO)[q]
+Do you object to the noise? | (NOISE)[hn] YOU OBJECT (TO)[q]
+Your answer agrees with mine. | YOUR ANSWER AGREE SAME-YOU-ME
+Give me a straight answer. | TELL-ME ANSWER CLEAR
+// Draw a straight line. | STRAIGHT LINE (to) DRAW [modified]
+What time does the class end? | (WHAT TIME CLASS FINISH)[q]
+At what time is the class finish? | (WHAT TIME CLASS FINISH)[q]
+I'm truly grateful for your help. | (ME)[hn] GRATEFUL YOU-HELP-ME
+how are you? | (YOU)[hn] (HOW)[q]
+
+...
 I'm sorry. | ix-me(pronoun) sorry
 I am fine. | ix-me fine.
 It's nice to meet you. | nice to-meet you

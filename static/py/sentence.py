@@ -128,19 +128,18 @@ class EnglishSentence:
                 self.subSentences[word.sent_group]+=[word.POStag]
                 temp_verb_dict[word.sent_group]+=[word.root]
 
+        print self.subSentences
+        print temp_verb_dict
         # now check for tense specific constructs
         # rework this - BROKEN
         for k,v in self.subSentences.iteritems():
+            print v
             tense = 'present'
-            if v == ['VBD', 'VBG'] or v == ['VBZ', 'VBN','VBG']:
-                tense = 'past-not_finished'
-            elif v == ['VBD'] or v == ['VBP', 'VBN']:
-                tense = 'past-finished'
-            elif v == ['VBZ', 'VBN']:
-                if v[-1] == 'be':           # special be + ADJP case
-                    tense = 'past-not_finished'
-                else:
-                    tense = 'past-finished'
+            if v in [['VBD', 'VBG'],['VBD'],['VBZ', 'VBN']]:
+                tense = 'past'
+            elif v == ['VBP', 'VBN']:
+                if temp_verb_dict[k][-1] != 'be':
+                    tense = 'past'
             elif v == ['VBZ', 'VBG']:
                 tense = 'future'
             elif v[0] == 'MD':
@@ -153,7 +152,7 @@ class EnglishSentence:
         self.augTree.pretty_print()
 
         # nicely prints all the details of the words
-        table_data = [['i','Word', 'POS', 'S-group', 'WN Category', 'Root','dep', 'dep-group','target', 'num_modified','negated']]
+        table_data = [['i','Word', 'POS', 'S-group', 'WN Category', 'Root','dep', 'dep-group','target', 'num_modified','negated','questioned']]
 
         for w in self.words:
             info = w.toString()
@@ -191,7 +190,7 @@ class IntermediateSentence:
 
     def toString(self):
         # nicely prints all the details of the words
-        table_data = [['i', 'Word', 'POS', 'S-group', 'WN Category', 'Root', 'dep', 'dep-group','target','num_modified', 'negated']]
+        table_data = [['i', 'Word', 'POS', 'S-group', 'WN Category', 'Root', 'dep', 'dep-group','target','num_modified', 'negated', 'questioned']]
 
         for w in self.words:
             info = w.toString()
@@ -265,8 +264,13 @@ class IntermediateSentence:
                 new_word.dep_group = word.dep_group
                 new_word.dependency = word.dependency
                 new_word.sent_group = word.sent_group
+                new_word.is_questioned = word.is_questioned
                 word.dependency = ('name', word.dependency[1])
                 self.words.insert(i+1, new_word)          # insert at correct index
+
+            if self.sentenceGroups[word.sent_group] == 'past-finished':     # in this case we insert a keyword to say the action is finished
+                pass
+
 
             # this handles the time case i.e. whenever we mention yesterday, today, in a week etc
             if word.category == 'noun.time' and i > 0:
@@ -380,6 +384,7 @@ class Word:
 
     #facial_expr = ''        # the facial expression associated with the word
     is_negated = False      # if the word is connected to a neg, it is negated (used for nouns, verbs, adjectives)
+    is_questioned = False   # if word is part of a question
 
     def __init__(self, text, tag, i):
         self.POStag = tag
@@ -469,7 +474,7 @@ class Word:
     def toString(self):
 
         return [self.index, self.text.encode('ascii'), self.POStag.encode('ascii'), self.sent_group, self.category, self.root.encode('ascii'), \
-            self.dependency[0].encode('ascii'),self.dep_group, self.dependency[1].root, self.num_modified ,self.is_negated]
+            self.dependency[0].encode('ascii'),self.dep_group, self.dependency[1].root, self.num_modified ,self.is_negated, self.is_questioned]
 
     # this method will transform any proper noun into fingerspelled format (no need for rules as there are only a coupl
     def fingerSpell(self):

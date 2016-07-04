@@ -168,6 +168,12 @@ class Rules:
         # will need to be refined for multiple rules, this is not enough
         for i, word in enumerate(i_sentence.words):
             if self.direct_translation['SWAP'][str(word)]:
+                if str(word) == 'if':   # if the word is 'if', then we want to make that part a question
+                    j=i
+                    while j < len(i_sentence.words) and i_sentence.words[j].sent_group == 'SBAR':
+                        i_sentence.words[j].is_questioned = True
+                        j+=1
+
                 i_sentence.words = i_sentence.words[i:]+i_sentence.words[:i]
 
         print i_sentence.words

@@ -13,6 +13,7 @@ as an -> _ _
 have you -> _ you 				// remove any 'have you' questions
 time last -> past time
 year old -> _ age
+time what -> what time
 
 DT
 a->_

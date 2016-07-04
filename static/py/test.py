@@ -66,12 +66,12 @@ def process(sent):
 
     ''' AFTER THIS POINT WE WANT TO PROCESS FACIAL EXPRESSIONS ETC '''
 
-    output = analyser.generateOutput(bsl_skeleton)
+    fe_bsl_sentence = analyser.setFacialExpressions(bsl_skeleton)
 
     # dont forget to clear once we're done
     e_sentence.clear()
 
-    return output[0]
+    #return output[0]
 
 if __name__ == '__main__':
     main()
