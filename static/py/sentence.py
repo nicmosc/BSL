@@ -5,6 +5,8 @@ from copy import deepcopy
 from terminaltables import AsciiTable
 from utils import formatNumber, abbreviateMonth, findGender
 from collections import defaultdict
+from utils import toUpper
+from itertools import takewhile
 
 # this class will have objects describing a sentence from English
 # it will have:
@@ -134,16 +136,14 @@ class EnglishSentence:
         # rework this - BROKEN
         for k,v in self.subSentences.iteritems():
             print v
-            tense = 'present'
-            if v in [['VBD', 'VBG'],['VBD'],['VBZ', 'VBN']]:
+            tense = None
+            if v in [['VBD', 'VBG'],['VBD'],['VBZ', 'VBN'], ['VBP','VBN']]:
                 tense = 'past'
-            elif v == ['VBP', 'VBN']:
-                if temp_verb_dict[k][-1] != 'be':
-                    tense = 'past'
             elif v == ['VBZ', 'VBG']:
                 tense = 'future'
-            elif v[0] == 'MD':
+            elif v[0] == 'MD' and temp_verb_dict[k][0] != 'have':
                 tense = 'future'
+
             self.subSentences[k] = tense
 
     def toString(self):
@@ -199,9 +199,6 @@ class IntermediateSentence:
         table = AsciiTable(table_data)
         print table.table
 
-    def getGloss(self):
-        return map(lambda s: str(s), self.words)
-
     # this method will cover anything which couldnt be handled with external rules
     def specialCases(self):
 
@@ -234,6 +231,12 @@ class IntermediateSentence:
                     del self.words[i-1]
                     i -= 1
 
+            # in this case if we use an abbreviated version of "Have you not eaten?" = "Haven't you eaten?" we must flip the
+            # words for them to work in BSL
+            if word.text == "n't" and self.question and self.words[i+1].POStag == 'PRP':
+                self.words[i] = self.words[i+1]
+                self.words[i+1] = word
+
             # this handles the case of numbers + other elements
             if word.POStag == 'CD':
                 # the age case and money
@@ -259,7 +262,7 @@ class IntermediateSentence:
 
             # we also insert a 'Index' whenever a name is the subject
             if word.POStag == 'NNP' and word.dependency[0] == 'nsubj':
-                print 'INSERTING INDEX'
+                print 'inserting INDEX'
                 new_word = Word('index', 'PRP', -word.index)     # create new index word object
                 new_word.dep_group = word.dep_group
                 new_word.dependency = word.dependency
@@ -271,6 +274,18 @@ class IntermediateSentence:
             if self.sentenceGroups[word.sent_group] == 'past-finished':     # in this case we insert a keyword to say the action is finished
                 pass
 
+            if word.POStag == 'NNS':
+                if word.text != word.root and word.num_modified == False and word.direct_translation == False\
+                        and word.category != 'noun.body':
+                    #self.words.insert[i+1] += ' them'
+                    print 'inserting THEM'
+                    new_word = Word('them', 'PRP', -word.index)  # create new index word object
+                    new_word.dep_group = word.dep_group
+                    new_word.dependency = ('plural', word.dependency[1])
+                    new_word.sent_group = word.sent_group
+                    new_word.is_questioned = word.is_questioned
+                    #word.dependency = ('name', word.dependency[1])
+                    self.words.insert(i + 1, new_word)  # insert at correct index
 
             # this handles the time case i.e. whenever we mention yesterday, today, in a week etc
             if word.category == 'noun.time' and i > 0:
@@ -352,6 +367,119 @@ class IntermediateSentence:
 
                 word.root += '_'+str(indexes[-1][0])      # set the index to the last found id
 
+                # this method will take the skeleton of the BSL output, that is something like MY -M-F- LIVE WHERE -E-S-S-E-X-
+
+    # and add necessary info, as well as
+    def setNonManualFeatures(self):  # will generate both the text gloss and the JS object
+
+        print '\n SETTING FACIAL EXPRESSIONS \n'
+
+        # insert facial expressions e.g. hn, q, pause between groups, questions, tenses etc, negations
+        # should also separate between facial expressions that affect a sentence group, and those which affect individual words
+
+        # reminder: tenses and nsubj are not shown in the gloss
+
+        self.aug_sentence =  self.traverseContainers(self.words, -1, [])
+        print self.aug_sentence
+
+    def traverseContainers(self, sentence, container_length, c_tags):
+        if container_length == -1:  # initial case, start with no containers and no tags
+            print 'Initial case'
+            new_sent, new_length = self.setContainers(sentence, c_tags)
+            print new_sent, new_length
+            return self.traverseContainers(new_sent, new_length, c_tags)
+        elif container_length == 0:  # stop when we have no more containers to check
+            print 'done'
+            return sentence
+        else:
+            print 'more to traverse'
+            # print sentence.words, container_length
+            for c in sentence:
+                if isinstance(c, Container):  # if it's a container
+                    print 'word is a container', str(c), c.words, c.tag
+                    c_tags.append(c.tag)
+                    new_sent, new_length = self.setContainers(c.words, c_tags)
+                    print new_sent, new_length
+                    c.words = new_sent
+                    self.traverseContainers(c.words, new_length, c_tags)
+
+            return sentence
+
+    def setContainers(self, words, container_tags):
+
+        container_list = []
+        containers_left = 0
+        i = 0
+        while i < len(words):
+            # if the word begins a negation sequence
+            if words[i].is_negated and 'neg' not in container_tags:
+                temp_list = list(
+                    takewhile(lambda x: x.is_negated, words[i:]))  # get all words in that sequence
+                container_list.append(Container(temp_list, 'neg', True))
+                i += len(temp_list) - 1
+            # if the word begins a question sequence
+            elif words[i].is_questioned and 'q' not in container_tags:
+                temp_list = list(
+                    takewhile(lambda x: x.is_questioned, words[i:]))  # get all words in that sequence
+                container_list.append(Container(temp_list, 'q', True))
+                i += len(temp_list) - 1
+            # setting the tenses for the sentence group the word is part of
+            elif self.sentenceGroups[words[i].sent_group] not in container_tags\
+                    and self.sentenceGroups[words[i].sent_group] != None :      # if there is a tense (most often there is, except present)
+                tense = self.sentenceGroups[words[i].sent_group]
+                print tense
+                temp_list = list(takewhile(lambda x: x.sent_group == words[i].sent_group, words[i:]))
+                container_list.append(Container(temp_list, tense, False))
+                i += len(temp_list) - 1
+
+            elif words[i].sent_group in ['SQ'] and 'q' not in container_tags:  # maybe add SINV?
+                temp_list = list(takewhile(lambda x: x.sent_group in ['SQ', 'SBARQ'],
+                                           words[i:]))  # get all words in that sequence
+                container_list.append(Container(temp_list, 'q', True))
+                i += len(temp_list) - 1
+
+            # elif words[i].dep_group != None and words[i].dep_group not in container_tags:
+            #     temp_dep = words[i].dep_group
+            #     print 'dependency group ',temp_dep, words[i]
+            #     _i = i
+            #     for w in words[_i:]:
+            #         if w.dep_group != temp_dep:   # if the dep group is different
+            #             container_list.append(Container(words[i-1],temp_dep, False, mod=True))
+            #             break
+            #         elif w == words[-1]:           # if it's the last word (still within the group)
+            #             container_list.append(Container(w, temp_dep, False, mod=True))
+            #         else:
+            #             container_list.append(w)
+            #         i+=1
+            #         temp_dep = w.dep_group
+
+            elif words[i].root in ['who', 'where', 'why', 'when', 'how'] and 'q' not in container_tags:
+                container_list.append(Container([words[i]], 'q', True))
+
+            elif words[i].dependency[0] == 'nsubj' and 'hn' not in container_tags:      # adds a head nod for subject
+                container_list.append(Container([words[i]], 'hn', False))
+            elif words[i].POStag == 'JJR' and 'cp' not in container_tags:
+                container_list.append(Container([words[i]], 'cp', False, mod=True))  # comparative
+            elif words[i].POStag == 'JJS' and 'sp' not in container_tags:
+                container_list.append(Container([words[i]], 'sp', False, mod=True))  # superlative
+            else:
+                print words[i], words[i].dependency
+                container_list.append(words[i])
+                containers_left = -1  # decrease the number of containers if no new ones were added
+            containers_left += 1
+            i += 1
+
+        return container_list, containers_left
+
+    def __repr__(self):
+        return ' '.join(map(lambda x: repr(x), self.words))
+
+    def toGloss(self):
+        if self.aug_sentence:
+            print ' '.join(map(lambda x: str(x), self.aug_sentence))
+        else:
+            print 'Containers not set up yet'
+
 def addIndex(indexes, gender):
     latest = 0
     print indexes
@@ -391,6 +519,8 @@ class Word:
         self.index = i
         self.isUpper = text.isupper() and len(text)>1   # text is considered upper e.g. BBC, but 'I' is not considered
         self.text = text.lower()
+        self.is_negated = False     # by default
+        self.num_modified = False
 
         # get roots
         if "'" in text:
@@ -431,7 +561,7 @@ class Word:
             target.is_negated = True       # set both the target and the negation as facially negated
             self.is_negated = True
 
-        elif rel == 'amod' or rel == 'advmod' or rel == 'case': # (maybe also conj?)
+        elif rel in ['amod','advmod','case']: # (maybe also conj?)
             if target.dep_group:    # if a group already exists, use the same
                 self.dep_group = target.dep_group
             elif self.dep_group:        # similarly the other way around
@@ -443,6 +573,9 @@ class Word:
                     self.dep_group = 1
                 target.dep_group = self.dep_group
                 dep_groups.append(self.dep_group)       # update the total groups
+
+            if self.is_negated: target.is_negated = True
+            elif target.is_negated: self.is_negated = True
 
         elif rel == 'nummod':
             target.num_modified = True
@@ -507,5 +640,28 @@ def penn_to_wn(tag):
     elif tag in ['VBD', 'VBG', 'VBN', 'VBP', 'VBZ', 'VB']:
         return 'v'
     return None
+
+# this object will contain a word / list of words (in order) together with a 'tag' that goes with them e.g.
+# (YOU) [hn] -> object has [YOU] and tag hn, also (NOT GO) [neg] as well etc.
+# if we have multiple containers e.g.
+class Container:
+
+    def __init__(self, words, tag, show, mod = False):     # takes a list of words (can also include containers and the tag for those words
+        self.show_gloss = show                     # if the container is printed as part of the gloss
+        self.words = words
+        self.tag = tag
+        self.modifier = mod             # by default the container does not modify the word(s), but plays a non-manual sign in parallel
+                                        # if we want to modify the sign itself, we make modifier = true
+    def __str__(self):
+        #return 'Container([' + ' '.join(map(lambda x: str(x), self.words)) + '], ' + str(self.tag) + ')'
+        if self.show_gloss:
+            return self.__repr__(raw=False)
+        else:
+            return ' '.join(map(lambda x: str(x), self.words))
+
+    def __repr__(self, raw = True):      # if we want the raw representation, we print everything, otherwise only the show gloss ones
+        if raw: return '(' + ' '.join(map(lambda x: repr(x), self.words)) + ')' + '[' + str(self.tag) + ']'
+        else: return '(' + ' '.join(map(lambda x: str(x), self.words)) + ')' + '[' + str(self.tag) + ']'
+        #return str(self.words)
 
 

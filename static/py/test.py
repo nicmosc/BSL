@@ -66,7 +66,7 @@ def process(sent):
 
     ''' AFTER THIS POINT WE WANT TO PROCESS FACIAL EXPRESSIONS ETC '''
 
-    fe_bsl_sentence = analyser.setFacialExpressions(bsl_skeleton)
+    #fe_bsl_sentence = analyser.setFacialExpressions(bsl_skeleton)
 
     # dont forget to clear once we're done
     e_sentence.clear()
