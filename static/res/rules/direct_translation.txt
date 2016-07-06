@@ -20,18 +20,18 @@ DT
 a->_
 an->_
 some->_
-this->index
-those->index
-that->index
-these->index
+this->ix
+those->ix
+that->ix
+these->ix
 the->_
 
 PRP
 i->me
-he->index
-him->index
-she->index
-her->index
+he->ix
+him->ix
+she->ix
+her->ix
 it->_
 us->we
 they->them

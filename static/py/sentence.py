@@ -137,7 +137,7 @@ class EnglishSentence:
         for k,v in self.subSentences.iteritems():
             print v
             tense = None
-            if v in [['VBD', 'VBG'],['VBD'],['VBZ', 'VBN'], ['VBP','VBN']]:
+            if v in [['VBD', 'VBG'],['VBD'],['VBZ', 'VBN'], ['VBP','VBN'], ['VBD', 'VB']]:
                 tense = 'past'
             elif v == ['VBZ', 'VBG']:
                 tense = 'future'
@@ -257,13 +257,13 @@ class IntermediateSentence:
                 i -= 1
 
             # as 'that' is changed to index, if that is not a determiner, we want to keep the sign for that
-            if word.root == 'index' and word.text == 'that' and word.dependency[0] != 'det':
+            if word.root == 'ix' and word.text == 'that' and word.dependency[0] != 'det':
                 word.root = 'that'
 
-            # we also insert a 'Index' whenever a name is the subject
+            # we also insert a 'IX' whenever a name is the subject
             if word.POStag == 'NNP' and word.dependency[0] == 'nsubj':
-                print 'inserting INDEX'
-                new_word = Word('index', 'PRP', -word.index)     # create new index word object
+                print 'inserting IX'
+                new_word = Word('ix', 'PRP', -word.index)     # create new index word object
                 new_word.dep_group = word.dep_group
                 new_word.dependency = word.dependency
                 new_word.sent_group = word.sent_group
@@ -345,7 +345,7 @@ class IntermediateSentence:
         indexes = []        # will be of the form [(1, male, False), (1, male True), (2, None, False)] where False means...
 
         for word in self.words:
-            if word.root == 'index':
+            if word.root == 'ix':
                 # if word.dependency[0] == 'det':
                 #     word.root+='_'+str(indexes[-1])      # set the index to the last found id
                 #     indexes.append(indexes[-1]+1)
@@ -355,7 +355,7 @@ class IntermediateSentence:
                         if n.index == -word.index:
                             gender = findGender(n.text)
                             print word.root,gender
-                            addIndex(indexes, gender)
+                            addIndex(indexes, gender, True)     # True if is referring to a noun ( then it's a different person)
                 else:   # if the index represents a determiner or a personal pronoun
                     gender = None
                     if word.text in ['he', 'him']:
@@ -363,7 +363,7 @@ class IntermediateSentence:
                     elif word.text in ['she', 'her']:
                         gender = 'female'
                     # else the word is an object (determiner)
-                    addIndex(indexes, gender)
+                    addIndex(indexes, gender, False)
 
                 word.root += '_'+str(indexes[-1][0])      # set the index to the last found id
 
@@ -476,21 +476,22 @@ class IntermediateSentence:
 
     def toGloss(self):
         if self.aug_sentence:
-            print ' '.join(map(lambda x: str(x), self.aug_sentence))
+            #print ' '.join(map(lambda x: str(x).upper(), self.aug_sentence))
+            print ' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.aug_sentence])
         else:
             print 'Containers not set up yet'
 
-def addIndex(indexes, gender):
+def addIndex(indexes, gender, name):
     latest = 0
     print indexes
     for tpl in indexes:
         if tpl[0] > latest:
             latest = tpl[0]
-        if gender == tpl[1] and gender != None:
+        if gender == tpl[1] and gender != None and name != tpl[2]:
             indexes.append(tpl)
             return
     # if we don't find the same info, add a new entity
-    indexes.append((latest+1, gender))
+    indexes.append((latest+1, gender, name))
 
 # this object will represent an english word with constructions such as
 # - text: actual word
@@ -657,11 +658,12 @@ class Container:
         if self.show_gloss:
             return self.__repr__(raw=False)
         else:
-            return ' '.join(map(lambda x: str(x), self.words))
+            #return ' '.join(map(lambda x: str(x), self.words))
+            return ' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.words])
 
     def __repr__(self, raw = True):      # if we want the raw representation, we print everything, otherwise only the show gloss ones
         if raw: return '(' + ' '.join(map(lambda x: repr(x), self.words)) + ')' + '[' + str(self.tag) + ']'
-        else: return '(' + ' '.join(map(lambda x: str(x), self.words)) + ')' + '[' + str(self.tag) + ']'
+        return '('+' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.words])+ ')' + '[' + str(self.tag) + ']'
         #return str(self.words)
-
+        # else: return '(' + ' '.join(map(lambda x: str(x), self.words)) + ')' + '[' + str(self.tag) + ']'
 
