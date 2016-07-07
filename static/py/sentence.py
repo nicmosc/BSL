@@ -3,9 +3,8 @@ from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
 from copy import deepcopy
 from terminaltables import AsciiTable
-from utils import formatNumber, abbreviateMonth, findGender
+from utils import formatNumber, abbreviateMonth, findGender, toUpper
 from collections import defaultdict
-from utils import toUpper
 from itertools import takewhile
 
 # this class will have objects describing a sentence from English
@@ -277,9 +276,8 @@ class IntermediateSentence:
             if self.sentenceGroups[word.sent_group] == 'past-finished':     # in this case we insert a keyword to say the action is finished
                 pass
 
-            if word.POStag == 'NNS':
-                if word.text != word.root and word.num_modified == False and word.direct_translation == False\
-                        and word.category != 'noun.body':
+            if word.POStag == 'NNS' and word.category != 'noun.body' \
+                    and word.text != word.root and not word.num_modified and not word.direct_translation and word.specific:
                     #self.words.insert[i+1] += ' them'
                     print 'inserting THEM'
                     new_word = Word('them', 'PRP', -word.index)  # create new index word object
@@ -372,7 +370,7 @@ class IntermediateSentence:
 
                 # this method will take the skeleton of the BSL output, that is something like MY -M-F- LIVE WHERE -E-S-S-E-X-
 
-    # and add necessary info, as well as
+    # return the BLS data
     def setNonManualFeatures(self):  # will generate both the text gloss and the JS object
 
         print '\n SETTING FACIAL EXPRESSIONS \n'
@@ -382,8 +380,8 @@ class IntermediateSentence:
 
         # reminder: tenses and nsubj are not shown in the gloss
 
-        self.aug_sentence =  self.traverseContainers(self.words, -1, [])
-        print self.aug_sentence
+        aug_sentence = self.traverseContainers(self.words, -1, [])
+        return aug_sentence
 
     def traverseContainers(self, sentence, container_length, c_tags):
         if container_length == -1:  # initial case, start with no containers and no tags
@@ -477,15 +475,7 @@ class IntermediateSentence:
 
         return container_list, containers_left
 
-    def __repr__(self):
-        return ' '.join(map(lambda x: repr(x), self.words))
 
-    def toGloss(self):
-        if self.aug_sentence:
-            #print ' '.join(map(lambda x: str(x).upper(), self.aug_sentence))
-            print ' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.aug_sentence])
-        else:
-            print 'Containers not set up yet'
 
 def addIndex(indexes, gender, name):
     latest = 0
@@ -496,8 +486,29 @@ def addIndex(indexes, gender, name):
         if gender == tpl[1] and gender != None and name != tpl[2]:
             indexes.append(tpl)
             return
+        elif gender == tpl[1] and gender != None and name == tpl[2]:
+            if name == True:
+                break
+            else:
+                indexes.append(tpl)
+                return
+
     # if we don't find the same info, add a new entity
     indexes.append((latest+1, gender, name))
+
+# this object simply contains the final information required to construct the gloss and js objects
+class BSLSentence:
+
+    def __init__(self, data):
+        self.word_objects = data
+
+    def toGloss(self):
+            # print ' '.join(map(lambda x: str(x).upper(), self.aug_sentence))
+        return ' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.word_objects])
+
+    # will need to make a toJS method
+    def toJS(self):
+        return None
 
 # this object will represent an english word with constructions such as
 # - text: actual word
@@ -517,6 +528,7 @@ class Word:
     num_modified = False    # the number modification that a word has on this particular word
     direct_translation = False
     intense = False
+    specific = False        # if the word is denoted by a determiner e.g. The dogs is specific, dogs is not, used to insert 'THEM'
 
     #facial_expr = ''        # the facial expression associated with the word
     is_negated = False      # if the word is connected to a neg, it is negated (used for nouns, verbs, adjectives)
@@ -568,6 +580,9 @@ class Word:
         if rel == 'neg':
             target.is_negated = True       # set both the target and the negation as facially negated
             self.is_negated = True
+
+        elif rel == 'det':
+            target.specific = True
 
         elif rel in ['amod','advmod','case']: # (maybe also conj?)
             if target.dep_group:    # if a group already exists, use the same

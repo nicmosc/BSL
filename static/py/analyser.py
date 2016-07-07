@@ -1,7 +1,8 @@
+from nltk import Tree
 from parser import Parser
 from rules import Rules
 from sentence import IntermediateSentence
-from nltk import Tree
+
 
 class Analyser:
 
@@ -31,6 +32,17 @@ class Analyser:
         # this is done before moving the time related words as we nned all the words for this
         sentence.setTenses()
 
+    def removePunctuation(self, tree):
+        for subtree in tree[:]:
+            # print subtree
+            if type(subtree) == Tree:
+                if subtree.label() in Analyser.ignore:
+                    # print 'found', subtree.label()
+                    tree.remove(subtree)
+                else:
+                    self.removePunctuation(subtree)
+        return tree
+
     def applyRules(self, sentence):
 
         mod_sentence = self.rules.applyTreeTranforms(sentence)   # return modified original
@@ -50,24 +62,21 @@ class Analyser:
 
         i_sentence.toString()       # print once to see results
 
-        i_sentence.setNonManualFeatures()
+        bsl_data = i_sentence.setNonManualFeatures()
 
-        return i_sentence
+        print '\n========================== BSL DATA ==========================\n'
 
-    def removePunctuation(self, tree):
-        for subtree in tree[:]:
-            #print subtree
-            if type(subtree) == Tree:
-                if subtree.label() in Analyser.ignore:
-                    #print 'found', subtree.label()
-                    tree.remove(subtree)
-                else:
-                    self.removePunctuation(subtree)
-        return tree
+        print bsl_data
 
-    def genereteOutputs(self, bsl_sentence):
+        return bsl_data
+
+    def generateOutputs(self, bsl_sentence):
         print '\nGLOSS OUTPUT\n'
-        bsl_sentence.toGloss()
+        gloss = bsl_sentence.toGloss()
+
+        jsobject = bsl_sentence.toJS()
+
+        return (gloss, jsobject)
 
     def updateRules(self):      # for testing, we may re-read the file to make it quicker
         self.rules = Rules()

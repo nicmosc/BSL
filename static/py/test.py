@@ -1,8 +1,8 @@
-from analyser import Analyser
-from sentence import EnglishSentence
-from terminaltables import AsciiTable
 from termcolor import colored
-import requests
+from terminaltables import AsciiTable
+
+from analyser import Analyser
+from sentence import EnglishSentence, BSLSentence
 
 analyser = Analyser()
 
@@ -62,16 +62,18 @@ def process(sent):
 
     e_sentence.toString()  # print to see result
 
-    bsl_sentence = analyser.applyRules(e_sentence)  # apply rules to modify the sentence and return result
+    bsl_data = analyser.applyRules(e_sentence)  # apply rules to modify the sentence and return result
 
-    outputs = analyser.genereteOutputs(bsl_sentence)
+    bsl_sentence = BSLSentence(bsl_data)
+
+    outputs = analyser.generateOutputs(bsl_sentence)
 
     #fe_bsl_sentence = analyser.setFacialExpressions(bsl_skeleton)
 
     # dont forget to clear once we're done
     e_sentence.clear()
 
-    return output[0]
+    return outputs[0]
 
 if __name__ == '__main__':
     main()
