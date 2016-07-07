@@ -52,12 +52,6 @@ class Analyser:
 
         i_sentence.setNonManualFeatures()
 
-        print '\nGLOSS OUTPUT\n'
-        i_sentence.toGloss()
-
-        #i_sentence.toUpper()        # set everything to upper as required
-        #i_sentence.toString()
-
         return i_sentence
 
     def removePunctuation(self, tree):
@@ -69,8 +63,11 @@ class Analyser:
                     tree.remove(subtree)
                 else:
                     self.removePunctuation(subtree)
-
         return tree
+
+    def genereteOutputs(self, bsl_sentence):
+        print '\nGLOSS OUTPUT\n'
+        bsl_sentence.toGloss()
 
     def updateRules(self):      # for testing, we may re-read the file to make it quicker
         self.rules = Rules()

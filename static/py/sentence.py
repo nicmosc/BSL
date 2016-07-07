@@ -28,6 +28,7 @@ class EnglishSentence:
         self.syntaxTree = Tree  # syntax tree (unaltered, for reference)
         self.augTree = Tree     # will hold the word objects directly
         self.question = False  # if true then it is a question, false by default
+        self.exclamation = False    # if true then it will be signed faster and with wider eyes
 
         self.subSentences = defaultdict(list)  # will contain the sentence groups words belong to as well as the tense of the subsentence
         # it will be kept for the JS data, not for the simple gloss
@@ -55,6 +56,8 @@ class EnglishSentence:
 
             if text == '?':
                 self.question = True
+            if text == '!':
+                self.exclamation = True
 
         # after having updated all the words we can reassign the objects to the augmented syntax tree
         # so that they can be modified
@@ -179,10 +182,10 @@ class IntermediateSentence:
         self.question = e_sentence.question
         self.sentenceGroups = e_sentence.subSentences
 
-        #if type(words[-1]) == unicode:     # if the last element is a question mark e.g. remove it
-        #    words = words[:-1]
-
         self.words = words  # a list of word objects
+        if e_sentence.exclamation:
+            self.words[0].intense = True
+
         self.updateString()  # string representation of the current sentence
 
     def updateString(self):
@@ -281,7 +284,7 @@ class IntermediateSentence:
                     print 'inserting THEM'
                     new_word = Word('them', 'PRP', -word.index)  # create new index word object
                     new_word.dep_group = word.dep_group
-                    new_word.dependency = ('plural', word.dependency[1])
+                    new_word.dependency = ('plural', word)
                     new_word.sent_group = word.sent_group
                     new_word.is_questioned = word.is_questioned
                     #word.dependency = ('name', word.dependency[1])
@@ -410,9 +413,26 @@ class IntermediateSentence:
         container_list = []
         containers_left = 0
         i = 0
+
+        # special var for dep groups
+        notify = (False, -1)
+
         while i < len(words):
+
+            # to insert pauses between dependency groups
+            if words[i].dep_group != None and words[i].dep_group not in container_tags and not notify[0]:
+                notify = (True, words[i].dep_group)
+            if words[i].dep_group != notify[1] and notify[0]:       # if the dep group is different and notify is enabled
+                del container_list[-1]      # delete the word regardless if it was part of something else
+                container_list.append(Container([words[i - 1]], notify[1], False, mod=True))
+                notify = (False, -1)        # reset notify
+
+            if words[i].intense and 'intense' not in container_tags:
+                container_list.append(Container(words, 'intense', False))     # plays open eyes throughout the sentence
+                i = len(words)
+
             # if the word begins a negation sequence
-            if words[i].is_negated and 'neg' not in container_tags:
+            elif words[i].is_negated and 'neg' not in container_tags:
                 temp_list = list(
                     takewhile(lambda x: x.is_negated, words[i:]))  # get all words in that sequence
                 container_list.append(Container(temp_list, 'neg', True))
@@ -438,21 +458,6 @@ class IntermediateSentence:
                 container_list.append(Container(temp_list, 'q', True))
                 i += len(temp_list) - 1
 
-            # elif words[i].dep_group != None and words[i].dep_group not in container_tags:
-            #     temp_dep = words[i].dep_group
-            #     print 'dependency group ',temp_dep, words[i]
-            #     _i = i
-            #     for w in words[_i:]:
-            #         if w.dep_group != temp_dep:   # if the dep group is different
-            #             container_list.append(Container(words[i-1],temp_dep, False, mod=True))
-            #             break
-            #         elif w == words[-1]:           # if it's the last word (still within the group)
-            #             container_list.append(Container(w, temp_dep, False, mod=True))
-            #         else:
-            #             container_list.append(w)
-            #         i+=1
-            #         temp_dep = w.dep_group
-
             elif words[i].root in ['who', 'where', 'why', 'when', 'how'] and 'q' not in container_tags:
                 container_list.append(Container([words[i]], 'q', True))
 
@@ -465,9 +470,10 @@ class IntermediateSentence:
             else:
                 print words[i], words[i].dependency
                 container_list.append(words[i])
-                containers_left = -1  # decrease the number of containers if no new ones were added
+                containers_left -= 1  # decrease the number of containers if no new ones were added
             containers_left += 1
             i += 1
+            #print container_list
 
         return container_list, containers_left
 
@@ -510,6 +516,7 @@ class Word:
     dep_group = None          # the dependency group the word belongs to
     num_modified = False    # the number modification that a word has on this particular word
     direct_translation = False
+    intense = False
 
     #facial_expr = ''        # the facial expression associated with the word
     is_negated = False      # if the word is connected to a neg, it is negated (used for nouns, verbs, adjectives)
