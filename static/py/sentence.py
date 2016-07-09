@@ -143,7 +143,7 @@ class EnglishSentence:
                 tense = 'past'
             elif v == ['VBZ', 'VBG']:
                 tense = 'future'
-            elif v[0] == 'MD' and temp_verb_dict[k][0] != 'have':
+            elif v[0] == 'MD' and temp_verb_dict[k][0] not in ['have', 'can']:
                 tense = 'future'
 
             self.subSentences[k] = tense

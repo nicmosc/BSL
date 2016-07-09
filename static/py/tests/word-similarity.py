@@ -74,4 +74,19 @@ def readWN():
         if ss.lexname() == 'noun.time':
             print ss
 
-readWN()
+def consoleTest():
+    import sys
+    import os
+    import time
+    num = 100
+    print num
+    for i in range(num):
+        sys.stdout = open(os.devnull, 'w')
+        print 'hello'
+        sys.stdout = sys.__stdout__
+        sys.stdout.write('\r'+str(int((float(i) / num) * 100.0)) + '%')
+        #sys.stdout.write('\rhello' + str(i))
+        sys.stdout.flush()
+        time.sleep(1)
+
+consoleTest()

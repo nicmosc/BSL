@@ -1,11 +1,11 @@
 import re
 
 def regex():
-    line = "VP_1 -> VBG S_1"
+    line = "NP -> DT JJ NN"
 
-    source = "VP -> VBG S"
+    source = "NP -> DT <> NN~"
 
-    target = "VP -> _ S"
+    target = "NP -> NN~ DT <>"   # needs [1, (4,5), 2, 3]
 
 
     # modify the mapping before applying it (for unique tags
@@ -77,6 +77,7 @@ def regex():
         last_point = 0
         skip = 0
         needs_backtrace = False
+        seen_tags = []      # will store the tags seen (for backtracing)
         for t in trg:                   # iterate through all target tags
             for s in temp_source[:]:    # for each source tag
                 if t == '->':  # ignore ->
@@ -86,10 +87,15 @@ def regex():
                 else:
                     temp_source.remove(s)   # otherwise remove it as it's not needed
                     continue                # skip the stuff below
-                print t, s, i, backtrace, 'skip',skip
+                print t, s, i, backtrace, 'skip',skip, ' seen tags:', seen_tags
                 if t == s or t == '_':                  # if the two tags match
                     print source_i, len(source_i), i
-                    target_i.append(source_i[i])    # add the corresponding group index to the target position
+                    if s in seen_tags:
+                        target_i.append(source_i[i])
+                        seen_tags.remove(s)
+                    else:
+                        target_i.append(source_i[i+skip])    # add the corresponding group index to the target position
+                        #if skip > 1: skip -=1
                     if i == last_point and skip > 0:
                         i += skip-1
                         skip = 0
@@ -105,6 +111,7 @@ def regex():
                 else:
                     if s != '->' and t != '->':     # if both source and target tags are not -> then it means the tag we're looking for is further awat
                         print 'setting backtrace'
+                        seen_tags.append(s)
                         if not needs_backtrace:
                             needs_backtrace = True
                             last_point = i+1
@@ -137,4 +144,4 @@ def regex():
     else:
        print "No match!!"
 
-regex()
+#regex()

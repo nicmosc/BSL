@@ -1,0 +1,71 @@
+The cat looked at the mouse and walked away. | MOUSE IX_1 CAT IX_2 IX_1 LOOK-AT IX_2 IX_1 WALK-AWAY
+The young boy walked along the quiet street. | street quiet, ix young boy walk cl-person-path
+The black horse ran through the open gate. | gate open[t], ix black horse cl-run cl-gate/cl-horse-path
+Abruptly the music stopped and the lights went out. | music suddenly/abruptly stop, light cl-go-out
+It was a cold, foggy day in December. | that day past december cold fog-fs cl-fog
+Turns head side to side when lying on tummy. | [brows-up]tummy lie-down, head cl-head turn-sides (on L ref)
+The fire destroyed the entire building. | building-cl fire-loc destroyed all-loc
+
+The dentist filled up the whole hole with silver. | tooth cl-tooth ix hollow/hole, dentist(subj)[brows up] silver(obj) fill-in-classifier filled
+The drunk man lurched down the stairs. | stairs dcl-stairs drunk man steps-down cl-man
+The telephone rang, and she ran across the room and answered it. | [t]telephone ring[/t] woman ix run[fac] cl-person-run[loc] cl-pick-up[loc] telephone
+When you speak, he will begin to turn his head toward you. | [wh]you speak[/wh] ix will[assert] start cl-look[loc to loc]
+Her brand new bicycle crashed into the fence. | fence[loc, topic] her brand-new bicycle cl-crash - cl-fence
+The light shone in his eyes. | [t]his-loc eyes[t] light ecl-light (towards eyes) eye-shine
+What your newborn loves: looking at your face; smile and talk with him; being carried close to you | your newly+born baby love what-rh ix-thumb your face[brows up] gaze-at, ix-finger interact, smile, chat, ix-middle close cl-carry-baby.
+
+Soon she'll learn to go from a crawling position back into a sitting position. | soon ix learn bpcl-crawl cl-crawl infl-turn sitting
+Are the ingredients in texturizing bodifier nearly identical to those in regular old hair spray? I have no idea. Maybe. But the label matters. | [tp]for dog, [loc-lf]cl-container label[on-cl] ix "texturizing bodifier" chemical-things inside[loc] almost exact [lf]same-to[rt] ix-rt [old] regular hairspray q-rh. ix-me not-know, maybe[bu] #but actually cl-container(lf) label[on-cl] ix-cl important.
+
+Our attention span has shriveled down to about 15 seconds. That puts us on a par with goldfish.
+ | people det attention span-wide -> span-short limit-to 15 secs that[bu] cl-equal/same-to[rt] limit attention what-rh goldfish.
+
+ If you were an Olympic-caliber swimmer, you could be forgiven for sort of hating Michael Phelps. | if ph-1-cl + cl-hon *olympic* swimmer, ix-you sort-of [midair]sick-of swimmer michael phelps. understandable, ix-you-forgiven
+BLT sandwich | bread toasted dcl-bread(ref), butter cl-buttered, cheese cl, lettuce shredded cl, bacon cl, tomato cl, cl-bread, cl-sandwich-eat
+
+Google's algorithm isn't set in stone. | GOOGLE-fs[topic] search+cl numeral++ calculate++ pull-up that-ix cl-path finish+root+decide set [NEG}no++[NEG]
+The cup of coffee falls off the counter. | DCL:C + TABLE/\ [assertion] COFFEE/\ DCL:C (on DCL:B) DCL(FALL-OFF).
+a pen on the paper | paper[t] cl-paper pen[t] cl-pen[loc]
+a pen under the paper | paper[t] cl-paper pen[t] cl-pen[loc]
+an animal on the table | table cl-table animal cl-animal[loc]
+an animal under the table | table cl-table animal cl-animal[loc]
+a head turning around on the surface | head[t] cl-turn
+running tap water | WATER cl-TAP ecl-running
+running horse | HORSE/\ SCL: running
+He burst into tears and stormed off. | IX1 BURST-TEARS QUICKLY-WALK CL1:storm-out.
+
+The police stormed the building. | /\BUILDING + CL:L/\, POLICE STORM-IN-BUILDING.
+Wearing false eyelashes to make your eyes stand out. | EYELASHES/\ FAKE PUT-ON WORSE CL4:(LONGER-LASHES).
+Never stand under a tree during a lightning storm. | IF/\ BAD+WIND++ RAIN LIGHTNING+, /\TREE/\ YOU STAND (next to CL:TREE), WAVE-NO, NEVER!
+Brainstorming is by far the most widely used tool to stimulate creative thinking. | THINK/MUSE CREATIVE IDEAS HOW/\ HAVE cl:LIST ONE/\ IX1(REF1) (assertive nodding) BRAINSTORMING /\THAT IX1(REF1) SINCE MOST IX2-plu USE++ THAT IX1.
+
+This tree is three times taller than that one. | TREE/\ IX1-CL:1 TREE/\ IX2 CL:1(ix2)-UP TRIPLE.
+She lays awake all night worrying about her mark. | IX1 CL:lie-down ALL-NIGHT FULL-WAKE WORRY++ THINK-BOTHER++ fs-MARK.
+The driving time from Washington, D.C. to Toronto, Canada is approximately eight and half hours. | WASHINGTON, #DC IX1/\ TORONTO, CANADA IX2/\ DRIVE IX1 CL:pathline(aah) IX2 AROUND 8 1/2 HOUR DRIVE CL:pathline.
+
+The truck reversed into the back of a bus. | BUS/\ CL-bus TRUCK/\ DRIVE CL:3-REVERSED-INTO-BUS.
+Even if he doesn't speak, his mere presence has a calming effect on the family. | IX/\ REGARDLESS/NOT-MATTER IX NOT SPEAK, POSS FAMILY/\ CL:family IX1 CL:1 APPROACH/\ CL:C TEND-to CALM-DOWN + AFFECT.
+
+My uncle lays down the book. | /\BOOK/\ MY UNCLE IX1 CL:LAY-DOWN ON-CL:SURFACE.
+Everyone huddled round the fire to keep warm. | /\FIRE/\ #ALL CL4:PEOPLE HUDDLE-ROUND FIRE WARM.
+Both terms soliloquy and monologue refer to a long speech by one person, but a monologue can be addressed to other people, whereas in a soliloquy the speaker is always talking to him/herself. | /\WORD fs-SOLILOQUY | IX2 fs-MONOLOGUE [nod] IX1 | IX2 MEAN rh-q-WHAT/\ TWO-THEY MEAN /\ONE PERSON/\ LONG [gloss+++] SAME conj-UNDERSTAND/\ DIFFERENT conj-WHAT IX1 ONE PERSON MONO-TALK CL:1 PEOPLE CL:4-WATCH-PERSON TALKING | IX2 [neg] [gloss] ALONE MONO-TALK [gloss].
+
+The police station is across from the courthouse. | /\POLICE/\ CL:STATION IX1 ACROSS-FROM CL:BUILDING IX2 COURT+BUILDING.
+We had walked further than I realized. | AH-OH, TWO-WE HAVE-TO WALK MORE CL:pathline.
+My brother can swim across the river. | /\RIVER/\ /\MY BROTHER/\ IX1 CAN SWIM CL:bank(passive hand) CL:1-across-river(pathline+aah).
+Please don't reach across the table for the salt. Instead, ask someone to pass it to you. | /\TABLE/\ /\SALT/\ CL:container-on CL:table YOU CL:1-reach WAVE-NO PLEASE; /\ASK SOMEONE PASS-TO-YOU.
+I came across these photographs when I was tidying the closet. | /\CLOSET/\ IX-me CLEAN++ /\HAPPEN+FIND/\ PHOTOGRAPH CL:pile/set.
+Be careful when you walk across that busy street! | /\STREET/\ "VERY" TRAFFIC(puff) /\YOU CL:walk-on CL:surface(street)/\, BE-CAREFUL!
+The Canadian dime is small, flat, and round. | /\CANADIAN 10+CENT/\ CL:F-small(oo) CL:F-coin.
+
+Someone has been eating my chips. | /\MY CHIPS/\ SOMEONE (2h)EAT++ CL:container+CL:level-down.
+He watched him as she ambled through the crowd. | /\PEOPLE CL:CROWD/\ IX2 AMBLE CL1:through-crowd IX1 CL2:look-at-IX2.
+Whenever he meets his ex-girlfriend, she looks through through him. | WHENEVER IX1 SEE EX-BOYFRIEND/\, IX1 WALK CL:2-look-through-CL2.
+It has been raining and the pavement is wet. | /\CL:pavement/\ WET[nod], RAIN SINCE-then. 
+
+I tried to get my point across to my mother but she wouldn't listen. | MY MOTHER IX_1 ME TRY EXPLAIN POINT IX_1 BUT IX_1 NOT-LISTEN
+He has been battling against the oppression. | OPPRESSION IX_2 IX_1 BEEN FIGHT AGAINST IX2
+We can borrow money from a bank to buy this big house. | BANK IX_1 MONEY IX_1 WE CAN BORROW TO BUY HOUSE LARGE // check this
+
+A fly in the soup | (SOUP BOWL)[t] IX_1 FLY IX_2 IX_1 IN IX_2
+The flying time from New York to London was seven hours. | NEW-YORK IX_1 LONDON IX_2 IX_1 FLY IX_2 -7- HOUR

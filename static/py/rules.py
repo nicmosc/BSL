@@ -253,6 +253,7 @@ class Rules:
         i = -1
         backtrace = 0  # used if our match is further on in the rule
         needs_backtrace = False
+        seen_tags = []  # will store the tags seen (for backtracing)
         last_point = 0
         skip = 0
         for t in target:  # iterate through all target tags
@@ -267,7 +268,11 @@ class Rules:
                 #print t, s, i, backtrace
                 if t == s or t == '_':  # if the two tags match
                     #print source_i, len(source_i), i
-                    target_i.append(source_i[i])  # add the corresponding group index to the target position
+                    if s in seen_tags:
+                        target_i.append(source_i[i])
+                        seen_tags.remove(s)
+                    else:
+                        target_i.append(source_i[i + skip])  # add the corresponding group index to the target position
                     if i == last_point and skip > 0:
                         i += skip - 1
                         skip = 0
@@ -283,6 +288,7 @@ class Rules:
                 else:
                     if s != '->' and t != '->':  # if both source and target tags are not -> then it means the tag we're looking for is further awat
                         #print 'setting backtrace'
+                        seen_tags.append(s)
                         if not needs_backtrace:
                             needs_backtrace = True
                             last_point = i + 1

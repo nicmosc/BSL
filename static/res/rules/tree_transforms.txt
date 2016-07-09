@@ -6,10 +6,12 @@
 NP -> PDT <> | NP -> _ <>
 NP -> <> JJ NN~ CC <> NN~ | NP -> NN~ <> JJ CC NN~ <> 	// very specific case
 NP -> <> JJ JJ NN~ | NP -> <> NN~ JJ JJ
+NP -> DT <> NN~ | NP -> NN~ DT <>
 NP -> JJ NN~ | NP -> NN~ JJ
 //NP -> DT <> NN~ | NP -> DT NN~ <>		// generic case to swap any adjective modifier
 
-NP -> DT RB JJ NN~ | NP -> DT NN~ RB JJ 
+NP -> DT NN~ <> | NP -> NN~ DT <>
+NP -> DT RB JJ NN~ | NP -> NN~ DT RB JJ 
 NP -> <> JJ NN~ | NP -> <> NN~ JJ
 NP -> <> ADJP NN~ | NP -> <> NN~ ADJP
 
