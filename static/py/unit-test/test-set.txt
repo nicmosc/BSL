@@ -22,8 +22,7 @@ Do you mind the noise? | NOISE YOU OBJECT (TO)[q]
 Do you object to the noise? | NOISE YOU OBJECT (TO)[q]
 Your answer agrees with mine. | YOUR ANSWER AGREE SAME-YOU-ME
 Give me a straight answer. | TELL-ME ANSWER CLEAR
-// Draw a straight line. | STRAIGHT LINE (to) DRAW [modified]
-What time does the class end? | (WHAT TIME CLASS FINISH)[q]		// maybe different
+What time does the class end? | (WHAT TIME CLASS FINISH)[q]		// maybe different // Draw a straight line. | STRAIGHT LINE (to) DRAW [modified]
 At what time is the class finish? | (WHAT TIME CLASS FINISH)[q]
 I'm truly grateful for your help. | ME GRATEFUL YOU-HELP-ME
 How are you? | YOU (HOW)[q]
@@ -67,12 +66,12 @@ Maybe she will study for PhD in the future. | MAYBE FUTURE IX_1 STUDY IX_4 -P-H-
 That's why. | THAT WHY
 Who is she? | IX_1 (WHO)[q]
 Who's he? | IX_1 (WHO)[q]
-Who is t? | IX_1 (WHO)[q]
+Who is it? | IX_1 (WHO)[q]
 That is why I warned you not to drive today. | TODAY THAT WHY ME WARN-YOU (NOT DRIVE)[neg]
 That day, my dog died. | THAT-DAY MY DOG DIE
 Are you married? | (YOU MARRY)[q]
 Where do you live? | YOU LIVE (WHERE)[q]
-I live in California.| ME LIVE (WHERE)[q] -C-A-L-I-F-O-R-N-I-A-
+I live in California. | ME LIVE (WHERE)[q] -C-A-L-I-F-O-R-N-I-A-
 Where is the school? | SCHOOL (WHERE)[q]
 I bought new clothes for the dance. | ME BUY NEW CLOTHES FOR DANCE
 I use this knife for chopping vegetables. | IX_1 KNIFE ME USE FOR VEGETABLE TO-CHOP 
@@ -142,10 +141,7 @@ I like her. | ME LIKE IX_1
 I like her dog. | ME LIKE HER DOG
 He applied for the job. | IX_1 APPLY-FOR JOB
 
-We are going against the best basketball team in the town tomorrow. | TOMORROW WE PLAY VERSUS BASKETBALL TEAM BEST IN TOWN
-
-The developer broke the final project down into three separate projects. | PROJECT/\ IX1 DEVELOP++ [nod] WHOLE IX1 DIVIDE-UP++ THREE PROJECT to-SEPARATE.
-DEVELOP //check this
+We are going against the best basketball team in the town tomorrow. | TOMORROW WE PLAY VERSUS BASKETBALL TEAM BEST IN TOWN //The developer broke the final project down into three separate projects. | PROJECT/\ IX1 DEVELOP++ [nod] WHOLE IX1 DIVIDE-UP++ THREE PROJECT to-SEPARATE. DEVELOP //check this
 
 My friend lent me 100 dollars and I must pay it back soon. | MY FRIEND IX_1 LOAN-TO-ME -1-0-0- DOLLAR ME MUST PAY IX_1 BACK SOON
 Look over your lab photos before authorizing their release. | FIRST LOOK OVER LAB PHOTO THEM APPROVE GO-AHEAD RELEASE

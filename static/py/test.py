@@ -5,6 +5,7 @@ from analyser import Analyser
 from sentence import EnglishSentence, BSLSentence
 
 from bleu import sentence_bleu, corpus_bleu
+from re import sub
 
 import sys
 from os import devnull
@@ -54,7 +55,7 @@ def tableResults(sent):
     except IOError:
         print 'File ' + f_name + ' not found'
 
-# calculate bleu score only over the whole test set (only returns a number at the end
+# calculate bleu score only over the whole test set (only returns a number at the end: 0.610444977652
 def systemAccuracy(sent):
     f_name = sent.split(' ')[1]
     try:
@@ -65,33 +66,34 @@ def systemAccuracy(sent):
 
         file_lines = file.readlines()
 
-        num_lines = sum(1 for i in list(file_lines))
+        num_lines = sum(1 for i in list(file_lines) if i.rstrip())
 
         print num_lines
 
         current_line = 1
         for line in list(file_lines):
-            #print line
-            input = line.split(' | ')[0]
-            output = line.split(' | ')[1]
+            if line.rstrip():   # avoid empty lines
+                #print line
+                input = line.split(' | ')[0]
+                output = sub('\t|//.*', '', line).split(' | ')[1]   # remove possible comments and tabs
 
-            # suppress printing from the result method
-            sys.stdout = open(devnull, 'w')
+                # suppress printing from the result method
+                sys.stdout = open(devnull, 'w')
 
-            reference.append([output])
-            result = process(input)
-            hypothesis.append(result)   # for each english sentence we have the expected translation (reference) and result
-            # from our system (hypothesis
+                reference.append([output])
+                result = process(input)
+                hypothesis.append(result)   # for each english sentence we have the expected translation (reference) and result
+                # from our system (hypothesis
 
-            sys.stdout = sys.__stdout__
+                sys.stdout = sys.__stdout__
 
-            #print reference, result
+                #print reference, result
 
-            #sys.stdout.write(str(int(float(current_line)/num_lines)*100.0)+'%'+'    \r')
-            sys.stdout.write('\r'+str(int((float(current_line) / num_lines) * 100.0)) + '%')
-            sys.stdout.flush()
+                #sys.stdout.write(str(int(float(current_line)/num_lines)*100.0)+'%'+'    \r')
+                sys.stdout.write('\r'+str(int((float(current_line) / num_lines) * 100.0)) + '% '+ input)
+                sys.stdout.flush()
 
-            current_line += 1
+                current_line += 1
 
         print '\r'
 
