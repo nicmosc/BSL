@@ -19,7 +19,7 @@ from os import devnull
 app = Flask(__name__)
 
 # Initalise the translating analyser
-analyser = Analyser('static/res/rules/')
+analyser = Analyser(app=True)
 
 # This route will show a form to perform an AJAX request
 # jQuery is loaded to execute the request and update the
@@ -44,7 +44,8 @@ def processText():
     sys.stdout = sys.__stdout__     # reset printing
 
     print 'Gloss:',data[0]
-    print 'JS:',data[1]
+    print 'HTML:',data[1]
+    print 'JS:',data[2]
 
     # letters = list(text.upper())
     #
@@ -60,8 +61,6 @@ def processText():
     # #print(jsonify(letters))
     # # we process the text here for now
     # return jsonify(result=data)
-
-    exit(0)
 
     return jsonify(result=data[1])
 

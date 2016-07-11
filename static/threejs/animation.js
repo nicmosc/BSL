@@ -399,26 +399,28 @@ $('#start-pause-play').on('click', function() {
 
         console.log("clicked start");
 
-        this.innerHTML = 'pause';
+        //this.innerHTML = 'pause';
         // get the text from the textbox and send it to python
         $.getJSON('/_process_text', {
             input_text: $('input[name="input_text"]').val()
         }, function(data) {
 
-            if(JSON.stringify(data.result) != JSON.stringify(urls)) {
-                console.log(data.result, urls);
-                resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
-                for(i = 0; i < data.result.length; i++){
-                    urls.push(JSON.parse(data.result[i]));  // convert json object from string representation to json object
-                }
-                console.log(urls);
-                started = true;
-                setupAnimations(urls);
-            }
-            else{
-                displayTranslation = true;
-                console.log("text is still the same");
-            }
+            console.log(data);
+
+            // if(JSON.stringify(data.result) != JSON.stringify(urls)) {
+            //     console.log(data.result, urls);
+            //     resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)
+            //     for(i = 0; i < data.result.length; i++){
+            //         urls.push(JSON.parse(data.result[i]));  // convert json object from string representation to json object
+            //     }
+            //     console.log(urls);
+            //     started = true;
+            //     setupAnimations(urls);
+            // }
+            // else{
+            //     displayTranslation = true;
+            //     console.log("text is still the same");
+            // }
         });
     }
     else {
@@ -427,7 +429,7 @@ $('#start-pause-play').on('click', function() {
         else this.innerHTML = 'pause';
     }
     // remember that on first click we make 'cancel' visible
-    document.getElementById('cancel').style.visibility = 'visible';
+    //document.getElementById('cancel').style.visibility = 'visible';
 });
 
 $('#cancel').on('click', function() {

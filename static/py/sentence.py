@@ -6,6 +6,7 @@ from terminaltables import AsciiTable
 from utils import formatNumber, abbreviateMonth, findGender, toUpper
 from collections import defaultdict
 from itertools import takewhile
+from re import compile, escape
 
 # this class will have objects describing a sentence from English
 # it will have:
@@ -518,9 +519,23 @@ class BSLSentence:
     def __init__(self, data):
         self.word_objects = data
 
-    def toGloss(self):
+    # returns simple text representation
+    def toGlossText(self):
             # print ' '.join(map(lambda x: str(x).upper(), self.aug_sentence))
         return ' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.word_objects])
+
+    def toGlossHTML(self, gloss=None):
+        # if gloss is given use it directly
+        if not gloss: gloss = self.toGlossText()
+
+        rep = {'(': '<over>', ')': '</over>', '[': '<sup>', ']': '</sup>'}  # define desired replacements here
+
+        # use these three lines to do the replacement
+        rep = dict((escape(k), v) for k, v in rep.iteritems())
+        pattern = compile("|".join(rep.keys()))
+        html = pattern.sub(lambda m: rep[escape(m.group(0))], gloss)
+
+        return html
 
     # will need to make a toJS method
     def toJS(self):

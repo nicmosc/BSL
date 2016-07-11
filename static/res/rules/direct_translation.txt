@@ -56,15 +56,15 @@ mum->-m-m-
 mother->-m-m-
 dad->-d-d-
 father->-d-d-
-bsl->-B-S-L-
-asl->-A-S-L-
-o'clock->time
 
 CC
 and->_ 			// remove and conjunction
 
 $
 $->dollar
+
+RB
+o'clock->time
 
 VB
 be->_

@@ -26,13 +26,24 @@
             top: 10px;
             left: 10px;
         }
-        .button, .textbox {
-            background: #eee;
+        .button {
             padding: 3px 5px;
             margin: 5px;
             cursor: pointer;
             display: inline-block;
-            border: 1px solid #aaa;
+            border: 1px solid #999;
+            background: #fff;
+            //padding: 10px;
+        }
+
+        .textbox {
+            padding: 3px 5px;
+            margin: 5px;
+            cursor: pointer;
+            display: inline-block;
+            width: 100%;
+            border: 1px solid #999;
+            background: #fff;
         }
 
         #cancel {
@@ -57,7 +68,7 @@
     <div id="swap-camera" class="button">swap camera</div>
     <div id="start-pause-play" class="button">start</div> <!-- first click starts the video, then switches between paused and playing -->
     <div id="cancel" class="button">cancel</div>    <!-- used to cancel everything (back to idle) -->
-    <input id = "input-text" type="text" class = "textbox" name = "input_text" size="20">
+    <input id = "input-text" type="text" class = "textbox" placeholder='english sentence...' name = "input_text">
 </div>
 
 <script src="../static/lib/js/jquery.min.js"></script>

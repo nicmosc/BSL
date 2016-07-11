@@ -2,7 +2,6 @@ from termcolor import colored
 from terminaltables import AsciiTable
 
 from analyser import Analyser
-from sentence import EnglishSentence, BSLSentence
 
 from bleu import sentence_bleu, corpus_bleu
 from re import sub
@@ -28,7 +27,7 @@ def main():
         elif sent.split(' ')[0] == 'system_accuracy':
             systemAccuracy(sent)
         else:   # if we want to just test a sentence
-            print analyser.process(sent)
+            print analyser.process(sent)[0]
 
 def tableResults(sent):
     f_name = sent.split(' ')[1]
@@ -42,7 +41,7 @@ def tableResults(sent):
 
                 # suppress printing from the result method
                 sys.stdout = open(devnull, 'w')
-                result = analyser.process(input)
+                result = analyser.process(input)[0]     # this is the simple gloss text output
                 sys.stdout = sys.__stdout__
 
                 # do the test evaluation here...
@@ -93,7 +92,7 @@ def systemAccuracy(sent):
                 sys.stdout = open(devnull, 'w')
 
                 reference.append([output])
-                result = analyser.process(input)
+                result = analyser.process(input)[0]
                 hypothesis.append(result)   # for each english sentence we have the expected translation (reference) and result
                 # from our system (hypothesis
 

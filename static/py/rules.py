@@ -3,9 +3,12 @@ from collections import defaultdict
 from nltk import CFG, Nonterminal, Production
 from nltk.parse.generate import generate
 
+from os.path import join
+from static import APP_RULES
+
 class Rules:
 
-    def __init__(self, dir):
+    def __init__(self, app):
 
         self.tree_transforms = []  # rules to be applied to the syntax trees
         self.direct_translation = defaultdict(lambda: defaultdict(str))  # rules for direct translation
@@ -15,8 +18,8 @@ class Rules:
         # read the rules from the file
 
         # first open tree transforms
-        #self.dir = '../res/rules/'
-        self.dir = dir
+        self.dir = '../res/rules/'
+        self.APP = app  # if this is true, then we use the alternative open method
 
         f_name = 'tree_transforms.txt'
         try:
@@ -40,7 +43,13 @@ class Rules:
                 print k1,v1
 
     def readTreeRules(self, f_name):
-        file = open(self.dir + f_name, 'r')
+        file = None
+        if self.APP:
+            print APP_RULES
+            file = open(join(APP_RULES, f_name), 'r')
+        else:
+            file = open(self.dir + f_name, 'r')
+
         for line in file:
             if not line.isspace() and line[0] != '/':  # if the line is not empty
                 sections = line.split('|')
@@ -57,7 +66,12 @@ class Rules:
     def readDirectRules(self, f_name):
         new_cat = True  # when this is true, we start a new category of direct rules
         current_cat = ''  # the category we are in at the moment
-        file = open(self.dir + f_name, 'r')
+        file = None
+        if self.APP:
+            file = open(join(APP_RULES, f_name), 'r')
+        else:
+            file = open(self.dir + f_name, 'r')
+
         for line in file:
             if line.isspace():  # whenever a new category is introduced (space)
                 new_cat = True
@@ -77,11 +91,15 @@ class Rules:
     def readCombinedWords(self):
         f_name = 'signbank_multi.txt'
         try:
-            f = open('../res/rules/' + f_name, 'r')
-            for line in f:
+            file = None
+            if self.APP:
+                file = open(join(APP_RULES, f_name), 'r')
+            else:
+                file = open(self.dir + f_name, 'r')
+            for line in file:
                 split = line.strip().split(' ')
                 self.combined_words[split[0]].append(split[1:])
-            f.close()
+            file.close()
         except IOError:
             print 'File ' + f_name + ' not found'
 

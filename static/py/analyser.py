@@ -8,9 +8,10 @@ class Analyser:
 
     ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';', '!', "''", "'"]  # these are possible tags we want to ignore
 
-    def __init__(self, directory):
+    def __init__(self, app = False):
         self.parser = Parser()
-        self.rules = Rules(directory)    # a rules object to apply the transfer and direct translation
+        self.APP = app
+        self.rules = Rules(app)    # a rules object to apply the transfer and direct translation
 
     def buildSent(self, sentence):
 
@@ -74,11 +75,15 @@ class Analyser:
 
     def generateOutputs(self, bsl_sentence):
         print '\nGLOSS OUTPUT\n'
-        gloss = bsl_sentence.toGloss()
+        gloss = bsl_sentence.toGlossText()
+
+        html = bsl_sentence.toGlossHTML(gloss)
+
+        print html
 
         jsobject = bsl_sentence.toJS()
 
-        return (gloss, jsobject)
+        return (gloss, html, jsobject)
 
     def process(self,sent):
         e_sentence = EnglishSentence(sent)
@@ -96,7 +101,7 @@ class Analyser:
         # dont forget to clear once we're done
         e_sentence.clear()
 
-        return outputs[0]
+        return outputs
 
     def updateRules(self):      # for testing, we may re-read the file to make it quicker
-        self.rules = Rules()
+        self.rules = Rules(self.APP)
