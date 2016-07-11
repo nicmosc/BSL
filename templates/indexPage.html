@@ -10,7 +10,7 @@
             padding:0;
             margin:0;
             overflow:hidden;
-            font-family:sans-serif;
+            font-family:Arial, Helvetica,sans-serif;
             text-align:center;
         }
         h1 { }
@@ -25,29 +25,45 @@
             position: absolute;
             top: 10px;
             left: 10px;
+            right: 10px;
+            width: 100%;
         }
         .button {
-            padding: 3px 5px;
+            padding: 10px;
             margin: 5px;
             cursor: pointer;
             display: inline-block;
             border: 1px solid #999;
             background: #fff;
-            //padding: 10px;
+        }
+
+        .button:hover {
+            background: #cccccc;
         }
 
         .textbox {
-            padding: 3px 5px;
+            padding: 10px;
             margin: 5px;
             cursor: pointer;
             display: inline-block;
-            width: 100%;
+            width: 70%;
             border: 1px solid #999;
             background: #fff;
         }
 
         #cancel {
-            visibility: hidden;
+            //visibility: hidden;
+        }
+
+        #gloss {
+            font-size: 17pt;
+            position: absolute;
+            top: 20%;
+            left: 5%;
+        }
+
+        over {
+            text-decoration: overline;
         }
 
         .log {
@@ -66,10 +82,12 @@
 
 <div id="buttons">
     <div id="swap-camera" class="button">swap camera</div>
+    <input id = "input-text" type="text" class = "textbox" placeholder='english sentence...' name = "input_text">
     <div id="start-pause-play" class="button">start</div> <!-- first click starts the video, then switches between paused and playing -->
     <div id="cancel" class="button">cancel</div>    <!-- used to cancel everything (back to idle) -->
-    <input id = "input-text" type="text" class = "textbox" placeholder='english sentence...' name = "input_text">
 </div>
+
+<div id = "gloss"></div>
 
 <script src="../static/lib/js/jquery.min.js"></script>
 

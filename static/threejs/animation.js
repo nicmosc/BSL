@@ -407,6 +407,8 @@ $('#start-pause-play').on('click', function() {
 
             console.log(data);
 
+            document.getElementById('gloss').innerHTML = data.result;
+
             // if(JSON.stringify(data.result) != JSON.stringify(urls)) {
             //     console.log(data.result, urls);
             //     resetClipAndUrlArrays();    // not necessary if the sentence is the same exactly (we can just check urls)

@@ -426,10 +426,14 @@ class IntermediateSentence:
 
             # to insert pauses between dependency groups
             if words[i].dep_group != None and words[i].dep_group not in container_tags and not notify[0]:
+                print words[i]
                 notify = (True, words[i].dep_group)
+
             if words[i].dep_group != notify[1] and notify[0]:       # if the dep group is different and notify is enabled
-                del container_list[-1]      # delete the word regardless if it was part of something else
-                container_list.append(Container([words[i - 1]], notify[1], False, mod=True))
+                if isinstance(container_list[-1], Word):
+                    del container_list[-1]      # delete the word regardless if it was part of something else
+                    container_list.append(Container([words[i - 1]], notify[1], False, mod=True))
+
                 notify = (False, -1)        # reset notify
 
             if words[i].intense and 'intense' not in container_tags:
@@ -447,6 +451,7 @@ class IntermediateSentence:
                 temp_list = list(
                     takewhile(lambda x: x.is_questioned, words[i:]))  # get all words in that sequence
                 container_list.append(Container(temp_list, 'q', True))
+                print container_list
                 i += len(temp_list) - 1
             # setting the tenses for the sentence group the word is part of
             elif self.sentenceGroups[words[i].sent_group] not in container_tags\
@@ -528,7 +533,7 @@ class BSLSentence:
         # if gloss is given use it directly
         if not gloss: gloss = self.toGlossText()
 
-        rep = {'(': '<over>', ')': '</over>', '[': '<sup>', ']': '</sup>'}  # define desired replacements here
+        rep = {'(': '<over>', ')': '</over>', '[': '<sup> ', ']': '</sup>'}  # define desired replacements here
 
         # use these three lines to do the replacement
         rep = dict((escape(k), v) for k, v in rep.iteritems())
