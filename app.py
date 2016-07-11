@@ -11,10 +11,15 @@
 # to send JSON as a response of a request
 from flask import Flask, render_template, request, jsonify
 import json
+from static.py.analyser import Analyser
+import sys
+from os import devnull
 
 # Initialize the Flask application
 app = Flask(__name__)
 
+# Initalise the translating analyser
+analyser = Analyser('static/res/rules/')
 
 # This route will show a form to perform an AJAX request
 # jQuery is loaded to execute the request and update the
@@ -28,21 +33,37 @@ def index():
 # result as a proper JSON response (Content-Type, etc.)
 @app.route('/_process_text')
 def processText():
+
+    ''' this is the old stuff '''
     text = request.args.get('input_text', '', type = str)
-    letters = list(text.upper())
 
-    data = []   # will contain the signs/letters with their path
+    print text
 
-    for letter in letters:
-        obj = {}
-        obj['name'] = letter
-        obj['path'] = 'alphabet'    # specific to this program (will have to differentiate facial and more)
-        data.append(json.dumps(obj))
+    sys.stdout = open(devnull, 'w') # suppress printing from the result method
+    data = analyser.process(text)
+    sys.stdout = sys.__stdout__     # reset printing
 
-    print(letters, data)
-    #print(jsonify(letters))
-    # we process the text here for now
-    return jsonify(result=data)
+    print 'Gloss:',data[0]
+    print 'JS:',data[1]
+
+    # letters = list(text.upper())
+    #
+    # data = []   # will contain the signs/letters with their path
+    #
+    # for letter in letters:
+    #     obj = {}
+    #     obj['name'] = letter
+    #     obj['path'] = 'alphabet'    # specific to this program (will have to differentiate facial and more)
+    #     data.append(json.dumps(obj))
+    #
+    # print(letters, data)
+    # #print(jsonify(letters))
+    # # we process the text here for now
+    # return jsonify(result=data)
+
+    exit(0)
+
+    return jsonify(result=data[1])
 
 if __name__ == '__main__':
     # app.run(

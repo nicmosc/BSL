@@ -10,7 +10,7 @@ from re import sub
 import sys
 from os import devnull
 
-analyser = Analyser()
+analyser = Analyser('../res/rules/')
 
 def main():
 
@@ -28,7 +28,7 @@ def main():
         elif sent.split(' ')[0] == 'system_accuracy':
             systemAccuracy(sent)
         else:   # if we want to just test a sentence
-            print process(sent)
+            print analyser.process(sent)
 
 def tableResults(sent):
     f_name = sent.split(' ')[1]
@@ -42,7 +42,7 @@ def tableResults(sent):
 
                 # suppress printing from the result method
                 sys.stdout = open(devnull, 'w')
-                result = process(input)
+                result = analyser.process(input)
                 sys.stdout = sys.__stdout__
 
                 # do the test evaluation here...
@@ -93,7 +93,7 @@ def systemAccuracy(sent):
                 sys.stdout = open(devnull, 'w')
 
                 reference.append([output])
-                result = process(input)
+                result = analyser.process(input)
                 hypothesis.append(result)   # for each english sentence we have the expected translation (reference) and result
                 # from our system (hypothesis
 
@@ -117,30 +117,6 @@ def systemAccuracy(sent):
 
     except IOError:
         print 'File ' + f_name + ' not found'
-
-def process(sent):
-    e_sentence = EnglishSentence(sent)
-
-    analyser.buildSent(e_sentence)  # build sentence object with all relationships etc
-
-    e_sentence.toString()  # print to see result
-
-    bsl_data = analyser.applyRules(e_sentence)  # apply rules to modify the sentence and return result
-
-    bsl_sentence = BSLSentence(bsl_data)
-
-    outputs = analyser.generateOutputs(bsl_sentence)
-
-    #accuracy_plain = sentence_bleu(['ME NOT LOVE IX_1'], sub('[\(\)]|\[.*\]', '', outputs[0]))
-    #accuracy_plain = sentence_bleu(['ME NOT LOVE IX_1'], outputs[0])
-    #print accuracy_plain
-
-    #fe_bsl_sentence = analyser.setFacialExpressions(bsl_skeleton)
-
-    # dont forget to clear once we're done
-    e_sentence.clear()
-
-    return outputs[0]
 
 if __name__ == '__main__':
     main()

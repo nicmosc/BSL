@@ -1,16 +1,16 @@
 from nltk import Tree
 from parser import Parser
 from rules import Rules
-from sentence import IntermediateSentence
+from sentence import EnglishSentence,IntermediateSentence,BSLSentence
 
 
 class Analyser:
 
     ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';', '!', "''", "'"]  # these are possible tags we want to ignore
 
-    def __init__(self):
+    def __init__(self, directory):
         self.parser = Parser()
-        self.rules = Rules()    # a rules object to apply the transfer and direct translation
+        self.rules = Rules(directory)    # a rules object to apply the transfer and direct translation
 
     def buildSent(self, sentence):
 
@@ -79,6 +79,24 @@ class Analyser:
         jsobject = bsl_sentence.toJS()
 
         return (gloss, jsobject)
+
+    def process(self,sent):
+        e_sentence = EnglishSentence(sent)
+
+        self.buildSent(e_sentence)  # build sentence object with all relationships etc
+
+        e_sentence.toString()  # print to see result
+
+        bsl_data = self.applyRules(e_sentence)  # apply rules to modify the sentence and return result
+
+        bsl_sentence = BSLSentence(bsl_data)
+
+        outputs = self.generateOutputs(bsl_sentence)
+
+        # dont forget to clear once we're done
+        e_sentence.clear()
+
+        return outputs[0]
 
     def updateRules(self):      # for testing, we may re-read the file to make it quicker
         self.rules = Rules()

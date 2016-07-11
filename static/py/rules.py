@@ -5,7 +5,7 @@ from nltk.parse.generate import generate
 
 class Rules:
 
-    def __init__(self):
+    def __init__(self, dir):
 
         self.tree_transforms = []  # rules to be applied to the syntax trees
         self.direct_translation = defaultdict(lambda: defaultdict(str))  # rules for direct translation
@@ -15,7 +15,8 @@ class Rules:
         # read the rules from the file
 
         # first open tree transforms
-        self.dir = '../res/rules/'
+        #self.dir = '../res/rules/'
+        self.dir = dir
 
         f_name = 'tree_transforms.txt'
         try:

@@ -6,7 +6,7 @@ from nltk.internals import find_jars_within_path
 import requests
 from bs4 import BeautifulSoup
 from itertools import chain
-from parser import Parser
+from static.py.parser import Parser
 
 
 def tag():
