@@ -9,7 +9,7 @@ class Analyser:
     ignore = ['#', '"', '(', ')', ',', '.', ':', '``', ';', '!', "''", "'"]  # these are possible tags we want to ignore
 
     def __init__(self, app = False):
-        self.parser = Parser()
+        self.parser = Parser(app)
         self.APP = app
         self.rules = Rules(app)    # a rules object to apply the transfer and direct translation
 

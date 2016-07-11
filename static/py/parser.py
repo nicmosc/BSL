@@ -5,11 +5,11 @@ import requests
 import os
 from bs4 import BeautifulSoup
 from itertools import chain
-#nltk.internals.config_java(options='-xmx2G')
+from static import APP_PARSER
 
 class Parser:
 
-    def __init__(self):
+    def __init__(self, app=False):
         # first check if the stanford website is accessible
         status_code = 0
         try:
@@ -30,8 +30,12 @@ class Parser:
             self.online = False
 
             # set up necessary variables for local stanford parser
-            os.environ['STANFORD_PARSER'] = '../lib/stanford-parser-full'
-            os.environ['STANFORD_MODELS'] = '../lib/stanford-parser-full'
+            if app:
+                os.environ['STANFORD_PARSER'] = APP_PARSER
+                os.environ['STANFORD_MODELS'] = APP_PARSER
+            else:
+                os.environ['STANFORD_PARSER'] = '../lib/stanford-parser-full'
+                os.environ['STANFORD_MODELS'] = '../lib/stanford-parser-full'
 
             # set up tree parser
             self.parser = StanfordParser()
