@@ -52,6 +52,8 @@ class Analyser:
         # before applying direct translation we may want to find multiple words that make up 1 sign e.g. now and then = NOW-AND-THEN
         self.rules.applyCombinedWords(i_sentence.words)
 
+        print i_sentence.words
+
         # direct translation
         self.rules.applyDirectTranslation(i_sentence)
 

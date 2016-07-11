@@ -36,18 +36,27 @@ def tableResults(sent):
         file = open('unit-test/' + f_name + '.txt', 'r')
         table_data = [['Input', 'Expected', 'BLEU Accuracy', 'Output']]
         for line in file:
+            if line.rstrip():
+                input = line.split(' | ')[0]
+                output = sub('\t|//.*', '', line).split(' | ')[1].strip()  # remove possible comments and tabs
 
-            input = line.split(' | ')[0]
-            output = line.split(' | ')[1]
-            result = process(input)
+                # suppress printing from the result method
+                sys.stdout = open(devnull, 'w')
+                result = process(input)
+                sys.stdout = sys.__stdout__
 
-            # do the test evaluation here...
-            color = 'green'
-            if result.strip() != output.strip():
-                color = 'red'
+                # do the test evaluation here...
+                color = 'green'
+                if result.strip() != output:
+                    color = 'red'
 
-            accuracy = sentence_bleu([output], result)
-            table_data.append([input, output, accuracy, colored(result, color)])
+                accuracy = sentence_bleu([output], result)
+
+                accuracy_plain = sentence_bleu([sub('[\(\)]|\[.*\]','',output)], sub('[\(\)]|\[.*\]','',result))
+
+                print input,'|',output,'|',colored(result,color),'|',accuracy,'|',accuracy_plain
+
+                table_data.append([input, output, accuracy, colored(result, color)])
         table = AsciiTable(table_data)
         print table.table
         file.close()
@@ -55,7 +64,10 @@ def tableResults(sent):
     except IOError:
         print 'File ' + f_name + ' not found'
 
-# calculate bleu score only over the whole test set (only returns a number at the end: 0.610444977652
+# calculate bleu score only over the whole test set (only returns a number at the end: 0.610444977652 now 0.632765476997 (184)
+# only classifiers 0.391927292578 (49 sent)
+# combined: 0.563023520503
+# re.sub('[\(\)]|\[.*\]','',sent) to remove non manual features
 def systemAccuracy(sent):
     f_name = sent.split(' ')[1]
     try:
@@ -118,6 +130,10 @@ def process(sent):
     bsl_sentence = BSLSentence(bsl_data)
 
     outputs = analyser.generateOutputs(bsl_sentence)
+
+    #accuracy_plain = sentence_bleu(['ME NOT LOVE IX_1'], sub('[\(\)]|\[.*\]', '', outputs[0]))
+    #accuracy_plain = sentence_bleu(['ME NOT LOVE IX_1'], outputs[0])
+    #print accuracy_plain
 
     #fe_bsl_sentence = analyser.setFacialExpressions(bsl_skeleton)
 

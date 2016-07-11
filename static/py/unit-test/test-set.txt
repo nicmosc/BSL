@@ -1,7 +1,7 @@
-What happened? | (HAPPEN WHAT)[q]
+What happened? | HAPPEN (WHAT)[q]
 Do you need help? | (YOU NEED HELP)[q]
-How do you feel? | (HOW YOU FEEL)[q]
-How old are you? | (YOU HOW OLD)[q]
+How do you feel? | YOU FEEL (HOW)[q]
+How old are you? | YOU (HOW OLD)[q]
 I was just about to leave when you phoned me. | ME ALMOST LEAVE YOU CALL-ME
 Please fingerspell slowly. | PLEASE FINGERSPELL SLOWLY
 I am learning ASL a little bit. | ME LEARN -A-S-L- A-LITTLE-BIT
@@ -22,7 +22,8 @@ Do you mind the noise? | NOISE YOU OBJECT (TO)[q]
 Do you object to the noise? | NOISE YOU OBJECT (TO)[q]
 Your answer agrees with mine. | YOUR ANSWER AGREE SAME-YOU-ME
 Give me a straight answer. | TELL-ME ANSWER CLEAR
-What time does the class end? | (WHAT TIME CLASS FINISH)[q]		// maybe different // Draw a straight line. | STRAIGHT LINE (to) DRAW [modified]
+What time does the class end? | (WHAT TIME CLASS FINISH)[q]
+Draw a straight line. | LINE STRAIGHT DRAW
 At what time is the class finish? | (WHAT TIME CLASS FINISH)[q]
 I'm truly grateful for your help. | ME GRATEFUL YOU-HELP-ME
 How are you? | YOU (HOW)[q]
@@ -34,7 +35,6 @@ What is your name? | YOUR NAME (WHAT)[q]
 You're welcome. | WELCOME
 The two dollar bill was bogus money. | MONEY -2-DOLLAR BILL IX_1 BOGUS
 The boat capsized in the stormy waters. | BAD STORM BOAT CAPSIZE
-The crowd heckled the speaker. | speaker [L]classifier-1 [R]indexing-to-classifier audience heckle
 I don't understand. | ME DO-NOT-UNDERSTAND
 Please sign slowly. | PLEASE SIGN SLOWLY
 Please slow down signing. | PLEASE SIGN SLOWLY
@@ -87,29 +87,27 @@ I have not eaten yet. | ME EAT (NOT-YET)[neg]
 What to do? | DO (WHAT)[q]
 I won't bite you. | ME (NOT BITE)[neg] YOU
 Jane's mother has just given birth to twins. | -J-A-N-E- MOTHER RECENTLY GIVE-BIRTH BABY TWIN THEM
-His application finally went through. | HIS APPLICATION FINALLY BE-PUT-INTO-EFFECT
+His application finally went through. | POSS_1 APPLICATION FINALLY BE-PUT-INTO-EFFECT
 This cake tastes of onions. | CAKE IX_1 TASTE LIKE ONION 
-The doctor told me to stick out my tongue, so I stuck it out. | DOCTOR TELL-ME STICK-OUT TONGUE FINE ME STICK-OUT // check
-Fred fell off his bicycle. | -F-R-E-D- IX_1 BICYCLE FALL-OFF
+The doctor told me to stick out my tongue, so I stuck it out. | DOCTOR TELL-ME STICK-OUT TONGUE FINE ME STICK-OUT TONGUE
+Fred fell off his bicycle. | -F-R-E-D- IX_1 BICYCLE POSS_1 FALL-OFF
 Quit fooling around and get to work. | FOOL-AROUND ENOUGH NOW WORK
 We stay in almost every night and watch TV. | EVERY-NIGHT WE TEND-TO STAY HOME WATCH -T-V-
 
-When the publisher of that magazine retires, his son will take it over. | (MAGAZINE)[t] PUBLISHER IX_1 RETIRE (WHEN)[q] HIS SON TAKE-OVER
+When the publisher of that magazine retires, his son will take it over. | (MAGAZINE)[t] PUBLISHER IX_1 RETIRE (WHEN)[q] POSS_1 SON TAKE-OVER
 Her bright red hair made her stand out from the others. | PEOPLE[t] IN-CROWD STAND-OUT -1- GIRL HAIR BRIGHT RED
 He stays up every night until one o'clock doing his work. | EVERY-NIGHT IX_1 STAY-UP UNTIL TIME -1- WORK
 That student has been getting all A's. | STUDENT IX_1 SINCE A-PLUS
 I hope he will keep it up. | ME HOPE IX_1 KEEP-UP
-The room seemed warm enough so we let the fire die down. | ROOM SEEM WARM ENOUGH FIRE DIE-DOWN // check this
-
-Her mother angrily sent her to her room. | HER MOTHER ANGRY COMMAND IX_1 GO BEDROOM
+The room seemed warm enough so we let the fire die down. | ROOM SEEM WARM ENOUGH FIRE DIE-DOWN
+Her mother angrily sent her to her room. | POSS_1 MOTHER ANGRY COMMAND IX_1 GO BEDROOM
 She was beautiful, and he fell in love with her at first sight. | IX_1 BEAUTIFUL IX_2 FALL-IN-LOVE IX_1 FIRST SEE IX_1
-The lawyer made a very convincing argument. | LAWYER ARGUE CONVINCE // check this
 That happened yesterday. | YESTERDAY IX_1 HAPPEN 
 The game was long but exciting. | GAME LONG BUT EXCITING
-His favorite fruits are apple, grape, peach, and banana. | (FRUITS)[t] HIS FAVOURITE (WHAT)[q] APPLE GRAPE PEACH BANANA
+His favorite fruits are apple, grape, peach, and banana. | (FRUITS)[t] POSS_1 FAVOURITE (WHAT)[q] APPLE GRAPE PEACH BANANA
 
 He couldn't find that word in the dictionary. | (DICTIONARY)[t] LOOK-FOR WORD IX_1 (CAN NOT FIND)[neg]
-She walked to the beach and saw her brother. | IX_1 GO-TO WALK BEACH SEE HER BROTHER
+She walked to the beach and saw her brother. | IX_1 GO-TO WALK BEACH SEE POSS_1 BROTHER
 Why can't you admit you're wrong? | (CAN NOT ADMIT)[neg] YOU WRONG (WHY)[q]
 They called the police. | THEY CALL POLICE
 The camera broke, so Jan took it to the repair shop. | CAMERA IX_1 BREAK -J-A-N- TAKE IX_1 DROP-OFF IX_1 SHOP TO-REPAIR
@@ -118,14 +116,14 @@ By the end of the first month, neck muscles are becoming stronger. | FIRST MONTH
 When she first heard the story, she believed it. | IX_1 HEAR STORY IX_1 BELIEVE
 The woman talked so fast that no one understood her. | WOMAN IX_1 SPEAK FAST PEOPLE (DO-NOT-UNDERSTAND)[neg] IX_1
 
-The boy refused to take the spelling test. | BOY REFUSE (TAKE)[neg] SPELLING TEST // check this
+The boy refused to take the spelling test. | BOY REFUSE (TAKE)[neg] SPELLING TEST
 The ice cream was delicious, but it melted very fast on such a hot day. | ICE-CREAM DELICIOUS BUT HOT SUN MELT VERY FAST
 Last year 265 people died in an air crash near Paris. | LAST-YEAR 265 PEOPLE DIE PLANE CRASH NEAR -P-A-R-I-S-
 The test begins at eleven o'clock tomorrow morning. | TOMORROW MORNING (TEST)[t] START TIME -1-1-
 
 Whether your child is heading back to the classroom or entering it for the first time, prepare her for the first day of school. | YOUR CHILD BACK-TO SCHOOL OR ENTER FIRST-TIME HELP IX_1 READY FIRST-DAY
-But it's not necessarily true. | BUT TRUE (NOT ALWAYS)[neg] // check this
-One developmental toy is not going to teach your child all the skills. | -1- TOY (NOT HELP)[neg] HELP CHILD DEVELOP ALL SKILLS // check this
+But it's not necessarily true. | BUT TRUE (NOT ALWAYS)[neg]
+One developmental toy is not going to teach your child all the skills. | -1- TOY (NOT HELP)[neg] CHILD DEVELOP ALL SKILLS
 
 Is there anything that isn't changing? | (HAVE ANYTHING THAT (NOT CHANGE)[neg])[q]
 The train has been just gone, sorry. | TRAIN ZOOM SORRY
@@ -141,7 +139,7 @@ I like her. | ME LIKE IX_1
 I like her dog. | ME LIKE HER DOG
 He applied for the job. | IX_1 APPLY-FOR JOB
 
-We are going against the best basketball team in the town tomorrow. | TOMORROW WE PLAY VERSUS BASKETBALL TEAM BEST IN TOWN //The developer broke the final project down into three separate projects. | PROJECT/\ IX1 DEVELOP++ [nod] WHOLE IX1 DIVIDE-UP++ THREE PROJECT to-SEPARATE. DEVELOP //check this
+We are going against the best basketball team in the town tomorrow. | TOMORROW WE PLAY VERSUS BASKETBALL TEAM BEST IN TOWN
 
 My friend lent me 100 dollars and I must pay it back soon. | MY FRIEND IX_1 LOAN-TO-ME -1-0-0- DOLLAR ME MUST PAY IX_1 BACK SOON
 Look over your lab photos before authorizing their release. | FIRST LOOK OVER LAB PHOTO THEM APPROVE GO-AHEAD RELEASE
@@ -150,54 +148,52 @@ When I need money, I can borrow some from a friend. | WHEN ME NEED MONEY MY FRIE
 
 get in the car. | GET-IN CAR
 Get on the bus. | GET IN BUS
-My sister and her boss get along well. | MY SISTER IX_1 AND HER BOSS IX_2 -2- THEY GOOD ALONG //check this
+My sister and her boss get along well. | MY SISTER IX_1 AND POSS_1 BOSS IX_2 -2- THEY GOOD ALONG
 The milk is all gone. | MILK RUN-OUT.
-The woman broke down when the police told her that her son had died. | WOMAN IX_1 SHOCK MIND-BREAKDOWN WHEN POLICE INFORM IX_1 HER SON DIE
+The woman broke down when the police told her that her son had died. | WOMAN IX_1 SHOCK MIND-BREAKDOWN WHEN POLICE INFORM IX_1 POSS_1 SON DIE
 What's the matter? | WRONG (WHAT)[q]
 The purport of the visit was to discuss trade relations. | TRUE BEHIND VISIT WANT DICUSS TRADE RELATION THEM
 
-A thief tried to break in that shop last night. | LAST NIGHT SHOP IX_2 THIEF TRY BREAK ENTER IX_2 //check this
+A thief tried to break in that shop last night. | LAST NIGHT SHOP IX_2 THIEF TRY BREAK ENTER IX_2
 
-The company went bankrupt and recently put the ship up for sale. | COMPANY BUSINESS IX_1 BANKRUPT ITS SHIP IX_1 DECIDE GO-AHEAD ADVERTISE TO-SELL // check this
+The company went bankrupt and recently put the ship up for sale. | COMPANY BUSINESS IX_1 BANKRUPT SHIP IX_1 DECIDE GO-AHEAD ADVERTISE TO-SELL
 
 My sister-in-law grew up in a small town. | MY SISTER-LAW GROW UP (WHERE)[q] SMALL TOWN
-The river lies 25 km to the south. | RIVER WIND-DOWN -2-5- KM // check this
-Don't trust him, he's lying. | (TRUST IX_1)[neg] IX_1 LIE // check this for ++ (-ing)
+The river lies 25 km to the south. | RIVER WIND-DOWN -2-5- -K-M-
+Don't trust him, he's lying. | (TRUST IX_1)[neg] IX_1 LIE
 She was lying on the bed watching television. | IX_1 LIE-DOWN BED WATCH -T-V-
-She told me the story of her life. | IX_1 TELL-STORY HER LIFE ME LISTEN-TO
+She told me the story of her life. | IX_1 TELL-STORY POSS_1 LIFE ME LISTEN-TO
 I've never told this anyone else in my whole life. | SINCE ME BORN GROW-UP ME (NEVER TELL-OTHER THEM)[neg]
-I knew that he was telling the truth. | ME KNOW IX_1 TELL TRUTH //check for ++
+I knew that he was telling the truth. | ME KNOW IX_1 TELL TRUTH
 He's young but at the same time, he's quite responsible. | IX_1 YOUNG BUT IX_1 QUITE RESPONSIBLE
 
 It really bummed me out that she could have helped but didn't. | ME DISAPPOINTED IX_1 COULD HELP BUT IX_1 (DID NOT)[neg]
 
-My aunt lies down to take in all its great information. | MY AUNT LIE-DOWN READ VORACIOUS GOOD // check this
+Even though my mother passed away years ago, I still feel her presence in this home. | MY MOTHER IX_1 DIE LONG-AGO BUT ME STILL FEEL POSS_1 PRESENT-AROUND IN HERE HOME
 
-Even though my mother passed away years ago, I still feel her presence in this home. | MY MOTHER IX_1 DIE LONG-AGO BUT ME STILL FEEL HER PRESENT-AROUND IN HERE HOME
-
-I laugh more in a day than they do in a year and I'm not kidding. | ME LAUGH -1- DAY THEM LAUGH -1- DAY EQUATE-TO LAUGH -1- YEAR TRUE // check this
+I laugh more in a day than they do in a year and I'm not kidding. | ME LAUGH -1- DAY THEM LAUGH -1- DAY EQUATE-TO LAUGH -1- YEAR TRUE
 
 The woman has my book. | WOMAN HAVE MY BOOK
 What year were you born? | YOU BORN YEAR (WHAT)[q] 
 How long have you learned ASL? | YOU LEARN -A-S-L- (HOW-LONG)[q]
 How many brothers and sisters do you have? | BROTHER SISTER YOU HAVE (HOW-MANY)[q]
 How many siblings do you have? | BROTHER SISTER YOU HAVE (HOW-MANY)[q]
-People were leering at the painting. | PEOPLE LEER-AT PAINTING // check this
+People were leering at the painting. | PEOPLE LEER-AT PAINTING
 I can get up there most of the time, but in winter, forget it. | ME CAN GET-UP MOSTLY BUT WINTER (NO-THANK)[neg]
 
 Are you with me so far? | (YOU UNDERSTAND ME SO-FAR)[q]
 
-I'm trying to remember what I wanted to say a few seconds ago, it slips my mind. | RECENTLY ME WANT-TO SAY ME FORGET MY MIND DISAPPEAR // check this
+I'm trying to remember what I wanted to say a few seconds ago, it slips my mind. | RECENTLY ME WANT-TO SAY ME FORGET MY MIND DISAPPEAR
 
 My three siblings are all quite serious. | MY BROTHER SISTER -3- THEM ALL QUITE SERIOUS
 Where is your ASL class? | YOUR -A-S-L- CLASS (WHERE)[q]
 
 Will you be wearing high heels for the party tonight? | (TONIGHT PARTY YOU WILL WEAR HIGH-HEELS)[q]
 
-I've been reading your book, it's very good. | ME READ YOUR BOOK VERY GOOD // check for ++
+I've been reading your book, it's very good. | ME READ YOUR BOOK VERY GOOD
 A picture is worthy 1000 words. | PICTURE EQUAL -1-0-0-0- WORD THEM
 Will you be my valentine? | (YOU MY VALENTINE)[q]
-He looked through his notes before the lecture. | IX_1 READ NOTES BEFORE LECTURE
+He looked through his notes before the lecture. | IX_1 READ POSS_1 NOTES BEFORE LECTURE
 She has known Roberta since she was a child. | IX_1 KNOW -R-O-B-E-R-T-A- IX_2 SINCE IX_1 CHILD
 
 Paul started signing in 1996 and he's been doing it ever since. | -P-A-U-L- IX_1 START SIGN (WHEN)[q] -1-9-9-6- IX_1 SIGN EVER SINCE
@@ -205,7 +201,7 @@ Paul started signing in 1996 and he's been doing it ever since. | -P-A-U-L- IX_1
 Ever since I was at school, I've wanted to write ASL. | SINCE SCHOOL ME WANT TO-WRITE -A-S-L-
 
 I want the red bicycle. | ME WANT RED BICYCLE
-I've wanted to visit Jamaica for years. | SINCE-THEN ME ALWAYS WANT VISIT -J-A-M-A-I-C-A- // check for location
+I've wanted to visit Jamaica for years. | SINCE-THEN ME ALWAYS WANT VISIT -J-A-M-A-I-C-A-
 I've been working on this report since 8 o'clock this morning. | SINCE THIS MORNING TIME -8- ME WORK REPORT
 She has been working here since 2004. | IX_1 WORK HERE SINCE -2-0-0-4-
 She has been waiting for you all day. | IX_1 WAIT FOR YOU ALL-DAY

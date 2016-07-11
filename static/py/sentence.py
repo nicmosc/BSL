@@ -146,7 +146,8 @@ class EnglishSentence:
             elif v[0] == 'MD' and temp_verb_dict[k][0] not in ['have', 'can']:
                 tense = 'future'
 
-            self.subSentences[k] = tense
+            if tense: self.subSentences[k] = tense
+            else: self.subSentences[k] = ''
 
     def toString(self):
         print 'Is it a question? ', self.question
@@ -367,7 +368,12 @@ class IntermediateSentence:
                     addIndex(indexes, gender, False)
 
                 word.root += '_'+str(indexes[-1][0])      # set the index to the last found id
-
+            elif word.root == 'her':
+                word.root = addPoss(indexes,gender='female')
+            elif word.root == 'his':
+                word.root = addPoss(indexes,gender='male')
+            elif word.root == 'its':
+                word.root = addPoss(indexes,gender=None)
                 # this method will take the skeleton of the BSL output, that is something like MY -M-F- LIVE WHERE -E-S-S-E-X-
 
     # return the BLS data
@@ -443,9 +449,9 @@ class IntermediateSentence:
                 i += len(temp_list) - 1
             # setting the tenses for the sentence group the word is part of
             elif self.sentenceGroups[words[i].sent_group] not in container_tags\
-                    and self.sentenceGroups[words[i].sent_group] != None :      # if there is a tense (most often there is, except present)
+                    and len(self.sentenceGroups[words[i].sent_group]) != 0 :      # if there is a tense (most often there is, except present)
                 tense = self.sentenceGroups[words[i].sent_group]
-                print tense
+                print 'tense',tense
                 temp_list = list(takewhile(lambda x: x.sent_group == words[i].sent_group, words[i:]))
                 container_list.append(Container(temp_list, tense, False))
                 i += len(temp_list) - 1
@@ -456,7 +462,9 @@ class IntermediateSentence:
                 container_list.append(Container(temp_list, 'q', True))
                 i += len(temp_list) - 1
 
-            elif words[i].root in ['who', 'where', 'why', 'when', 'how'] and 'q' not in container_tags:
+            elif any(wh in words[i].root for wh in ['who', 'where', 'why', 'when', 'how', 'what']) and 'q' not in container_tags\
+                    and words[i].sent_group in ['SQ', 'SBARQ']:
+            #elif words[i].root in ['who', 'where', 'why', 'when', 'how', 'what'] and 'q' not in container_tags:
                 container_list.append(Container([words[i]], 'q', True))
 
             elif words[i].dependency[0] == 'nsubj' and 'hn' not in container_tags:      # adds a head nod for subject
@@ -475,7 +483,15 @@ class IntermediateSentence:
 
         return container_list, containers_left
 
+def addPoss(indexes, gender):
+    latest = 0
+    for tpl in indexes:
+        if tpl[0] > latest: latest = tpl[0]
+        if tpl[1] == gender:
+            #print tpl[0]
+            return 'poss_'+str(tpl[0])
 
+    return 'poss_'+str(latest+1)
 
 def addIndex(indexes, gender, name):
     latest = 0
@@ -635,7 +651,7 @@ class Word:
     # this method will transform any proper noun into fingerspelled format (no need for rules as there are only a coupl
     def fingerSpell(self):
         fingerspell = '-'
-        for ch in self.text:
+        for ch in self.root:
             fingerspell += ch + '-'
 
         self.root = fingerspell
