@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title> Auto Speller - BSL </title>
+    <title> English to BSL </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
@@ -37,7 +37,7 @@
             clear:both;
         }
 
-        #play, #pause,#swap {
+        #play-pause, #stop,#swap {
             float:left;
             padding: 0.2em;
             margin-top: 2%;
@@ -56,16 +56,16 @@
             border-radius: .2em;
         }
 
-        #play:hover, #pause:hover, #swap:hover{
+        #play-pause:hover, #stop:hover, #swap:hover{
             outline: none;
             border-bottom: solid 2px #969696;
         }
 
-        #play:active,#pause:active,#swap:active{
+        #play-pause:active,#stop:active,#swap:active{
             background: #cccccc;
         }
 
-        #translate-cancel{
+        #translate{
             float:right;
             padding: 0.5em;
             margin-top: 2%;
@@ -77,7 +77,7 @@
             transition: background 0.3s;
         }
 
-        #translate-cancel:hover{
+        #translate:hover{
             background: #0066ff;
         }
 
@@ -151,7 +151,7 @@
         /* LOADER CODE */
 
         /* start invisible */
-        .cssload-container {
+        #cssload-container {
             position: relative;
             float: right;
             margin-top: 2%;
@@ -294,11 +294,11 @@
 
 <div class="container">
 <div class="buttons">
-    <div id="play"><span class="glyphicon glyphicon-play"></span></div>
-    <div id="pause"><span class="glyphicon glyphicon-pause"></span></div>
+    <div id="play-pause"><span id="switcher" class="glyphicon glyphicon-play"></span></div>
+    <div id="stop"><span class="glyphicon glyphicon-stop"></span></div>
     <div id="swap"><span class="glyphicon glyphicon-eye-open"></span></div>
-    <div id="translate-cancel" class="button">Translate</div>
-    <div class="cssload-container">
+    <div id="translate" class="button">Translate</div>
+    <div id="cssload-container">
         <div class="cssload-speeding-wheel"></div>
     </div>
 </div>
@@ -352,8 +352,8 @@
 
 <!-- here we choose which file we want to run -->
 <!--<script src = ../static/threejs/tests/alphabet-interpreter.js></script>-->
-<script src = ../static/threejs/animation.js></script>
 <script src = '../static/threejs/utils.js'></script>
+<script src = ../static/threejs/main.js></script>
 
 </body>
 

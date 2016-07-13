@@ -9,14 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="b97f7e79-b30a-4b61-b344-9ce904b8692f" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/threejs/utils.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/static/threejs/IK.js" afterPath="$PROJECT_DIR$/static/threejs/tests/IK.js" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/static/threejs/alphabet-interpreter.js" afterPath="$PROJECT_DIR$/static/threejs/tests/alphabet-interpreter.js" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/static/threejs/main.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/py/sentence.py" afterPath="$PROJECT_DIR$/static/py/sentence.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/py/test.py" afterPath="$PROJECT_DIR$/static/py/test.py" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/py/unit-test/test-set.txt" afterPath="$PROJECT_DIR$/static/py/unit-test/test-set.txt" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/threejs/animation.js" afterPath="$PROJECT_DIR$/static/threejs/animation.js" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/static/threejs/utils.js" afterPath="$PROJECT_DIR$/static/threejs/utils.js" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/templates/indexPage.html" afterPath="$PROJECT_DIR$/templates/indexPage.html" />
     </list>
     <ignored path="BSL.iws" />
@@ -39,13 +35,33 @@
     <SUITE FILE_PATH="coverage/BSL$fromjs.coverage" NAME="fromjs Coverage Results" MODIFIED="1466092020889" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
     <SUITE FILE_PATH="coverage/BSL$html_scraper.coverage" NAME="html-scraper Coverage Results" MODIFIED="1466096647650" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py/tests" />
     <SUITE FILE_PATH="coverage/BSL$rules.coverage" NAME="rules Coverage Results" MODIFIED="1466092030744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
-    <SUITE FILE_PATH="coverage/BSL$BSL.coverage" NAME="BSL Coverage Results" MODIFIED="1468345474183" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+    <SUITE FILE_PATH="coverage/BSL$BSL.coverage" NAME="BSL Coverage Results" MODIFIED="1468415770270" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
     <SUITE FILE_PATH="coverage/BSL$corenlp.coverage" NAME="corenlp Coverage Results" MODIFIED="1463497208357" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/corenlp" />
     <SUITE FILE_PATH="coverage/BSL$utils.coverage" NAME="utils Coverage Results" MODIFIED="1466418775757" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py" />
     <SUITE FILE_PATH="coverage/BSL$word_similarity.coverage" NAME="word-similarity Coverage Results" MODIFIED="1468071405117" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="true" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/static/py/tests" />
   </component>
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
+  </component>
+  <component name="DockManager">
+    <window id="2">
+      <content type="file-editors">
+        <state>
+          <leaf>
+            <file leaf-file-name="alphabet-interpreter.js" pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/static/threejs/tests/alphabet-interpreter.js">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="0">
+                    <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="39" />
+                    <folding />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
   </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
@@ -58,24 +74,12 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file leaf-file-name="animation.js" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/static/threejs/animation.js">
+      <file leaf-file-name="main.js" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/static/threejs/main.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-90">
-              <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+            <state relative-caret-position="90">
+              <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
               <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="app.py" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app.py">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="656">
-              <caret line="64" column="32" selection-start-line="64" selection-start-column="32" selection-end-line="64" selection-end-column="32" />
-              <folding>
-                <element signature="e#472#530#0" expanded="true" />
-              </folding>
             </state>
           </provider>
         </entry>
@@ -83,9 +87,21 @@
       <file leaf-file-name="indexPage.html" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/templates/indexPage.html">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="227">
-              <caret line="355" column="43" selection-start-line="355" selection-start-column="43" selection-end-line="355" selection-end-column="43" />
+            <state relative-caret-position="72">
+              <caret line="348" column="0" selection-start-line="348" selection-start-column="0" selection-end-line="348" selection-end-column="0" />
               <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="animation.js" pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/static/threejs/animation.js">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="240">
+              <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+              <folding>
+                <element signature="n#!!doc;n#Model#0" expanded="false" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -93,8 +109,8 @@
       <file leaf-file-name="utils.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/static/threejs/utils.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="75">
-              <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+            <state relative-caret-position="480">
+              <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
               <folding />
             </state>
           </provider>
@@ -146,9 +162,9 @@
         <option value="$PROJECT_DIR$/templates/layout-test.html" />
         <option value="$PROJECT_DIR$/static/py/test.py" />
         <option value="$PROJECT_DIR$/static/py/sentence.py" />
-        <option value="$PROJECT_DIR$/static/threejs/animation.js" />
-        <option value="$PROJECT_DIR$/static/threejs/utils.js" />
         <option value="$PROJECT_DIR$/templates/indexPage.html" />
+        <option value="$PROJECT_DIR$/static/threejs/utils.js" />
+        <option value="$PROJECT_DIR$/static/threejs/animation.js" />
       </list>
     </option>
   </component>
@@ -162,9 +178,8 @@
     <scope name="LOC" pattern="(file:app.py||file[BSL]:static/threejs/*||file[BSL]:static/py/*||file[BSL]:templates/*)&amp;&amp;!file:templates/index.html&amp;&amp;!file:static/threejs/IK.js" />
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="3" />
     <option name="y" value="23" />
-    <option name="width" value="1277" />
+    <option name="width" value="1280" />
     <option name="height" value="708" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="false">
@@ -221,6 +236,20 @@
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
             <PATH_ELEMENT>
+              <option name="myItemId" value="templates" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BSL" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BSL" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
               <option name="myItemId" value="static" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
@@ -240,6 +269,28 @@
             </PATH_ELEMENT>
             <PATH_ELEMENT>
               <option name="myItemId" value="threejs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BSL" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.ProjectViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="BSL" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="static" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="threejs" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="tests" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
           </PATH>
@@ -283,7 +334,7 @@
       <recent name="$PROJECT_DIR$/static/py/sentence" />
     </key>
   </component>
-  <component name="RunManager" selected="JavaScript Debug.indexPage.html">
+  <component name="RunManager" selected="Python.BSL">
     <configuration default="false" name="test" type="PythonConfigurationType" factoryName="Python" temporary="true">
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
@@ -605,16 +656,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="3" y="23" width="1277" height="708" extended-state="6" />
+    <frame x="0" y="23" width="1280" height="708" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1605325" sideWeight="0.49406528" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.16015625" sideWeight="0.49406528" order="0" side_tool="false" content_ui="combo" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.34428796" sideWeight="0.50305676" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="Python Console" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291634" sideWeight="0.490625" order="8" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="9" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.35211268" sideWeight="0.503125" order="11" side_tool="true" content_ui="tabs" x="-1283" y="407" width="1283" height="408" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3834116" sideWeight="0.503125" order="11" side_tool="true" content_ui="tabs" x="-1283" y="407" width="1283" height="408" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3291634" sideWeight="0.49375" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Favorites" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.18075117" sideWeight="0.5059347" order="2" side_tool="true" content_ui="tabs" />
@@ -650,13 +701,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="405">
-          <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/static/threejs/tests/alphabet-interpreter.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="2550">
@@ -857,14 +901,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/static/threejs/tests/alphabet-interpreter.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="12" column="18" selection-start-line="0" selection-start-column="0" selection-end-line="436" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/setup.py">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -902,7 +938,7 @@
         <state relative-caret-position="-375">
           <caret line="10" column="26" selection-start-line="10" selection-start-column="26" selection-end-line="10" selection-end-column="26" />
           <folding>
-            <element signature="e#0#9#0" expanded="true" />
+            <element signature="e#0#9#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -930,7 +966,7 @@
         <state relative-caret-position="210">
           <caret line="66" column="43" selection-start-line="66" selection-start-column="43" selection-end-line="66" selection-end-column="43" />
           <folding>
-            <element signature="e#0#29#0" expanded="true" />
+            <element signature="e#0#29#0" expanded="false" />
           </folding>
         </state>
       </provider>
@@ -957,7 +993,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app.py">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="656">
+        <state relative-caret-position="506">
           <caret line="64" column="32" selection-start-line="64" selection-start-column="32" selection-end-line="64" selection-end-column="32" />
           <folding>
             <element signature="e#472#530#0" expanded="true" />
@@ -967,24 +1003,42 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/templates/indexPage.html">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="227">
-          <caret line="355" column="43" selection-start-line="355" selection-start-column="43" selection-end-line="355" selection-end-column="43" />
+        <state relative-caret-position="72">
+          <caret line="348" column="0" selection-start-line="348" selection-start-column="0" selection-end-line="348" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/threejs/utils.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="75">
-          <caret line="5" column="4" selection-start-line="5" selection-start-column="4" selection-end-line="5" selection-end-column="4" />
+        <state relative-caret-position="480">
+          <caret line="32" column="5" selection-start-line="32" selection-start-column="5" selection-end-line="32" selection-end-column="5" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/static/threejs/animation.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-90">
-          <caret line="11" column="0" selection-start-line="11" selection-start-column="0" selection-end-line="11" selection-end-column="0" />
+        <state relative-caret-position="240">
+          <caret line="18" column="4" selection-start-line="18" selection-start-column="4" selection-end-line="18" selection-end-column="4" />
+          <folding>
+            <element signature="n#!!doc;n#Model#0" expanded="false" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/threejs/tests/alphabet-interpreter.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="1" selection-end-column="39" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/static/threejs/main.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="90">
+          <caret line="6" column="16" selection-start-line="6" selection-start-column="16" selection-end-line="6" selection-end-column="16" />
           <folding />
         </state>
       </provider>
