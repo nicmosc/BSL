@@ -469,7 +469,7 @@ class IntermediateSentence:
                 i += len(temp_list) - 1
 
             elif any(wh in words[i].root for wh in ['who', 'where', 'why', 'when', 'how', 'what']) and 'q' not in container_tags\
-                    and words[i].sent_group in ['SQ', 'SBARQ']:
+                    and words[i].sent_group in ['SQ', 'SBARQ','SBAR']:
             #elif words[i].root in ['who', 'where', 'why', 'when', 'how', 'what'] and 'q' not in container_tags:
                 container_list.append(Container([words[i]], 'q', True))
 

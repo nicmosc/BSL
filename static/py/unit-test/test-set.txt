@@ -17,7 +17,8 @@ Where does it hurt? | HURT (WHERE)[q]
 Where are you from? | YOU FROM (WHERE)[q]
 Who is your instructor? | YOUR INSTRUCTOR (WHO)[q]
 
-When did/do you move in? | YOU MOVE-IN (WHEN)[q]
+When did you move in? | YOU MOVE-IN (WHEN)[q]
+When do you move in? | YOU MOVE-IN (WHEN)[q]
 Do you mind the noise? | NOISE YOU OBJECT (TO)[q]
 Do you object to the noise? | NOISE YOU OBJECT (TO)[q]
 Your answer agrees with mine. | YOUR ANSWER AGREE SAME-YOU-ME

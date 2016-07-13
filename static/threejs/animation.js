@@ -387,15 +387,15 @@ function render() {
 
 /// MAIN PAGE RELATED STUFF
 
-$('#swap-camera').on('click', function() {
+$('#swap').on('click', function() {
     firstPerson = !firstPerson;
 });
 
-$('#start-pause-play').on('click', function() {
+$('#translate-cancel').on('click', function() {
 
     var text = '';
 
-    if (this.innerHTML == 'start') {
+    //if (this.innerHTML == 'start') {
 
         console.log("clicked start");
 
@@ -407,7 +407,7 @@ $('#start-pause-play').on('click', function() {
 
             console.log(data);
 
-            document.getElementById('gloss').innerHTML = data.result;
+            document.getElementById('bsl').innerHTML = data.result;
 
             // if(JSON.stringify(data.result) != JSON.stringify(urls)) {
             //     console.log(data.result, urls);
@@ -424,12 +424,12 @@ $('#start-pause-play').on('click', function() {
             //     console.log("text is still the same");
             // }
         });
-    }
-    else {
-        paused = !paused;
-        if (this.innerHTML == 'pause') this.innerHTML = 'play';
-        else this.innerHTML = 'pause';
-    }
+    //}
+    // else {
+    //     paused = !paused;
+    //     if (this.innerHTML == 'pause') this.innerHTML = 'play';
+    //     else this.innerHTML = 'pause';
+    // }
     // remember that on first click we make 'cancel' visible
     //document.getElementById('cancel').style.visibility = 'visible';
 });

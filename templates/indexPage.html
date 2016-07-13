@@ -3,67 +3,279 @@
 <head>
     <title> Auto Speller - BSL </title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <style>
         body {
             background:#fff;
             padding:0;
             margin:0;
             overflow:hidden;
-            font-family:Arial, Helvetica,sans-serif;
-            text-align:center;
+            width: 100%;
+            font: 400 14px/24px "Open Sans", "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, Arial, "Lucida Grande", Sans-Serif;
         }
         h1 { }
         a { color:skyblue }
 
-        #stats { position: absolute; top:0; right: 0 }
+        #stats { position: absolute; bottom:0; right: 0 }
         #stats #fps { background: transparent !important }
         #stats #fps #fpsText { color: #000 !important }
         #stats #fps #fpsGraph { display: none }
 
-        #buttons {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            right: 10px;
+        .container{
+            position:absolute;
             width: 100%;
         }
-        .button {
-            padding: 10px;
-            margin: 5px;
-            cursor: pointer;
-            display: inline-block;
-            border: 1px solid #999;
-            background: #fff;
+
+        .buttons:before,
+        .buttons:after {
+            content: "";
+            display: table;
         }
 
-        .button:hover {
+        .buttons:after{
+            clear:both;
+        }
+
+        #play, #pause,#swap {
+            float:left;
+            padding: 0.2em;
+            margin-top: 2%;
+            margin-left:1%;
+            cursor: pointer;
+            display: inline-block;
+            background: rgb(255, 255, 255);
+            background: rgba(255, 255, 255, .7);
+            border: none;
+            border-bottom: solid 2px #c9c9c9;
+            transition: border 0.3s;
+            padding-left: 2em;
+            padding-right: 2em;
+            text-decoration: none;
+            color: #333;
+            border-radius: .2em;
+        }
+
+        #play:hover, #pause:hover, #swap:hover{
+            outline: none;
+            border-bottom: solid 2px #969696;
+        }
+
+        #play:active,#pause:active,#swap:active{
             background: #cccccc;
         }
 
-        .textbox {
-            padding: 10px;
-            margin: 5px;
+        #translate-cancel{
+            float:right;
+            padding: 0.5em;
+            margin-top: 2%;
+            margin-right:1%;
             cursor: pointer;
-            display: inline-block;
-            width: 70%;
-            border: 1px solid #999;
-            background: #fff;
+            background: #66a3ff;
+            color: #ffffff;
+            border-radius: .2em;
+            transition: background 0.3s;
         }
 
-        #cancel {
-            //visibility: hidden;
+        #translate-cancel:hover{
+            background: #0066ff;
         }
 
-        #gloss {
-            font-size: 17pt;
-            position: absolute;
-            top: 20%;
-            left: 5%;
+        .text:before,
+        .text:after {
+            content: "";
+            display: table;
+        }
+
+        .text:after {
+            clear: both;
+        }
+
+        .text, .buttons{
+            position:relative;
+        }
+
+        #english,
+        #bsl {
+            margin: 1%;
+            padding: 10px;
+            text-align: left;
+            border-radius: .2em;
+        }
+
+        #english {
+            float: left;
+            width: 45%;
+            background: rgb(255, 255, 255);
+            background: rgba(255, 255, 255, .7);
+            padding-left:5px;
+        }
+
+        #bsl {
+            float: right;
+            width: 45%;
+            display: block;
+            font-size: 16px;
+            box-shadow: none;
+            border-radius: 0;
+            padding-top: 10px;
+            border: none;
+            border-bottom: solid 2px #c9c9c9;
+            transition: border 0.3s;
+        }
+
+        #temp{
+            color: #c9c9c9;
         }
 
         over {
             text-decoration: overline;
+        }
+
+        input[type="text"] {
+            display: block;
+            margin: 0;
+            font-size: 16px;
+            box-shadow: none;
+            border-radius: 0;
+            border: none;
+            border-bottom: solid 2px #c9c9c9;
+            transition: border 0.3s;
+        }
+
+        input[type="text"]:focus {
+            outline: none;
+            border-bottom: solid 2px #969696;
+        }
+
+        /* LOADER CODE */
+
+        /* start invisible */
+        .cssload-container {
+            position: relative;
+            float: right;
+            margin-top: 2%;
+            margin-right:1.5%;
+            padding-top:5px;
+
+            visibility: hidden;
+        }
+
+        .cssload-speeding-wheel {
+            width: 25px;
+            height: 25px;
+            margin: 0 auto;
+            border: 1px solid rgb(0, 0, 0);
+            border-radius: 50%;
+            border-left-color: transparent;
+            border-right-color: transparent;
+            animation: cssload-spin 800ms infinite linear;
+            -o-animation: cssload-spin 800ms infinite linear;
+            -ms-animation: cssload-spin 800ms infinite linear;
+            -webkit-animation: cssload-spin 800ms infinite linear;
+            -moz-animation: cssload-spin 800ms infinite linear;
+        }
+
+        @keyframes cssload-spin {
+            0% {
+                transform: rotate(0deg);
+                opacity: 0;
+            }
+            40% {
+                transform: rotate(360deg);
+                opacity: 1;
+            }
+            100% {
+                transform: rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @-o-keyframes cssload-spin {
+             0% {
+                -o-transform: rotate(0deg);
+                transform: rotate(0deg);
+                opacity: 0;
+            }
+            40% {
+                -o-transform: rotate(360deg);
+                transform: rotate(360deg);
+                opacity: 1;
+            }
+            100% {
+                -o-transform: rotate(720deg);
+                transform: rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @-ms-keyframes cssload-spin {
+             0% {
+                -ms-transform: rotate(0deg);
+                transform: rotate(0deg);
+                opacity: 0;
+            }
+            40% {
+                -ms-transform: rotate(360deg);
+                transform: rotate(360deg);
+                opacity: 1;
+            }
+            100% {
+                -ms-transform: rotate(720deg);
+                transform: rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @-webkit-keyframes cssload-spin {
+             0% {
+                -webkit-transform: rotate(0deg);
+                transform: rotate(0deg);
+                opacity: 0;
+            }
+            40% {
+                -webkit-transform: rotate(360deg);
+                transform: rotate(360deg);
+                opacity: 1;
+            }
+            100% {
+                -webkit-transform: rotate(720deg);
+                transform: rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        @-moz-keyframes cssload-spin {
+             0% {
+                -moz-transform: rotate(0deg);
+                transform: rotate(0deg);
+                opacity: 0;
+            }
+            40% {
+                -moz-transform: rotate(360deg);
+                transform: rotate(360deg);
+                opacity: 1;
+            }
+            100% {
+                -moz-transform: rotate(720deg);
+                transform: rotate(720deg);
+                opacity: 0;
+            }
+        }
+
+        /* PHONES CODE */
+        /* Portrait and Landscape */
+        @media only screen
+        and (max-width: 800px) {
+            #english {
+                width: 98%;
+
+            }
+
+            #bsl {
+                float: left;
+                width: 98%;
+            }
         }
 
         .log {
@@ -80,14 +292,21 @@
 
 <body>
 
-<div id="buttons">
-    <div id="swap-camera" class="button">swap camera</div>
-    <input id = "input-text" type="text" class = "textbox" placeholder='english sentence...' name = "input_text">
-    <div id="start-pause-play" class="button">start</div> <!-- first click starts the video, then switches between paused and playing -->
-    <div id="cancel" class="button">cancel</div>    <!-- used to cancel everything (back to idle) -->
+<div class="container">
+<div class="buttons">
+    <div id="play"><span class="glyphicon glyphicon-play"></span></div>
+    <div id="pause"><span class="glyphicon glyphicon-pause"></span></div>
+    <div id="swap"><span class="glyphicon glyphicon-eye-open"></span></div>
+    <div id="translate-cancel" class="button">Translate</div>
+    <div class="cssload-container">
+        <div class="cssload-speeding-wheel"></div>
+    </div>
 </div>
-
-<div id = "gloss"></div>
+<div class="text">
+    <input id="english" type="text" placeholder=' english sentence...' name = "input_text">
+    <div id="bsl" ><div id="temp">BSL output...</div></div>
+</div>
+</div>
 
 <script src="../static/lib/js/jquery.min.js"></script>
 
@@ -132,9 +351,9 @@
 </script>
 
 <!-- here we choose which file we want to run -->
-<!--<script src = ../static/threejs/alphabet-interpreter.js></script> -->
-<!--<script src = ../static/threejs/alphabet-interpreter.js></script>-->
+<!--<script src = ../static/threejs/tests/alphabet-interpreter.js></script>-->
 <script src = ../static/threejs/animation.js></script>
+<script src = '../static/threejs/utils.js'></script>
 
 </body>
 

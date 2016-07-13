@@ -63,7 +63,7 @@ def tableResults(sent):
     except IOError:
         print 'File ' + f_name + ' not found'
 
-# calculate bleu score only over the whole test set (only returns a number at the end: 0.610444977652 now 0.632765476997 (184)
+# calculate bleu score only over the whole test set (only returns a number at the end: 0.610444977652 now 0.634 (184)
 # only classifiers 0.391927292578 (49 sent)
 # combined: 0.563023520503
 # re.sub('[\(\)]|\[.*\]','',sent) to remove non manual features
