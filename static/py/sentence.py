@@ -7,6 +7,7 @@ from utils import formatNumber, abbreviateMonth, findGender, toUpper
 from collections import defaultdict
 from itertools import takewhile
 from re import compile, escape
+import json
 
 # this class will have objects describing a sentence from English
 # it will have:
@@ -377,6 +378,12 @@ class IntermediateSentence:
                 word.root = addPoss(indexes,gender=None)
                 # this method will take the skeleton of the BSL output, that is something like MY -M-F- LIVE WHERE -E-S-S-E-X-
 
+    def resetWordPositions(self):
+        i = 0
+        for word in self.words:
+            word.index = i
+            i+=1
+
     # return the BLS data
     def setNonManualFeatures(self):  # will generate both the text gloss and the JS object
 
@@ -388,7 +395,7 @@ class IntermediateSentence:
         # reminder: tenses and nsubj are not shown in the gloss
 
         aug_sentence = self.traverseContainers(self.words, -1, [])
-        return aug_sentence
+        return (aug_sentence, self.words)
 
     def traverseContainers(self, sentence, container_length, c_tags):
         if container_length == -1:  # initial case, start with no containers and no tags
@@ -522,7 +529,8 @@ def addIndex(indexes, gender, name):
 class BSLSentence:
 
     def __init__(self, data):
-        self.word_objects = data
+        self.word_objects = data[0]
+        self.word_list = data[1]
 
     # returns simple text representation
     def toGlossText(self):
@@ -544,7 +552,74 @@ class BSLSentence:
 
     # will need to make a toJS method
     def toJS(self):
-        return None
+
+        word_index_js = []      # will contain the words in order
+
+        # first split all future files with paths and indexes
+        for w in self.word_list:
+            obj = {}
+            if w.root[0] == '-' and w.root[-1] == '-':  # if the word is finger spelled
+                for letter in w.root.split('-'):
+                    if letter != '':
+                        obj['name'] = letter
+                        obj['index'] = w.index
+                        obj['path'] = 'alphabet'
+                        word_index_js.append(json.dumps(obj))
+            else:
+                obj['name'] = w.root
+                obj['index'] = w.index
+                obj['path'] = w.root[0]  # arranged in alphabetical order
+                word_index_js.append(json.dumps(obj))
+
+        # now get the non_manual stuff
+
+        mod = [[] for _ in xrange(len(self.word_list))]     # list of lists of modifiers e.g. BIG can have modifier cp or sp (and pause)
+        non_man = [([],[]) for _ in xrange(len(self.word_list))]   # possible non manual object for each element
+        '''
+        example for the above in ((tomorrow rain)[past])[q], (tonight (me)[hn] (not go)[neg] beach)[future]
+        >>> non_man = [([q, past],[]),([],[q, past]), ([future],[]), ([hn],[hn]), ([neg],[]), ([],[neg]), ([],[future])]
+                               0            1               2               3           4          5            6
+        '''
+        container_list = self.treeToList(self.word_objects, containers=[])
+        self.getAllLeaves(container_list, non_man, mod)
+
+        non_man_js = []
+        mod_js = []
+
+        for tpl in non_man:
+            obj = {}
+            obj['start'] = tpl[0]
+            obj['end'] = tpl[1]
+            non_man_js.append(json.dumps(obj))
+
+        for mods in mod:
+            obj = {}
+            obj['modifiers'] = mods
+            mod_js.append(json.dumps(obj))
+
+        return (word_index_js,non_man_js,mod_js)        # return the three lists for JS
+
+    def treeToList(self, objects, containers):
+        for obj in objects:
+            if isinstance(obj, Container):
+                containers.append(obj)
+                self.treeToList(obj.words, containers)
+        return containers
+
+    def getAllLeaves(self, container_list, non_man, mod):
+        # go through all the containers and get the leaves i.e. the indexes
+        for container in container_list:
+            indexes = list(container.flatten())
+            if container.modifier:
+                tag = container.tag
+                if isinstance(tag, int): tag = 'pause'
+                mod[indexes[0]].append(tag)
+            else:
+                indexes = list(container.flatten())
+                start_index = indexes[0]
+                end_index = indexes[-1]
+                non_man[start_index][0].append(container.tag)
+                non_man[end_index][1].append(container.tag)
 
 # this object will represent an english word with constructions such as
 # - text: actual word
@@ -725,3 +800,13 @@ class Container:
         #return str(self.words)
         # else: return '(' + ' '.join(map(lambda x: str(x), self.words)) + ')' + '[' + str(self.tag) + ']'
 
+    # this method returns a list of word indexes contained in this container (also words in sub containers)
+    def flatten(self):
+        return self.flatten_(self.words)
+    def flatten_(self, l):
+        for el in l:
+            if isinstance(el, Container):
+                for sub in self.flatten_(el.words):
+                    yield sub
+            else:
+                yield el.index

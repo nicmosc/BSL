@@ -10,7 +10,6 @@
 # using the request object from flask. jsonigy is required
 # to send JSON as a response of a request
 from flask import Flask, render_template, request, jsonify
-import json
 from static.py.analyser import Analyser
 import sys
 from os import devnull
@@ -47,22 +46,9 @@ def processText():
     print 'HTML:',data[1]
     print 'JS:',data[2]
 
-    # letters = list(text.upper())
-    #
-    # data = []   # will contain the signs/letters with their path
-    #
-    # for letter in letters:
-    #     obj = {}
-    #     obj['name'] = letter
-    #     obj['path'] = 'alphabet'    # specific to this program (will have to differentiate facial and more)
-    #     data.append(json.dumps(obj))
-    #
-    # print(letters, data)
-    # #print(jsonify(letters))
-    # # we process the text here for now
     # return jsonify(result=data)
 
-    return jsonify(result=data[1])
+    return jsonify(result=(data[1],data[2]))
 
 if __name__ == '__main__':
     # app.run(

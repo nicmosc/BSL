@@ -63,6 +63,8 @@ class Analyser:
 
         i_sentence.countIndexes()
 
+        i_sentence.resetWordPositions()     # to make JS generation easier
+
         i_sentence.toString()       # print once to see results
 
         bsl_data = i_sentence.setNonManualFeatures()

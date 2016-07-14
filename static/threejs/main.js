@@ -405,11 +405,13 @@ $('#translate').on('click', function() {
 
         console.log(data);
 
-        Interface.setGloss('bsl', data.result);     // print the result on screen
+        Interface.setGloss('bsl', data.result[0]);     // print the result on screen (gloss)
         Interface.disableSpinner('cssload-container');  // stop loading: will move this somewhere else when animations are working
 
         // once the animations starts playing we set the button to pause
         Interface.play_pause_button.pause();
+
+        // use data.result[1] for the rest (
 
         // if(JSON.stringify(data.result) != JSON.stringify(urls)) {
         //     console.log(data.result, urls);
