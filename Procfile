@@ -1,1 +1,1 @@
-web: gunicorn BSL:app
+web: gunicorn app:app --log-file -
