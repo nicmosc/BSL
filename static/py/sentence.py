@@ -573,7 +573,7 @@ class BSLSentence:
             if w.root[0] == '-' and w.root[-1] == '-':  # if the word is finger spelled
                 for letter in w.root.split('-'):
                     if letter != '':
-                        obj['name'] = letter
+                        obj['name'] = letter.upper()
                         obj['index'] = w.index
                         if letter.isdigit():
                             obj['path'] = 'numbers'
