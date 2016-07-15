@@ -21,7 +21,7 @@ function SwitchButton(name,icon1, icon2){
     this.play_icon = icon1;
     this.pause_icon = icon2;
     this.name = name;
-    this.play_on = true;
+    this.play_on = false;
 }
 
 SwitchButton.prototype = new Button();

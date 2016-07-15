@@ -485,11 +485,12 @@ class IntermediateSentence:
                 container_list.append(Container(temp_list, 'q', True))
                 i += len(temp_list) - 1
 
-            elif any(wh in words[i].root for wh in ['who', 'where', 'why', 'when', 'how', 'what']) and 'q' not in container_tags\
+            elif words[i].root in ['who', 'why', 'when', 'how', 'what'] and 'q' not in container_tags\
                     and words[i].sent_group in ['SQ', 'SBARQ','SBAR']:
-            #elif words[i].root in ['who', 'where', 'why', 'when', 'how', 'what'] and 'q' not in container_tags:
                 container_list.append(Container([words[i]], 'q', True))
-
+            #elif words[i].root in ['who', 'where', 'why', 'when', 'how', 'what'] and 'q' not in container_tags:
+            elif words[i].root == 'where' and 'q' not in container_tags:
+                container_list.append(Container([words[i]], 'q', True))
             elif words[i].dependency[0] == 'nsubj' and 'hn' not in container_tags:      # adds a head nod for subject
                 container_list.append(Container([words[i]], 'hn', False))
             elif words[i].POStag == 'JJR' and 'cp' not in container_tags:

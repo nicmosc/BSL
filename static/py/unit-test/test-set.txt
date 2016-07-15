@@ -60,7 +60,7 @@ Happy new year | HAPPY NEW YEAR
 How do you come to class? | YOU COME-TO CLASS (HOW)[q]
 How did you come to class? | YOU COME-TO CLASS (HOW)[q]
 How did you go to class? | YOU GO-TO CLASS (HOW)[q]
-My father has one brother and three sisters. | MY FATHER HAVE 1 BROTHER 3 SISTER
+My father has one brother and three sisters. | MY FATHER HAVE -1- BROTHER -3- SISTER
 He is the last of five children. | IX_1 -5- CHILD LAST 
 My mother has three degrees: BA, BFA, and MFA. | MY MOTHER HAVE -3- DEGREE IX_1 -B-A- IX_2 -B-F-A- IX_3 -M-F-A-
 Maybe she will study for PhD in the future. | MAYBE FUTURE IX_1 STUDY IX_4 -P-H-D-
@@ -119,7 +119,7 @@ The woman talked so fast that no one understood her. | WOMAN IX_1 SPEAK FAST PEO
 
 The boy refused to take the spelling test. | BOY REFUSE (TAKE)[neg] SPELLING TEST
 The ice cream was delicious, but it melted very fast on such a hot day. | ICE-CREAM DELICIOUS BUT HOT SUN MELT VERY FAST
-Last year 265 people died in an air crash near Paris. | LAST-YEAR 265 PEOPLE DIE PLANE CRASH NEAR -P-A-R-I-S-
+Last year 265 people died in an air crash near Paris. | LAST-YEAR -2-6-5- PEOPLE DIE PLANE CRASH NEAR -P-A-R-I-S-
 The test begins at eleven o'clock tomorrow morning. | TOMORROW MORNING (TEST)[t] START TIME -1-1-
 
 Whether your child is heading back to the classroom or entering it for the first time, prepare her for the first day of school. | YOUR CHILD BACK-TO SCHOOL OR ENTER FIRST-TIME HELP IX_1 READY FIRST-DAY

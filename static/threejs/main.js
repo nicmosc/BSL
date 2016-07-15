@@ -353,13 +353,10 @@ function animate() {
         }
         
         if(done){
-            // set the first button back to start
-            //document.getElementById('start-pause-play').innerHTML = 'start';
-            // hide the cancel button
-            //document.getElementById('cancel').style.visibility = 'hidden';
             Interface.play_pause_button.pause();     // set back to play
             done = false;
             started = false;
+            console.log(paused, cancelled, done, started);
         }
     }
 
@@ -438,6 +435,7 @@ $('#translate').on('click', function() {
     }
     else {
         console.log('text is the same');
+        started = true;
         displayTranslation = true;
     }
 });
@@ -449,7 +447,7 @@ $('#swap').on('click', function() {
 $('#stop').on('click', function() {
     if(started){
         cancelled = true;
-        Interface.play_pause_button.play(); // set back the play icon
+        //Interface.play_pause_button.pause(); // set back the play icon
     }
 });
 
@@ -457,6 +455,7 @@ $('#play-pause').on('click', function(){
     // will add if (animation.playing) {  or something, otherwise you cant switch or click
     if(started) {
         paused = !paused;
+        console.log(paused);
         Interface.play_pause_button.switch();   // switch icons
     }
 });
