@@ -35,7 +35,7 @@ class Rules:
             print 'File ' + f_name + ' not found'
 
         self.readCombinedWords()    # load combined words from signbank
-        print self.combined_words
+        #print self.combined_words
 
         for k,v in self.direct_translation.iteritems():
             print k
