@@ -8,7 +8,7 @@ var skinnedMesh;
 
 var modelUrl = '../static/res/model/model2.js'; // where the model is located (for local testing)
 var baseUrls = [{name:'blinking', path:'init'}, {name:'idle', path:'init'}];       // these are loaded along with the model at the beginning
-var urls = [];  // here will go all clips for the translation
+var urls = [];  // here will go all manual_clips for the translation
 
 // animation stuff
 var mixer,clips; // make them global for testing
@@ -26,7 +26,7 @@ animate();
 
 function init() {
 
-    clips = new Array;
+    manual_clips = new Array;
 
     container = document.createElement( 'div' );
     document.body.appendChild( container );
@@ -198,10 +198,10 @@ function setupAnimations(urlArray){
 
                 updateClipList(clip, i);
 
-                if (counter == urlArray.length) {    // once we have loaded all the clips, go on to modify them9
+                if (counter == urlArray.length) {    // once we have loaded all the manual_clips, go on to modify them9
                     if(!started) nextStep();
                     else {
-                        console.log('done loading new', clips, urls);
+                        console.log('done loading new', manual_clips, urls);
                         displayTranslation = true;
                     }
                 }
@@ -213,20 +213,20 @@ function setupAnimations(urlArray){
 function updateClipList(clip, index){
     //console.log(index, clip.name);
     if(!started) {      // if we are still loading the initial animations
-        clips.splice(index, 0, clip);   // insert object
+        manual_clips.splice(index, 0, clip);   // insert object
     }
     else{
-        clips.splice(index+2, 0, clip);   // insert object 2 indexes further
+        manual_clips.splice(index+2, 0, clip);   // insert object 2 indexes further
     }
-    //console.log(clips);
+    //console.log(manual_clips);
 }
 
 function nextStep(){
-    console.log(mixer.clipAction(clips[1]));
+    console.log(mixer.clipAction(manual_clips[1]));
 
     // play idle and blinking first
-    mixer.clipAction(clips[0]).play();  // play blinking and idle
-    mixer.clipAction(clips[1]).play();
+    mixer.clipAction(manual_clips[0]).play();  // play blinking and idle
+    mixer.clipAction(manual_clips[1]).play();
 }
 
 function onWindowResize() {
@@ -254,7 +254,7 @@ window.addEventListener('keydown', handleKeyDown, false);
 
 function resetClipAndUrlArrays(){
     urls = [];      // reset animations
-    clips.length = 2;   // remove all elements except the first two (idle and blinking)
+    manual_clips.length = 2;   // remove all elements except the first two (idle and blinking)
 }
 
 function playAnimationSequence(){
@@ -263,10 +263,10 @@ function playAnimationSequence(){
     if(firstStep){
         console.log("at first step");
         // set up the next clip to be interpolated
-        mixer.clipAction(clips[fadeCounter+1]).setLoop(THREE.LoopOnce);
-        mixer.clipAction(clips[fadeCounter+1]).reset();
-        mixer.clipAction(clips[fadeCounter+1]).play();
-        mixer.clipAction(clips[fadeCounter]).crossFadeTo(mixer.clipAction(clips[fadeCounter+1]), 0.6, false);
+        mixer.clipAction(manual_clips[fadeCounter+1]).setLoop(THREE.LoopOnce);
+        mixer.clipAction(manual_clips[fadeCounter+1]).reset();
+        mixer.clipAction(manual_clips[fadeCounter+1]).play();
+        mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1]), 0.6, false);
 
         // testing some stuff
         // let us pretend this animation is IK - all directional verbs are handled as IK -> we give a start and end pos
@@ -286,18 +286,18 @@ function playAnimationSequence(){
 
     if(continuousStep){
         if(urls.length > 1) {  // if we only have to play 1 animation, we skip the middle step
-            if (mixer.clipAction(clips[fadeCounter]).time > (clips[fadeCounter].duration - 0.1)) {
+            if (mixer.clipAction(manual_clips[fadeCounter]).time > (manual_clips[fadeCounter].duration - 0.1)) {
                 //console.log("at continuous step", fadeCounter);
-                mixer.clipAction(clips[fadeCounter]).paused = true;  // pause current clip
+                mixer.clipAction(manual_clips[fadeCounter]).paused = true;  // pause current clip
                 // set up next clip
-                if(clips[fadeCounter].name == clips[fadeCounter+1].name){
-                    clips[fadeCounter+1].name += '_1';  // if the same letter repeats, we need to change its name
-                    console.log(clips[fadeCounter+1].name);
+                if(manual_clips[fadeCounter].name == manual_clips[fadeCounter+1].name){
+                    manual_clips[fadeCounter+1].name += '_1';  // if the same letter repeats, we need to change its name
+                    console.log(manual_clips[fadeCounter+1].name);
                 }
-                mixer.clipAction(clips[fadeCounter + 1]).setLoop(THREE.LoopOnce);
-                mixer.clipAction(clips[fadeCounter + 1]).reset();
-                mixer.clipAction(clips[fadeCounter + 1]).play();
-                mixer.clipAction(clips[fadeCounter]).crossFadeTo(mixer.clipAction(clips[fadeCounter + 1]), 0.6, false);
+                mixer.clipAction(manual_clips[fadeCounter + 1]).setLoop(THREE.LoopOnce);
+                mixer.clipAction(manual_clips[fadeCounter + 1]).reset();
+                mixer.clipAction(manual_clips[fadeCounter + 1]).play();
+                mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1]), 0.6, false);
 
                 if (fadeCounter == urls.length) {   // if we reached the end of the animations, go to final step
                     continuousStep = false;
@@ -315,11 +315,11 @@ function playAnimationSequence(){
 
     /** final step **/
     if(finalStep){
-        if (mixer.clipAction(clips[fadeCounter]).time > (clips[fadeCounter].duration - 0.1)) { // this line is identical
+        if (mixer.clipAction(manual_clips[fadeCounter]).time > (manual_clips[fadeCounter].duration - 0.1)) { // this line is identical
             console.log("at final step");
-            mixer.clipAction(clips[fadeCounter]).paused = true;
-            mixer.clipAction(clips[1]).reset();     // assuming idle is the second clip ALWAYS
-            mixer.clipAction(clips[fadeCounter]).crossFadeTo(mixer.clipAction(clips[1]), 0.6, false);
+            mixer.clipAction(manual_clips[fadeCounter]).paused = true;
+            mixer.clipAction(manual_clips[1]).reset();     // assuming idle is the second clip ALWAYS
+            mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[1]), 0.6, false);
 
             finalStep = false;
             done = true; // this way we also set the start button back}
@@ -347,12 +347,12 @@ function animate() {
         // should move all of this somewhere else
         if(firstStep || continuousStep || finalStep) {
             if (paused) {
-                mixer.clipAction(clips[0]).paused = true;      // also stop the blinking : will have to apply to all animations (facial expressions etc)
-                mixer.clipAction(clips[fadeCounter]).paused = true;
+                mixer.clipAction(manual_clips[0]).paused = true;      // also stop the blinking : will have to apply to all animations (facial expressions etc)
+                mixer.clipAction(manual_clips[fadeCounter]).paused = true;
             }
             else {
-                mixer.clipAction(clips[0]).paused = false;      // put back blinking
-                mixer.clipAction(clips[fadeCounter]).paused = false;
+                mixer.clipAction(manual_clips[0]).paused = false;      // put back blinking
+                mixer.clipAction(manual_clips[fadeCounter]).paused = false;
             }
         }
         if(cancelled){

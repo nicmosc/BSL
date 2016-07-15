@@ -34,14 +34,17 @@ def formatNumber(textnum):
     if textnum.isdigit():     # if the string is already in integer form
         number = int(textnum)
         if number < 20:         # if the number is below 19, we use the corresponding sign
-            return textnum
+            return '-'+textnum+'-'
         else:
             return '-'+'-'.join(textnum)+'-'
 
     ########## TEXT CASE ##########
     else:                       # otherwise we convert it to int, then do as above
         number = text2int(textnum)
-        return '-'+'-'.join(str(number))+'-'
+        if number < 20:
+            return '-'+str(number)+'-'
+        else:
+            return '-'+'-'.join(str(number))+'-'
 
 def abbreviateMonth(word):
     if word in ['May', 'June', 'July']:

@@ -563,7 +563,10 @@ class BSLSentence:
                     if letter != '':
                         obj['name'] = letter
                         obj['index'] = w.index
-                        obj['path'] = 'alphabet'
+                        if letter.isdigit():
+                            obj['path'] = 'numbers'
+                        else:
+                            obj['path'] = 'alphabet'
                         word_index_js.append(json.dumps(obj))
             else:
                 obj['name'] = w.root
@@ -583,6 +586,10 @@ class BSLSentence:
         container_list = self.treeToList(self.word_objects, containers=[])
         self.getAllLeaves(container_list, non_man, mod)
 
+        temp_obj = {}
+        temp_obj['anims'] = map(lambda x: x.tag, container_list)
+        non_man_obj = json.dumps(temp_obj)  # contains a list with all the non_manuals required (to be loaded as clips in JS)
+
         non_man_js = []
         mod_js = []
 
@@ -597,7 +604,7 @@ class BSLSentence:
             obj['modifiers'] = mods
             mod_js.append(json.dumps(obj))
 
-        return (word_index_js,non_man_js,mod_js)        # return the three lists for JS
+        return (word_index_js,non_man_obj,non_man_js,mod_js)        # return the three lists for JS
 
     def treeToList(self, objects, containers):
         for obj in objects:
