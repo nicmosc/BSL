@@ -1,14 +1,9 @@
 from nltk import Tree
-from nltk.data import path
+#from nltk.data import path
 from static import APP_NLTK_DATA
-
-print path, APP_NLTK_DATA
-path = []
-path.append(APP_NLTK_DATA)
-print path
-
-from nltk.stem.wordnet import WordNetLemmatizer
-from nltk.corpus import wordnet as wn
+#from nltk.stem.wordnet import WordNetLemmatizer
+#from nltk.corpus import wordnet as wn
+import nltk
 from copy import deepcopy
 from terminaltables import AsciiTable
 from utils import formatNumber, abbreviateMonth, findGender, toUpper
@@ -25,7 +20,12 @@ import json
 
 class EnglishSentence:
 
-    lemmatizer = WordNetLemmatizer()
+    nltk.data.path = []
+
+    nltk.data.path.append(APP_NLTK_DATA)
+    print nltk.data.path
+
+    lemmatizer = nltk.stem.WordNetLemmatizer()
 
     #ignore = ['.']
 
@@ -707,7 +707,7 @@ class Word:
     # using wordnet and the postag
     def setCategory(self, postag):
         print 'setting category'
-        syn = wn.synsets(self.root, pos=postag)
+        syn = nltk.corpus.wordnet.synsets(self.root, pos=postag)
         print 'done category'
         if len(syn) > 0:
             #print s, syn[0].lexname()
