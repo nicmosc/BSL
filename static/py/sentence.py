@@ -68,6 +68,8 @@ class EnglishSentence:
         self.syntaxTree = deepcopy(synTree)     # we don't want to modify syntax tree (not by reference, by value)
         self.augTree = synTree
 
+        print 'in update words'
+
         for dep in dependencies:
             fst = dep.split(',')[0] # get target node and relation
 
