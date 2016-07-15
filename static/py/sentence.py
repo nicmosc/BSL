@@ -43,6 +43,8 @@ class EnglishSentence:
 
     def updateWords(self, posTags, synTree, dependencies, ignore):
 
+        print 'in update words 46'
+
         pos = posTags.split(' ')
 
         i = 1   # will specify the position of the word in the sentence, also used as dictionary key
@@ -50,6 +52,8 @@ class EnglishSentence:
         for pair in pos:        # go through all the tagged words
             text = '/'.join(pair.split('/')[:-1])
             tag = pair.split('/')[-1]
+
+            print tag
 
             if tag not in ignore:     # do not count punctuation as words
                 word = Word(text, tag, i)
@@ -67,8 +71,6 @@ class EnglishSentence:
         # so that they can be modified
         self.syntaxTree = deepcopy(synTree)     # we don't want to modify syntax tree (not by reference, by value)
         self.augTree = synTree
-
-        print 'in update words'
 
         for dep in dependencies:
             fst = dep.split(',')[0] # get target node and relation
@@ -677,7 +679,9 @@ class Word:
         else:
             wn_tag = penn_to_wn(tag)
             if wn_tag != None:
+                print 'before lemmatizer'
                 self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
+                print 'after lemmatizer'
                 self.setCategory(wn_tag)
             else:
                 self.root = self.text
