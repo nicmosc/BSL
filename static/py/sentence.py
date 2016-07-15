@@ -48,8 +48,6 @@ class EnglishSentence:
 
     def updateWords(self, posTags, synTree, dependencies, ignore):
 
-        print 'in update words 46'
-
         pos = posTags.split(' ')
 
         i = 1   # will specify the position of the word in the sentence, also used as dictionary key
@@ -684,15 +682,7 @@ class Word:
         else:
             wn_tag = penn_to_wn(tag)
             if wn_tag != None:
-                print 'before lemmatizer',EnglishSentence.lemmatizer
-                try:
-                    print EnglishSentence.lemmatizer.lemmatize('eating', pos='v')
-                except:
-                    print 'Lemmatizer error'
-
-                #self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
-                self.root = self.text
-                print 'after lemmatizer'
+                self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
                 self.setCategory(wn_tag)
             else:
                 self.root = self.text
@@ -706,9 +696,7 @@ class Word:
 
     # using wordnet and the postag
     def setCategory(self, postag):
-        print 'setting category'
         syn = nltk.corpus.wordnet.synsets(self.root, pos=postag)
-        print 'done category'
         if len(syn) > 0:
             #print s, syn[0].lexname()
             self.category = syn[0].lexname()
