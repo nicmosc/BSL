@@ -683,9 +683,10 @@ class Word:
                 try:
                     print EnglishSentence.lemmatizer.lemmatize('eating', pos='v')
                 except:
-                    print 'Lemmatzier error'
+                    print 'Lemmatizer error'
 
-                self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
+                #self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
+                self.root = self.text
                 print 'after lemmatizer'
                 self.setCategory(wn_tag)
             else:
