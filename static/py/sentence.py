@@ -1,9 +1,10 @@
 from nltk import Tree
 from nltk.data import path
+from static import APP_NLTK_DATA
 
-print path
+print path, APP_NLTK_DATA
 path = []
-path.append('../lib/nltk_data')
+path.append(APP_NLTK_DATA)
 print path
 
 from nltk.stem.wordnet import WordNetLemmatizer
