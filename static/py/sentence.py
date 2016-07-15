@@ -691,7 +691,9 @@ class Word:
 
     # using wordnet and the postag
     def setCategory(self, postag):
+        print 'setting category'
         syn = wn.synsets(self.root, pos=postag)
+        print 'done category'
         if len(syn) > 0:
             #print s, syn[0].lexname()
             self.category = syn[0].lexname()
