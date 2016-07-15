@@ -679,7 +679,7 @@ class Word:
         else:
             wn_tag = penn_to_wn(tag)
             if wn_tag != None:
-                print 'before lemmatizer'
+                print 'before lemmatizer',EnglishSentence.lemmatizer
                 self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
                 print 'after lemmatizer'
                 self.setCategory(wn_tag)
