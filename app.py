@@ -9,6 +9,7 @@
 # We'll render HTML templates and access data sent by GET
 # using the request object from flask. jsonigy is required
 # to send JSON as a response of a request
+
 from flask import Flask, render_template, request, jsonify
 from static.py.analyser import Analyser
 import sys
