@@ -180,7 +180,7 @@ function setupAnimations(urlArray){
                     if (!started) playInit();
                     else {
                         if (URL.non_manual_names.length > 0) { // if no non manuals are needed, skip this step
-                            console.log('done loading manual', non_manual_clips);
+                            console.log('done loading manual', manual_clips);
                             setupNonManual();
                         }
                         else {
@@ -204,7 +204,7 @@ function setupNonManual(){
                 counter++;
                 updateNonManualClipList(clip);
                 if (counter == URL.non_manual_names.length) {    // once we have loaded all the non_manual_clips, go on to the next step
-                    console.log('done loading non manual', manual_clips);
+                    console.log('done loading non manual', non_manual_clips);
                     displayTranslation = true;
                 }
             });
@@ -279,7 +279,7 @@ function playAnimationSequence(){
                 }
                 mixer.clipAction(manual_clips[fadeCounter + 1]).setLoop(THREE.LoopOnce);
                 mixer.clipAction(manual_clips[fadeCounter+1]).timeScale = animation_speed;
-                console.log(mixer.clipAction(manual_clips[fadeCounter+1]));
+                //console.log(mixer.clipAction(manual_clips[fadeCounter+1]));
                 mixer.clipAction(manual_clips[fadeCounter + 1]).reset();
                 mixer.clipAction(manual_clips[fadeCounter + 1]).play();
                 mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1]), 0.6, false);
