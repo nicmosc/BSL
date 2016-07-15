@@ -8,6 +8,7 @@ var skinnedMesh;
 
 // animation stuff
 var mixer,manual_clips, non_manual_clips; // make them global for testing
+var animation_speed = 1.5;  // standard speed -> will be 1 for everything and 1.5 for the signs that seem a bit slow
 
 var clock = new THREE.Clock();
 
@@ -256,6 +257,7 @@ function playAnimationSequence(){
         console.log("at first step");
         // set up the next clip to be interpolated
         mixer.clipAction(manual_clips[fadeCounter+1]).setLoop(THREE.LoopOnce);
+        mixer.clipAction(manual_clips[fadeCounter+1]).timeScale = animation_speed;
         mixer.clipAction(manual_clips[fadeCounter+1]).reset();
         mixer.clipAction(manual_clips[fadeCounter+1]).play();
         mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1]), 0.6, false);
@@ -276,6 +278,8 @@ function playAnimationSequence(){
                     console.log(manual_clips[fadeCounter+1].name);
                 }
                 mixer.clipAction(manual_clips[fadeCounter + 1]).setLoop(THREE.LoopOnce);
+                mixer.clipAction(manual_clips[fadeCounter+1]).timeScale = animation_speed;
+                console.log(mixer.clipAction(manual_clips[fadeCounter+1]));
                 mixer.clipAction(manual_clips[fadeCounter + 1]).reset();
                 mixer.clipAction(manual_clips[fadeCounter + 1]).play();
                 mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1]), 0.6, false);

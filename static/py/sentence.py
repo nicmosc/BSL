@@ -1,6 +1,7 @@
 from nltk import Tree
 from nltk.stem.wordnet import WordNetLemmatizer
 from nltk.corpus import wordnet as wn
+from nltk.data import path
 from copy import deepcopy
 from terminaltables import AsciiTable
 from utils import formatNumber, abbreviateMonth, findGender, toUpper
@@ -14,6 +15,8 @@ import json
 # - string rep: the actual string sentence
 # - words: an array of word objects
 # - syntaxTree: tree structure from Stanford
+
+path.append('../lib/nltk_data')
 
 class EnglishSentence:
 
