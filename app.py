@@ -32,7 +32,7 @@ def index():
 # integer numbers (defaulted to zero) and return the
 # result as a proper JSON response (Content-Type, etc.)
 @app.route('/_process_text')
-def processText():
+def process_text():
 
     ''' this is the old stuff '''
     text = request.args.get('input_text', '', type = str)
