@@ -23,15 +23,25 @@ class Analyser:
 
         no_punctuation_tree = self.removePunctuation(result[1])     # remove all punctuation from the parse tree
 
+        print 'removed punctuation'
+
         sentence.updateWords(result[0], no_punctuation_tree, result[2], Analyser.ignore)
+
+        print 'updated words'
 
         sentence.traverseReplaceWords(sentence.augTree, [])  # replace words with word objects for modification and make tags unique
 
+        print 'traversed replaced words'
+
         sentence.setSentenceGroups(sentence.augTree) # set the sentence groups to each word
+
+        print 'set tense groups'
 
         # find tenses for the sentences in order to establish temporal topic
         # this is done before moving the time related words as we nned all the words for this
         sentence.setTenses()
+
+        print '\n'
 
     def removePunctuation(self, tree):
         for subtree in tree[:]:
