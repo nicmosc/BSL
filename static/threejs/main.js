@@ -200,6 +200,8 @@ function setupNonManual(){
         (function (i) {
             var animations_url = '../static/res/animations/non-manual/' + URL.non_manual_names[i] + '.js';
             $.getJSON(animations_url, function (json) {
+                console.log('gonna load clip');
+                console.log(json.animations);
                 clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
                 counter++;
                 updateNonManualClipList(clip);
@@ -221,11 +223,16 @@ function updateManualClipList(clip, index){
     }
 }
 
-function updateNonManualClipList(clip, name){
+function updateNonManualClipList(clip){
     for (i = 0; i<URL.non_manual.length; i++){
-        for (j = 0; j<URL.non_manual[i].start.length; j++){
-            if (URL.non_manual[i].start[j] == name) {
+        for (j = 0; j<URL.non_manual[i].start.length; j++){     // start
+            if (URL.non_manual[i].start[j] == clip.name) {
                 URL.non_manual[i].start[j] = clip;      // replace with clip object
+            }
+        }
+        for (j = 0; j<URL.non_manual[i].end.length; j++){   // end
+            if (URL.non_manual[i].end[j] == clip.name) {
+                URL.non_manual[i].end[j] = clip;      // replace with clip object
             }
         }
     }
@@ -261,6 +268,13 @@ function playAnimationSequence(){
         mixer.clipAction(manual_clips[fadeCounter+1]).reset();
         mixer.clipAction(manual_clips[fadeCounter+1]).play();
         mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1]), 0.6, false);
+        
+        // non manual just testing!
+        if (URL.non_manual_names.length > 0){
+            mixer.clipAction(URL.non_manual[0].start[0]).reset();
+            mixer.clipAction(URL.non_manual[0].start[0]).setLoop(THREE.LoopOnce);
+            mixer.clipAction(URL.non_manual[0].start[0]).play();
+        }
 
         // set interface changes
         colorGloss();
@@ -272,6 +286,14 @@ function playAnimationSequence(){
 
     if(continuousStep){
         if(URL.manual.length > 1) {  // if we only have to play 1 animation, we skip the middle step
+
+            // TEMPORARY REMOVE LATER
+            if (URL.non_manual_names.length > 0) {
+                if (mixer.clipAction(URL.non_manual[0].start[0]).time > (URL.non_manual[0].start[0].duration - 0.1)) {
+                    mixer.clipAction(URL.non_manual[0].start[0]).paused = true;  // pause current clip
+                }
+            }
+
             if (mixer.clipAction(manual_clips[fadeCounter]).time > (manual_clips[fadeCounter].duration - 0.1)) {
                 //console.log("at continuous step", fadeCounter);
                 mixer.clipAction(manual_clips[fadeCounter]).paused = true;  // pause current clip
@@ -312,6 +334,10 @@ function playAnimationSequence(){
             mixer.clipAction(manual_clips[1]).reset();     // assuming idle is the second clip ALWAYS
             mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[1]), 0.6, false);
 
+            // TEMPORARY REMOVE LATER - NON MANUAL
+            if (URL.non_manual_names.length > 0) {
+                mixer.clipAction(URL.non_manual[0].start[0]).crossFadeTo(mixer.clipAction(manual_clips[1]), 0.6, false);
+            }
             // set interface changes
             //colorGloss();
             Interface.resetAllGloss();
