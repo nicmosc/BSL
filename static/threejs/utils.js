@@ -58,6 +58,7 @@ function INTERFACE() {
     
     this.current_gloss = '';
     this.current_text = '';
+    this.gloss_length = 0;      // will hold the number of signs to be played (for gloss highlighting)
 }
 
 INTERFACE.prototype = {
@@ -77,7 +78,17 @@ INTERFACE.prototype = {
         this.current_gloss = text;
     },
     highlightGloss: function(id){
-        document.getElementsById(id).style.color = '#3366ff';
+        if(id >= 0 && id < this.gloss_length) {
+            document.getElementById(id).style.color = '#3366ff';
+        }
+    },
+    resetGloss: function(id) {
+        if(id >= 0 && id < this.gloss_length) {
+            document.getElementById(id).style.color = document.getElementById('bsl').style.color;   // reset to container color
+        }
+    },
+    resetAllGloss: function(){
+        $("span").css( 'color', document.getElementById('bsl').style.color);
     }
 };
 

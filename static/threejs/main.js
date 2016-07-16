@@ -262,6 +262,9 @@ function playAnimationSequence(){
         mixer.clipAction(manual_clips[fadeCounter+1]).play();
         mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1]), 0.6, false);
 
+        // set interface changes
+        colorGloss();
+
         fadeCounter++;
         firstStep = false;
         continuousStep = true;
@@ -284,6 +287,9 @@ function playAnimationSequence(){
                 mixer.clipAction(manual_clips[fadeCounter + 1]).play();
                 mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1]), 0.6, false);
 
+                // set interface changes
+                colorGloss();
+
                 if (fadeCounter == URL.manual.length) {   // if we reached the end of the animations, go to final step
                     continuousStep = false;
                     finalStep = true;
@@ -305,6 +311,11 @@ function playAnimationSequence(){
             mixer.clipAction(manual_clips[fadeCounter]).paused = true;
             mixer.clipAction(manual_clips[1]).reset();     // assuming idle is the second clip ALWAYS
             mixer.clipAction(manual_clips[fadeCounter]).crossFadeTo(mixer.clipAction(manual_clips[1]), 0.6, false);
+
+            // set interface changes
+            //colorGloss();
+            Interface.resetAllGloss();
+            
 
             finalStep = false;
             done = true; // this way we also set the start button back
@@ -377,6 +388,12 @@ function render() {
     }
 }
 
+function colorGloss(){
+    console.log(fadeCounter);
+    Interface.highlightGloss(fadeCounter-1);    // temporary solution for accessing the div id,
+    Interface.resetGloss(fadeCounter-2);        // could also set the id directly to match fadeCounter?
+}
+
 /// INTERFACE RELATED STUFF
 
 $('#translate').on('click', function() {
@@ -426,6 +443,8 @@ $('#translate').on('click', function() {
                 URL.modifiers.push(JSON.parse(modifiers[i]));
             }
             console.log(URL.manual, URL.non_manual_names, URL.non_manual, URL.modifiers);
+            
+            Interface.gloss_length = URL.manual.length;
 
             started = true;
             setupAnimations(URL.manual);
