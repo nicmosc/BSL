@@ -75,6 +75,9 @@ INTERFACE.prototype = {
     setGloss: function(div, text) {
         document.getElementById(div).innerHTML = text;
         this.current_gloss = text;
+    },
+    highlightGloss: function(id){
+        document.getElementsById(id).style.color = '#3366ff';
     }
 };
 

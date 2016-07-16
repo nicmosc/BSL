@@ -365,7 +365,6 @@ function animate() {
     render();
 
     stats.update();
-
 }
 
 function render() {

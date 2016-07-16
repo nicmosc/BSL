@@ -79,7 +79,7 @@ class Analyser:
         print '\nGLOSS OUTPUT\n'
         gloss = bsl_sentence.toGlossText()
 
-        html = bsl_sentence.toGlossHTML(gloss)
+        html = bsl_sentence.toGlossHTML()
 
         print html
 

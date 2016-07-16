@@ -1,15 +1,12 @@
 from nltk import Tree
-#from nltk.data import path
 from static import APP_NLTK_DATA
-#from nltk.stem.wordnet import WordNetLemmatizer
-#from nltk.corpus import wordnet as wn
 import nltk
 from copy import deepcopy
 from terminaltables import AsciiTable
 from utils import formatNumber, abbreviateMonth, findGender, toUpper
 from collections import defaultdict
 from itertools import takewhile
-from re import compile, escape
+from re import compile, escape, sub
 import json
 
 # this class will have objects describing a sentence from English
@@ -197,6 +194,8 @@ class IntermediateSentence:
         self.words = words  # a list of word objects
         if e_sentence.exclamation:
             self.words[0].intense = True
+        elif self.question:
+            self.words[0].is_questioned = True
 
         self.updateString()  # string representation of the current sentence
 
@@ -457,6 +456,10 @@ class IntermediateSentence:
                 container_list.append(Container(words, 'intense', False))     # plays open eyes throughout the sentence
                 i = len(words)
 
+            elif words[i].is_questioned and words[i].sent_group == 'S' and 'q' not in container_tags:
+                container_list.append(Container(words, 'q', True))
+                i = len(words)
+
             # if the word begins a negation sequence
             elif words[i].is_negated and 'neg' not in container_tags:
                 temp_list = list(
@@ -544,13 +547,24 @@ class BSLSentence:
         self.word_list = data[1]
 
     # returns simple text representation
-    def toGlossText(self):
-            # print ' '.join(map(lambda x: str(x).upper(), self.aug_sentence))
-        return ' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.word_objects])
+    def toGlossText(self, html=False):
+        if html:
+            return ' '.join([w.__str__(html=True) if isinstance(w, Word) else w.__str__(html=True) for w in self.word_objects])
+        else:
+            return ' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.word_objects])
 
     def toGlossHTML(self, gloss=None):
         # if gloss is given use it directly
-        if not gloss: gloss = self.toGlossText()
+        if not gloss: gloss = self.toGlossText(html=True)
+
+        temp_gloss = ''
+        i = 0
+        while temp_gloss != gloss:
+            temp_gloss = gloss
+            gloss = gloss.replace('?', str(i),1)
+            i+=1
+
+        print gloss
 
         rep = {'(': '<over>', ')': '</over>', '[': '<sup> ', ']': '</sup>'}  # define desired replacements here
 
@@ -770,10 +784,26 @@ class Word:
         self.root = fingerspell
 
     # override print method for pretty_print
-    def __str__(self):
+    def __str__(self, html=False):
+        if html:
+            if self.root[0] == '-' and self.root[-1] == '-':
+                res = ''
+                for let in self.root.split('-')[1:-1]:
+                    res += '-<span id="?">'+let.upper()+'</span>'
+                res += '-'
+                return res
+            return '<span id="?">'+self.root.upper()+'</span>'
         return self.root
 
-    def __repr__(self):
+    def __repr__(self, html=False):
+        if html:
+            if self.root[0] == '-' and self.root[-1] == '-':
+                res = ''
+                for let in self.root.split('-')[1:-1]:
+                    res += '-<span id="?">' + let.upper() + '</span>'
+                res += '-'
+                return res
+            return '<span id="?">' + self.root.upper() + '</span>'
         return self.root
 
 def isMonth(word):
@@ -804,16 +834,20 @@ class Container:
         self.tag = tag
         self.modifier = mod             # by default the container does not modify the word(s), but plays a non-manual sign in parallel
                                         # if we want to modify the sign itself, we make modifier = true
-    def __str__(self):
-        #return 'Container([' + ' '.join(map(lambda x: str(x), self.words)) + '], ' + str(self.tag) + ')'
+    def __str__(self, html=False):
         if self.show_gloss:
-            return self.__repr__(raw=False)
+            return self.__repr__(raw=False, html=html)
         else:
             #return ' '.join(map(lambda x: str(x), self.words))
+            if html:
+                return ' '.join([w.__str__(html=True) if isinstance(w, Word) else w.__str__(html=True) for w in self.words])
             return ' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.words])
 
-    def __repr__(self, raw = True):      # if we want the raw representation, we print everything, otherwise only the show gloss ones
-        if raw: return '(' + ' '.join(map(lambda x: repr(x), self.words)) + ')' + '[' + str(self.tag) + ']'
+    def __repr__(self, raw = True, html=False):      # if we want the raw representation, we print everything, otherwise only the show gloss ones
+        if raw and not html: return '(' + ' '.join(map(lambda x: repr(x), self.words)) + ')' + '[' + str(self.tag) + ']'
+
+        elif html: return '('+' '.join([w.__str__(html=True) if isinstance(w, Word) else w.__str__(html=True) for w in self.words])+ ')' + '[' + str(self.tag) + ']'
+
         return '('+' '.join([str(w).upper() if isinstance(w, Word) else str(w) for w in self.words])+ ')' + '[' + str(self.tag) + ']'
         #return str(self.words)
         # else: return '(' + ' '.join(map(lambda x: str(x), self.words)) + ')' + '[' + str(self.tag) + ']'
