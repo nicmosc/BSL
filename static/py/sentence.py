@@ -194,8 +194,8 @@ class IntermediateSentence:
         self.words = words  # a list of word objects
         if e_sentence.exclamation:
             self.words[0].intense = True
-        elif self.question:
-            self.words[0].is_questioned = True
+        #elif self.question:
+        #    self.words[0].is_questioned = True
 
         self.updateString()  # string representation of the current sentence
 
@@ -403,7 +403,14 @@ class IntermediateSentence:
 
         # reminder: tenses and nsubj are not shown in the gloss
 
-        aug_sentence = self.traverseContainers(self.words, -1, [])
+        c_tags = []
+
+        aug_sentence = self.traverseContainers(self.words, -1, c_tags)
+
+        # this is a bit of a hack but necessary
+        if 'q' not in c_tags and self.question:     # if the sentence is a question but no q tag was inserted, wrap everything into a question
+            aug_sentence = [Container(aug_sentence, 'q', True)]
+
         return (aug_sentence, self.words)
 
     def traverseContainers(self, sentence, container_length, c_tags):
@@ -456,22 +463,23 @@ class IntermediateSentence:
                 container_list.append(Container(words, 'intense', False))     # plays open eyes throughout the sentence
                 i = len(words)
 
-            elif words[i].is_questioned and words[i].sent_group == 'S' and 'q' not in container_tags:
-                container_list.append(Container(words, 'q', True))
-                i = len(words)
+            # elif words[i].is_questioned and words[i].sent_group == 'S' and 'q' not in container_tags:
+            #     container_list.append(Container(words, 'q', True))
+            #     i = len(words)
 
-            # if the word begins a negation sequence
-            elif words[i].is_negated and 'neg' not in container_tags:
-                temp_list = list(
-                    takewhile(lambda x: x.is_negated, words[i:]))  # get all words in that sequence
-                container_list.append(Container(temp_list, 'neg', True))
-                i += len(temp_list) - 1
             # if the word begins a question sequence
             elif words[i].is_questioned and 'q' not in container_tags:
                 temp_list = list(
                     takewhile(lambda x: x.is_questioned, words[i:]))  # get all words in that sequence
                 container_list.append(Container(temp_list, 'q', True))
                 print container_list
+                i += len(temp_list) - 1
+
+            # if the word begins a negation sequence
+            elif words[i].is_negated and 'neg' not in container_tags:
+                temp_list = list(
+                    takewhile(lambda x: x.is_negated, words[i:]))  # get all words in that sequence
+                container_list.append(Container(temp_list, 'neg', True))
                 i += len(temp_list) - 1
             # setting the tenses for the sentence group the word is part of
             elif self.sentenceGroups[words[i].sent_group] not in container_tags\

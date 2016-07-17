@@ -110,3 +110,7 @@ URLS.prototype = {
         this.non_manual = [];
     }
 };
+
+NON_MAN_VARS = {
+    current_index: -1
+};
