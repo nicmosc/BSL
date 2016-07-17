@@ -604,7 +604,7 @@ class BSLSentence:
             else:
                 obj['name'] = w.root
                 obj['index'] = w.index
-                obj['path'] = w.root[0]  # arranged in alphabetical order
+                obj['path'] = 'words/'+w.root[0]  # arranged in alphabetical order
                 word_index_js.append(json.dumps(obj))
 
         # now get the non_manual stuff

@@ -112,5 +112,6 @@ URLS.prototype = {
 };
 
 NON_MAN_VARS = {
-    current_index: -1
+    current_index: -1,
+    clips_list: []
 };

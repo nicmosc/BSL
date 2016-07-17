@@ -8,7 +8,7 @@ var skinnedMesh;
 
 // animation stuff
 var mixer,manual_clips, non_manual_clips; // make them global for testing
-var animation_speed = 1.5;  // standard speed -> will be 1 for everything and 1.5 for the signs that seem a bit slow
+var animation_speed = 1.0;  // standard speed -> will be 1 for everything and 1.5 for the signs that seem a bit slow
 
 var clock = new THREE.Clock();
 
@@ -174,6 +174,9 @@ function setupAnimations(urlArray){
             var animations_url = '../static/res/animations/' + urlArray[i].path + '/' + urlArray[i].name + '.js';
             $.getJSON(animations_url, function (json) {
                 clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
+                if (urlArray[i].path == 'numbers' || urlArray[i].path == 'alphabet'){
+                    mixer.clipAction(clip).timeScale = 1.5;
+                }
                 counter++;
                 updateManualClipList({clip: clip, index: urlArray[i].index}, i);
                 if (counter == urlArray.length) {    // once we have loaded all the manual_clips, go on to modify them
@@ -185,7 +188,7 @@ function setupAnimations(urlArray){
                         }
                         else {
                             console.log('done loading manual', manual_clips);
-                            //displayTranslation = true;
+                            displayTranslation = true;
                         }
                     }
                 }
@@ -208,7 +211,7 @@ function setupNonManual(){
                 updateNonManualClipList(clip);
                 if (counter == URL.non_manual_names.length) {    // once we have loaded all the non_manual_clips, go on to the next step
                     console.log('done loading non manual', non_manual_clips);
-                    //displayTranslation = true;
+                    displayTranslation = true;
                 }
             });
         })(i);
@@ -225,6 +228,9 @@ function updateManualClipList(clip, index){
 }
 
 function updateNonManualClipList(clip){
+
+    NON_MAN_VARS.clips_list.push(clip);       // used to keep track of playing status
+
     for (i = 0; i<non_manual_clips.length; i++){
         for (j = 0; j<non_manual_clips[i].start.length; j++){     // start
             if (non_manual_clips[i].start[j] == clip.name) {
@@ -256,6 +262,7 @@ function onWindowResize() {
 function resetClipAndUrlArrays(){
     URL.reset();      // reset animation urls
     manual_clips.length = 2;   // remove all elements except the first two (idle and blinking)
+    NON_MAN_VARS.clips_list = [];
 }
 
 function playAnimationSequence(){
@@ -263,16 +270,13 @@ function playAnimationSequence(){
     /** first step **/
     if(firstStep){
         console.log("at first step");
+
         // set up the next clip to be interpolated
         mixer.clipAction(manual_clips[fadeCounter+1].clip).setLoop(THREE.LoopOnce);
-        mixer.clipAction(manual_clips[fadeCounter+1].clip).timeScale = animation_speed;
+        mixer.clipAction(manual_clips[fadeCounter+1].clip).timeScale *= animation_speed;        // set to speed with general
         mixer.clipAction(manual_clips[fadeCounter+1].clip).reset();
         mixer.clipAction(manual_clips[fadeCounter+1].clip).play();
         mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1].clip), 0.6, false);
-
-        // set non manual
-        console.log(manual_clips[fadeCounter+1].index);
-        playNonManualSequence(manual_clips[fadeCounter+1].index); // pass the real clip index to setup non manual
 
         // set interface changes
         colorGloss();
@@ -286,23 +290,21 @@ function playAnimationSequence(){
         if(URL.manual.length > 1) {  // if we only have to play 1 animation, we skip the middle step
 
             // TEMPORARY REMOVE LATER
-            if (URL.non_manual_names.length > 0) {
-                if (mixer.clipAction(non_manual_clips[0].start[0]).time > (URL.non_manual[0].start[0].duration - 0.1)) {
-                    mixer.clipAction(non_manual_clips[0].start[0]).paused = true;  // pause current clip
-                }
-            }
+            // REMEMBER TO PAUSE LIKE BELOW FOR NON MANUAL CLIPS
 
+            // if the current clip has reached the end we pause it to have time to fade to the next one
             if (mixer.clipAction(manual_clips[fadeCounter].clip).time > (manual_clips[fadeCounter].clip.duration - 0.1)) {
-                //console.log("at continuous step", fadeCounter);
                 mixer.clipAction(manual_clips[fadeCounter].clip).paused = true;  // pause current clip
-                // set up next clip
+
+                // if the same letter repeats, we need to change its name
                 if(manual_clips[fadeCounter].clip.name == manual_clips[fadeCounter+1].clip.name){
-                    manual_clips[fadeCounter+1].clip.name += '_1';  // if the same letter repeats, we need to change its name
+                    manual_clips[fadeCounter+1].clip.name += '_1';
                     console.log(manual_clips[fadeCounter+1].clip.name);
                 }
+
+                // setup next clip like in first step
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).setLoop(THREE.LoopOnce);
-                mixer.clipAction(manual_clips[fadeCounter+1].clip).timeScale = animation_speed;
-                //console.log(mixer.clipAction(manual_clips[fadeCounter+1]));
+                mixer.clipAction(manual_clips[fadeCounter+1].clip).timeScale *= animation_speed;        // set to speed with general
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).reset();
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).play();
                 mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), 0.6, false);
@@ -314,7 +316,6 @@ function playAnimationSequence(){
                     continuousStep = false;
                     finalStep = true;
                 }
-
                 fadeCounter++;
             }
         }
@@ -326,20 +327,18 @@ function playAnimationSequence(){
 
     /** final step **/
     if(finalStep){
+
+        // pause clip to have time to fade
         if(mixer.clipAction(manual_clips[fadeCounter].clip).time > (manual_clips[fadeCounter].clip.duration-0.1)) { // this line is identical
             console.log("at final step");
             mixer.clipAction(manual_clips[fadeCounter].clip).paused = true;
             mixer.clipAction(manual_clips[1].clip).reset();     // assuming idle is the second clip ALWAYS
             mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[1].clip), 0.6, false);
 
-            // TEMPORARY REMOVE LATER - NON MANUAL
-            if (URL.non_manual_names.length > 0) {
-                mixer.clipAction(non_manual_clips[0].start[0]).crossFadeTo(mixer.clipAction(manual_clips[1].clip), 0.6, false);
-            }
             // set interface changes
-            //colorGloss();
             Interface.resetAllGloss();
-            
+
+            playNonManualSequence(NON_MAN_VARS.current_index+1);        // last step to finish off then stop
 
             finalStep = false;
             done = true; // this way we also set the start button back
@@ -347,16 +346,45 @@ function playAnimationSequence(){
     }
 }
 
-function playNonManualSequence(manual_index){
-    if (URL.non_manual_names.length > 0){   // general statement (if no non-manuals required, then don't play this
-        if (manual_index != NON_MAN_VARS.current_index) {       // if we are changing current sign
+function playNonManualSequence(sign_index){
 
-            for (i = 0; i < non_manual_clips[manual_index].start.length; i++) {  // go through all clips that begin at this point
-                mixer.clipAction(non_manual_clips[manual_index].start[0]).reset();
-                mixer.clipAction(non_manual_clips[manual_index].start[0]).setLoop(THREE.LoopOnce);
-                mixer.clipAction(non_manual_clips[manual_index].start[0]).play();
-            }
-            NON_MAN_VARS = manual_index;
+    if (sign_index != NON_MAN_VARS.current_index){      // if we change sign
+        console.log('sign_index '+sign_index);
+        nonManualLoop(sign_index);                                // go through the non manual loop to set clips
+        NON_MAN_VARS.current_index = sign_index;        // update sign index
+    }
+
+}
+
+function nonManualLoop(sign_index){
+
+    if (sign_index < non_manual_clips.length && sign_index >= 0) {
+        // for any clip that begins at this point (given by the clip index that is playing)
+        var clips = non_manual_clips[sign_index].start;
+        for (i = 0; i < clips.length; i++) {
+            mixer.clipAction(clips[i]).reset();
+            mixer.clipAction(clips[i]).setLoop(THREE.LoopOnce);
+            mixer.clipAction(clips[i]).play();
+        }
+    }
+
+    sign_index--;   // go down one to access the ending feature from the previous sign
+
+    if (sign_index >= 0) {
+        // for any clip ending at this point
+        clips = non_manual_clips[sign_index].end;
+        for (i = 0; i < clips.length; i++) {
+            console.log('stopping '+clips[i].name);
+            mixer.clipAction(clips[i]).fadeOut(0.5);
+        }
+    }
+}
+
+function checkStatusNonManualClips(){
+    var clips = NON_MAN_VARS.clips_list;
+    for (i = 0; i < clips.length; i++){
+        if (mixer.clipAction(clips[i]).time > (clips[i].duration - 0.1)) {
+            mixer.clipAction(clips[i]).paused = true;  // pause current clip
         }
     }
 }
@@ -369,8 +397,8 @@ function animate() {
         console.log('starting');
 
         Interface.disableSpinner('cssload-container');  // stop loading
-        //Interface.play_pause_button.pause();    // set the button to pause
 
+        // begin fadeCounter for manual clips
         fadeCounter = 1;
         firstStep = true;
         displayTranslation = false;    // avoid repeating this multiple times
@@ -391,17 +419,20 @@ function animate() {
                 mixer.clipAction(manual_clips[0].clip).paused = false;      // put back blinking
                 mixer.clipAction(manual_clips[fadeCounter].clip).paused = false;
             }
+
+            if (!finalStep && NON_MAN_VARS.clips_list.length > 0) {      // no point in doing this if the lists are empty){
+                playNonManualSequence(manual_clips[fadeCounter].index); // get the current clip index and pass it
+                checkStatusNonManualClips();        // for pausing
+            }
+
         }
+
+        // if cancelled reset all variables to initial state
         if(cancelled){
-            firstStep = false;
-            continuousStep = false;
-            finalStep = true;
-            paused = false;     // stop the pause before going back to idle
-            cancelled = false;
-            done = true;
-            started = false;
+            resetAllManualVars();
         }
-        
+
+        // reset variables to first state
         if(done){
             Interface.play_pause_button.pause();     // set back to play
             done = false;
@@ -411,14 +442,11 @@ function animate() {
     }
 
     camera.lookAt(cameraTarget.position);
-
     render();
-
     stats.update();
 }
 
 function render() {
-
     if(firstPerson) {
         renderer.render(scene, fpCamera);
     }
@@ -427,8 +455,18 @@ function render() {
     }
 }
 
+function resetAllManualVars(){
+    firstStep = false;
+    continuousStep = false;
+    finalStep = true;
+    paused = false;     // stop the pause before going back to idle
+    cancelled = false;
+    done = true;
+    started = false;
+}
+
 function colorGloss(){
-    console.log(fadeCounter);
+    //console.log(fadeCounter);
     Interface.highlightGloss(fadeCounter-1);    // temporary solution for accessing the div id,
     Interface.resetGloss(fadeCounter-2);        // could also set the id directly to match fadeCounter?
 }
