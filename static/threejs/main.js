@@ -273,7 +273,6 @@ function playAnimationSequence(){
 
         // set up the next clip to be interpolated
         mixer.clipAction(manual_clips[fadeCounter+1].clip).setLoop(THREE.LoopOnce);
-        mixer.clipAction(manual_clips[fadeCounter+1].clip).timeScale *= animation_speed;        // set to speed with general
         mixer.clipAction(manual_clips[fadeCounter+1].clip).reset();
         mixer.clipAction(manual_clips[fadeCounter+1].clip).play();
         mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1].clip), 0.6, false);
@@ -304,7 +303,6 @@ function playAnimationSequence(){
 
                 // setup next clip like in first step
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).setLoop(THREE.LoopOnce);
-                mixer.clipAction(manual_clips[fadeCounter+1].clip).timeScale *= animation_speed;        // set to speed with general
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).reset();
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).play();
                 mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), 0.6, false);
@@ -338,7 +336,9 @@ function playAnimationSequence(){
             // set interface changes
             Interface.resetAllGloss();
 
-            playNonManualSequence(NON_MAN_VARS.current_index+1);        // last step to finish off then stop
+            if (NON_MAN_VARS.clips_list.length > 0) {
+                playNonManualSequence(NON_MAN_VARS.current_index + 1);        // last step to finish off then stop
+            }
 
             finalStep = false;
             done = true; // this way we also set the start button back
@@ -353,7 +353,6 @@ function playNonManualSequence(sign_index){
         nonManualLoop(sign_index);                                // go through the non manual loop to set clips
         NON_MAN_VARS.current_index = sign_index;        // update sign index
     }
-
 }
 
 function nonManualLoop(sign_index){
@@ -386,6 +385,16 @@ function checkStatusNonManualClips(){
         if (mixer.clipAction(clips[i]).time > (clips[i].duration - 0.1)) {
             mixer.clipAction(clips[i]).paused = true;  // pause current clip
         }
+    }
+}
+
+// only gets called when we change the speed
+function updateSpeed(speed){
+    for (i = 0; i<manual_clips.length; i++){
+        mixer.clipAction(manual_clips[i].timeScale *= speed);
+    }
+    for (i=0; i < NON_MAN_VARS.clips_list.length; i++){
+        mixer.clipAction(NON_MAN_VARS.clips_list[i].timeScale *= speed);
     }
 }
 
@@ -554,4 +563,24 @@ $('#play-pause').on('click', function(){
         console.log(paused);
         Interface.play_pause_button.switch();   // switch icons
     }
+});
+
+$('#select').on('click', function(){
+    // open the drop down menu with options and fill the English field with the selected sentence
+    //$('.sub-menu').show().animate();
+    $('.sub-menu').toggle('fast');
+
+    $('ul.sub-menu li').unbind().click(function(){
+        $(this).parents('ul.sub-menu').hide('fast');
+
+        var text = $(this).text();
+        $('#english').val(text);
+
+        return false;
+    });
+
+    // for hiding the menu once we've clicked outside
+    $(window).one('click',function() {
+      $('.sub-menu').hide('fast');
+    }); event.stopPropagation();
 });

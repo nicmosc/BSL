@@ -56,6 +56,8 @@ function INTERFACE() {
     this.translate_button = new Button('translate');
     this.view_button = new Button('view');
     
+    //this.examples_button = new Button('select');
+    
     this.current_gloss = '';
     this.current_text = '';
     this.gloss_length = 0;      // will hold the number of signs to be played (for gloss highlighting)
