@@ -9,6 +9,7 @@ var skinnedMesh;
 // animation stuff
 var mixer,manual_clips, non_manual_clips; // make them global for testing
 var animation_speed = 1.0;  // standard speed -> will be 1 for everything and 1.5 for the signs that seem a bit slow
+var interpolation_speed = 0.5;
 
 var clock = new THREE.Clock();
 
@@ -33,9 +34,6 @@ function init() {
 
     scene = new THREE.Scene();
 
-    // cameraHelper = new THREE.CameraHelper(fpCamera);
-    // scene.add(cameraHelper);
-
     // LIGHTS
 
     var light = new THREE.DirectionalLight( 0xaabbff, 0.3 );
@@ -49,10 +47,6 @@ function init() {
     light.position.y = 250;
     light.position.z = 0;
     scene.add( light );
-
-    // var sphereSize = 1;
-    // var pointLightHelper = new THREE.DirectionalLightHelper( light, sphereSize );
-    // scene.add( pointLightHelper );
 
     var ambient = new THREE.AmbientLight( 0x404040 ); // soft white light
     scene.add( ambient );
@@ -165,57 +159,54 @@ function loadModel(materials){
 
 // the next function is to test the concatenation/mixing
 function setupAnimations(urlArray){
-    //urls = ['blinking', 'idle','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];  // array containing all animations required for the clip
-    // first do the manual features
-    var counter = 0;
-    for(var i = 0; i < urlArray.length; i++) {
-        (function (i) {
-            console.log(urlArray[i].name);
-            var animations_url = '../static/res/animations/' + urlArray[i].path + '/' + urlArray[i].name + '.js';
-            $.getJSON(animations_url, function (json) {
+    urlArray.forEach(function (url, i){
+        var animations_url = '../static/res/animations/' + url.path + '/' +url.name + '.js';
+        $.getJSON(animations_url, function (json){
+            clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
+            console.log(clip, i);
+
+            updateManualClipList({clip: clip, index: url.index}, i);
+
+            // if the sign isn't found use the default "unknown" animation
+        }).fail(function (jqXHR, textStatus, errorThrown) {
+            console.log(textStatus,errorThrown);
+            animations_url = '../static/res/animations/init/unknown_0.js';
+            $.getJSON(animations_url, function (json){
                 clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
-                if (urlArray[i].path == 'numbers' || urlArray[i].path == 'alphabet'){
-                    mixer.clipAction(clip).timeScale = 1.5;
-                }
-                counter++;
-                updateManualClipList({clip: clip, index: urlArray[i].index}, i);
-                if (counter == urlArray.length) {    // once we have loaded all the manual_clips, go on to modify them
-                    if (!started) playInit();
+                updateManualClipList({clip: clip, index: url.index}, i);
+            });
+        }).always(function () {
+            console.log("complete");
+            if(i == urlArray.length-1){
+                if (!started) playInit();
+                else {
+                    if (URL.non_manual_names.length > 0) { // if no non manuals are needed, skip this step
+                        console.log('done loading manual', manual_clips);
+                        setupNonManual();
+                    }
                     else {
-                        if (URL.non_manual_names.length > 0) { // if no non manuals are needed, skip this step
-                            console.log('done loading manual', manual_clips);
-                            setupNonManual();
-                        }
-                        else {
-                            console.log('done loading manual', manual_clips);
-                            displayTranslation = true;
-                        }
+                        console.log('done loading manual', manual_clips);
+                        displayTranslation = true;
                     }
                 }
-            });
-        })(i);
-    }
+            }
+        });
+    });
 }
 
 // this function sets up the non-manual animations for the clips
 function setupNonManual(){
-    var counter = 0;
-    for(var i = 0; i < URL.non_manual_names.length; i++) {
-        (function (i) {
-            var animations_url = '../static/res/animations/non-manual/' + URL.non_manual_names[i] + '.js';
-            $.getJSON(animations_url, function (json) {
-                console.log('gonna load clip');
-                console.log(json.animations);
-                clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
-                counter++;
-                updateNonManualClipList(clip);
-                if (counter == URL.non_manual_names.length) {    // once we have loaded all the non_manual_clips, go on to the next step
+    URL.non_manual_names.forEach(function (url, i){
+        var animations_url = '../static/res/animations/non-manual/' +url + '.js';
+        $.getJSON(animations_url, function (json){
+            clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
+            updateNonManualClipList(clip);
+            if (i == URL.non_manual_names.length-1) {    // once we have loaded all the non_manual_clips, go on to the next step
                     console.log('done loading non manual', non_manual_clips);
                     displayTranslation = true;
                 }
-            });
-        })(i);
-    }
+        });
+    });
 }
 
 function updateManualClipList(clip, index){
@@ -275,7 +266,7 @@ function playAnimationSequence(){
         mixer.clipAction(manual_clips[fadeCounter+1].clip).setLoop(THREE.LoopOnce);
         mixer.clipAction(manual_clips[fadeCounter+1].clip).reset();
         mixer.clipAction(manual_clips[fadeCounter+1].clip).play();
-        mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1].clip), 0.6, false);
+        mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1].clip), interpolation_speed, false);
 
         // set interface changes
         colorGloss();
@@ -305,7 +296,7 @@ function playAnimationSequence(){
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).setLoop(THREE.LoopOnce);
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).reset();
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).play();
-                mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), 0.6, false);
+                mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), interpolation_speed, false);
 
                 // set interface changes
                 colorGloss();
@@ -331,7 +322,7 @@ function playAnimationSequence(){
             console.log("at final step");
             mixer.clipAction(manual_clips[fadeCounter].clip).paused = true;
             mixer.clipAction(manual_clips[1].clip).reset();     // assuming idle is the second clip ALWAYS
-            mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[1].clip), 0.6, false);
+            mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[1].clip), interpolation_speed, false);
 
             // set interface changes
             Interface.resetAllGloss();
@@ -374,7 +365,7 @@ function nonManualLoop(sign_index){
         clips = non_manual_clips[sign_index].end;
         for (i = 0; i < clips.length; i++) {
             console.log('stopping '+clips[i].name);
-            mixer.clipAction(clips[i]).fadeOut(0.5);
+            mixer.clipAction(clips[i]).fadeOut(interpolation_speed);
         }
     }
 }
@@ -390,11 +381,38 @@ function checkStatusNonManualClips(){
 
 // only gets called when we change the speed
 function updateSpeed(speed){
-    for (i = 0; i<manual_clips.length; i++){
-        mixer.clipAction(manual_clips[i].timeScale *= speed);
+    console.log('updating speed');
+    for (i = 0; i<manual_clips.length; i++) {
+        // this is because of a mistake during the animations
+        console.log(i);
+        s = speed;
+        if (i > 1) {
+            if (URL.manual[i - 2].path == 'numbers' || URL.manual[i - 2].path == 'alphabet') {
+                s = speed * 1.5;
+            }
+        }
+        mixer.clipAction(manual_clips[i].clip).setEffectiveTimeScale(s);
     }
     for (i=0; i < NON_MAN_VARS.clips_list.length; i++){
-        mixer.clipAction(NON_MAN_VARS.clips_list[i].timeScale *= speed);
+        mixer.clipAction(NON_MAN_VARS.clips_list[i]).setEffectiveTimeScale(speed);
+    }
+    updateInterpolation(speed);
+}
+
+// when cancelled or done with the animation loop,
+function resetNonManual(){
+    var clips = NON_MAN_VARS.clips_list;
+    for (i = 0; i < clips.length; i++){
+        mixer.clipAction(clips[i]).crossFadeTo(mixer.clipAction(manual_clips[1].clip), interpolation_speed, false);  // fade out at the end to be sure
+    }
+}
+
+function updateInterpolation(speed){
+    if (speed > 1.0){   // we keep the standard interpolation for anything higher than 1.0
+        interpolation_speed = 0.5;
+    }
+    else{   // else we calculate the correct speed (should be 1.0 for speed = 0.5)
+        interpolation_speed = 0.5/speed;
     }
 }
 
@@ -409,6 +427,9 @@ function animate() {
 
         // begin fadeCounter for manual clips
         fadeCounter = 1;
+
+        updateSpeed(animation_speed);   // update before playing to be sure
+
         firstStep = true;
         displayTranslation = false;    // avoid repeating this multiple times
     }
@@ -439,11 +460,13 @@ function animate() {
         // if cancelled reset all variables to initial state
         if(cancelled){
             resetAllManualVars();
+            resetNonManual();
         }
 
         // reset variables to first state
         if(done){
             Interface.play_pause_button.pause();     // set back to play
+            resetNonManual();
             done = false;
             started = false;
             console.log(paused, cancelled, done, started);
@@ -472,6 +495,8 @@ function resetAllManualVars(){
     cancelled = false;
     done = true;
     started = false;
+
+    resetNonManual();
 }
 
 function colorGloss(){
@@ -528,6 +553,7 @@ $('#translate').on('click', function() {
                 URL.non_manual.push(JSON.parse(non_manual[i]));
                 URL.modifiers.push(JSON.parse(modifiers[i]));
             }
+
             console.log(URL.manual, URL.non_manual_names, URL.non_manual, URL.modifiers);
 
             non_manual_clips = URL.non_manual;
@@ -547,6 +573,8 @@ $('#translate').on('click', function() {
 
 $('#swap').on('click', function() {
     firstPerson = !firstPerson;
+    //updateSpeed(0.4);
+    //animation_speed = 0.4
 });
 
 $('#stop').on('click', function() {
@@ -554,6 +582,8 @@ $('#stop').on('click', function() {
         cancelled = true;
         //Interface.play_pause_button.pause(); // set back the play icon
     }
+    //updateSpeed(2.0);
+    //animation_speed = 2.0
 });
 
 $('#play-pause').on('click', function(){
@@ -583,4 +613,13 @@ $('#select').on('click', function(){
     $(window).one('click',function() {
       $('.sub-menu').hide('fast');
     }); event.stopPropagation();
+});
+
+$('#speed').on('click', function(){
+    animation_speed += 0.1;
+    if(animation_speed > 2.0){   // go back down
+        animation_speed = 0.2;
+    }
+    updateSpeed(animation_speed);
+    $(this).html(animation_speed);
 });

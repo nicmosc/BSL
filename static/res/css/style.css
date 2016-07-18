@@ -47,7 +47,7 @@ a {
     clear: both;
 }
 
-#play-pause, #stop, #swap {
+#play-pause, #stop, #swap, #speed {
     float: left;
     padding: 0.2em;
     margin-top: 2%;
@@ -66,12 +66,12 @@ a {
     border-radius: .2em;
 }
 
-#play-pause:hover, #stop:hover, #swap:hover, #select:hover {
+#play-pause:hover, #stop:hover, #swap:hover, #select:hover, #speed:hover {
     outline: none;
     border-bottom: solid 2px #969696;
 }
 
-#play-pause:active, #stop:active, #swap:active, #select:active {
+#play-pause:active, #stop:active, #swap:active, #select:active, #speed:hover {
     background: #cccccc;
 }
 
