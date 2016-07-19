@@ -266,6 +266,9 @@ function playAnimationSequence(){
         mixer.clipAction(manual_clips[fadeCounter+1].clip).setLoop(THREE.LoopOnce);
         mixer.clipAction(manual_clips[fadeCounter+1].clip).reset();
         mixer.clipAction(manual_clips[fadeCounter+1].clip).play();
+        // set modifiers (needs to be done here)
+        modifierLoop(manual_clips[fadeCounter+1]);
+
         mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1].clip), interpolation_speed, false);
 
         // set interface changes
@@ -296,6 +299,10 @@ function playAnimationSequence(){
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).setLoop(THREE.LoopOnce);
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).reset();
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).play();
+
+                // set modifiers (needs to be done here)
+                modifierLoop(manual_clips[fadeCounter+1]);
+
                 mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), interpolation_speed, false);
 
                 // set interface changes
@@ -342,6 +349,9 @@ function playNonManualSequence(sign_index){
     if (sign_index != NON_MAN_VARS.current_index){      // if we change sign
         console.log('sign_index '+sign_index);
         nonManualLoop(sign_index);                                // go through the non manual loop to set clips
+
+        //modifierLoop(sign_index);           // do the same for the modifiers
+
         NON_MAN_VARS.current_index = sign_index;        // update sign index
     }
 }
@@ -364,7 +374,7 @@ function nonManualLoop(sign_index){
         // for any clip ending at this point
         clips = non_manual_clips[sign_index].end;
         for (i = 0; i < clips.length; i++) {
-            console.log('stopping '+clips[i].name);
+            //console.log('stopping '+clips[i].name);
             mixer.clipAction(clips[i]).fadeOut(interpolation_speed);
         }
     }
@@ -376,6 +386,51 @@ function checkStatusNonManualClips(){
         if (mixer.clipAction(clips[i]).time > (clips[i].duration - 0.1)) {
             mixer.clipAction(clips[i]).paused = true;  // pause current clip
         }
+    }
+}
+
+function modifierLoop(clip){
+    mod_list =URL.modifiers[clip.index].modifiers;
+    if (mod_list.length > 0){  // if there is a modifier applied to the sign at this index, apply it
+        //console.log("modifier " +sign_index+ ' '+mod_list);
+        for (i = 0; i< mod_list.length; i++){
+            //console.log(manual_clips[fadeCounter]);
+            applyModifier(mod_list[i], clip.clip);
+        }
+    }
+}
+
+// if a modifier applies to this sign, we check the mod type and change the clip
+function applyModifier(mod, clip){
+    // uses the TWEEN library
+
+    var tween = new TWEEN.Tween(mixer.clipAction(clip));
+    var duration = (clip.duration-0.3)*1000/animation_speed;    // milliseconds
+
+    console.log(mod, clip, duration, mixer.clipAction(clip).timeScale, tween);
+
+    if (mod == 'cp'){       // comparartive = small hold at the beginning and sign faster
+        mixer.clipAction(clip).paused = true;
+        mixer.clipAction(clip).timeScale = 0.2*animation_speed;
+        tween.to({timeScale: animation_speed*1.5}, duration)
+            .delay(duration/3)
+            .easing(TWEEN.Easing.Quadratic.InOut)
+            .onUpdate(function() {console.log("tween changed "+this.timeScale);} )
+            .start(); // interpolate to a faster timescale for the duration of the clip - 0.3
+    }
+    else if (mod == 'sp'){  // superlative = long hold and sign even faster
+        mixer.clipAction(clip).paused = true;
+        mixer.clipAction(clip).timeScale = 0.1*animation_speed;
+        tween.to({timeScale: animation_speed*1.7}, duration)
+            .delay(duration/1.5)
+            .easing(TWEEN.Easing.Quartic.InOut)
+            .onUpdate(function() {console.log("tween changed "+this.timeScale);} )
+            .start(); // interpolate to a faster timescale for the duration of the clip - 0.3
+    }
+    else if (mod == 'pause'){   // hold at the end of the clip
+        console.log('pause detected');
+        //mixer.clipAction(clip).duration = clip.duration+2.0;  // add some more delay
+        clip.duration += 0.2 / animation_speed;
     }
 }
 
@@ -400,14 +455,19 @@ function updateSpeed(speed){
 }
 
 function updateInterpolation(speed){
-    if (speed > 1.0){   // we keep the standard interpolation for anything higher than 1.0
-        interpolation_speed = 0.5;
+    if (speed > 1.5){   // we keep the standard interpolation for anything higher than 1.0
+        interpolation_speed = 0.3;
+    }
+    else if (speed < 0.5){
+        interpolation_speed = 3.0;
     }
     else{   // else we calculate the correct speed (should be 1.0 for speed = 0.5)
         interpolation_speed = 0.5/speed;
     }
 }
 
+
+/*********** MAIN ANIMATION LOOP ************/
 function animate() {
 
     requestAnimationFrame( animate );
@@ -468,6 +528,7 @@ function animate() {
     camera.lookAt(cameraTarget.position);
     render();
     stats.update();
+    TWEEN.update();     // for the modifiers we use TWEEN
 }
 
 function render() {
@@ -504,7 +565,7 @@ function colorGloss(){
 
     // if current gloss is unknown
     var exists = true;
-    console.log('clip name '+ manual_clips[fadeCounter+1].clip.name);
+    //console.log('clip name '+ manual_clips[fadeCounter+1].clip.name);
     if (manual_clips[fadeCounter+1].clip.name.indexOf('unknown_0') > -1){   // check if name is (or contains unknown_0, in case it is repeated)
         exists = false
     }

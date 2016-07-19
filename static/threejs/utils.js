@@ -83,19 +83,23 @@ INTERFACE.prototype = {
         if(id >= 0 && id < this.gloss_length) {
             if (exists) {   // if the sign for gloss is found
                 document.getElementById(id).style.color = '#3366ff';
+                document.getElementById(id).style.textShadow = "#3366ff 0 0 5px";
             }
             else{   // if unknown color red
                 document.getElementById(id).style.color = '#ff0000';
+                document.getElementById(id).style.textShadow = "#ff0000 0 0 5px";
             }
         }
     },
     resetGloss: function(id) {
         if(id >= 0 && id < this.gloss_length) {
             document.getElementById(id).style.color = document.getElementById('bsl').style.color;   // reset to container color
+            document.getElementById(id).style.textShadow = document.getElementById('bsl').style.textShadow;   // reset to container color
         }
     },
     resetAllGloss: function(){
-        $("span").css( 'color', document.getElementById('bsl').style.color);
+        $("span").css( 'color', document.getElementById('bsl').style.color)
+            .css( 'text-shadow', document.getElementById('bsl').style.textShadow);
     }
 };
 
@@ -115,6 +119,7 @@ URLS.prototype = {
     reset: function(){
         this.manual = [];
         this.non_manual = [];
+        this.modifiers = [];
     }
 };
 

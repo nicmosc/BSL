@@ -620,7 +620,7 @@ class BSLSentence:
         self.getAllLeaves(container_list, non_man, mod)
 
         temp_obj = {}
-        temp_obj['anims'] = map(lambda x: x.tag, container_list)
+        temp_obj['anims'] = [x.tag for x in container_list if not x.modifier]
         non_man_obj = json.dumps(temp_obj)  # contains a list with all the non_manuals required (to be loaded as clips in JS)
 
         non_man_js = []
