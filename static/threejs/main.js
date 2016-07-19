@@ -399,14 +399,6 @@ function updateSpeed(speed){
     updateInterpolation(speed);
 }
 
-// when cancelled or done with the animation loop,
-function resetNonManual(){
-    var clips = NON_MAN_VARS.clips_list;
-    for (i = 0; i < clips.length; i++){
-        mixer.clipAction(clips[i]).crossFadeTo(mixer.clipAction(manual_clips[1].clip), interpolation_speed, false);  // fade out at the end to be sure
-    }
-}
-
 function updateInterpolation(speed){
     if (speed > 1.0){   // we keep the standard interpolation for anything higher than 1.0
         interpolation_speed = 0.5;
@@ -499,9 +491,25 @@ function resetAllManualVars(){
     resetNonManual();
 }
 
+// when cancelled or done with the animation loop,
+function resetNonManual(){
+    var clips = NON_MAN_VARS.clips_list;
+    for (i = 0; i < clips.length; i++){
+        mixer.clipAction(clips[i]).crossFadeTo(mixer.clipAction(manual_clips[1].clip), interpolation_speed, false);  // fade out at the end to be sure
+    }
+}
+
 function colorGloss(){
     //console.log(fadeCounter);
-    Interface.highlightGloss(fadeCounter-1);    // temporary solution for accessing the div id,
+
+    // if current gloss is unknown
+    var exists = true;
+    console.log('clip name '+ manual_clips[fadeCounter+1].clip.name);
+    if (manual_clips[fadeCounter+1].clip.name.indexOf('unknown_0') > -1){   // check if name is (or contains unknown_0, in case it is repeated)
+        exists = false
+    }
+
+    Interface.highlightGloss(fadeCounter-1, exists);    // temporary solution for accessing the div id, (we go back one because of the idle and blinking)
     Interface.resetGloss(fadeCounter-2);        // could also set the id directly to match fadeCounter?
 }
 
@@ -620,6 +628,22 @@ $('#speed').on('click', function(){
     if(animation_speed > 2.0){   // go back down
         animation_speed = 0.2;
     }
+
+    // round value to 1 decimal
+    animation_speed = Math.round(animation_speed*10)/10;
+
     updateSpeed(animation_speed);
-    $(this).html(animation_speed);
+    //$(this).text(animation_speed);
+    $('#speed-val').html(animation_speed);
 });
+
+$('#info-button').on('click', function(){
+    $('.overlay').slideToggle('fast');
+});
+
+// window.onload = function() {
+//     var vague = $blurred.find('iframe').Vague({
+//       intensity:5 //blur intensity
+//     });
+//     vague.blur();
+// };

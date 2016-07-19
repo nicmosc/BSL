@@ -79,9 +79,14 @@ INTERFACE.prototype = {
         document.getElementById(div).innerHTML = text;
         this.current_gloss = text;
     },
-    highlightGloss: function(id){
+    highlightGloss: function(id, exists){
         if(id >= 0 && id < this.gloss_length) {
-            document.getElementById(id).style.color = '#3366ff';
+            if (exists) {   // if the sign for gloss is found
+                document.getElementById(id).style.color = '#3366ff';
+            }
+            else{   // if unknown color red
+                document.getElementById(id).style.color = '#ff0000';
+            }
         }
     },
     resetGloss: function(id) {

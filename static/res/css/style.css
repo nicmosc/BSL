@@ -47,7 +47,7 @@ a {
     clear: both;
 }
 
-#play-pause, #stop, #swap, #speed {
+.media, #play-pause {
     float: left;
     padding: 0.2em;
     margin-top: 2%;
@@ -66,12 +66,17 @@ a {
     border-radius: .2em;
 }
 
-#play-pause:hover, #stop:hover, #swap:hover, #select:hover, #speed:hover {
+#speed {
+    padding-right: 1em;
+    padding-left: 1em;
+}
+
+.media:hover, #play-pause:hover, #select:hover {
     outline: none;
     border-bottom: solid 2px #969696;
 }
 
-#play-pause:active, #stop:active, #swap:active, #select:active, #speed:hover {
+.media:active, #play-pause:active, #select:active {
     background: #cccccc;
 }
 
@@ -372,7 +377,7 @@ and (max-width: 750px) {
         margin-left: 1%;
     }
 
-    #play-pause, #stop, #swap {
+    .media,#play-pause {
         padding-left: 1em;
         padding-right: 1em;
     }
@@ -387,4 +392,57 @@ and (max-width: 750px) {
 
 .disabled {
     color: #ccc;
+}
+
+/* for overlay - info menu */
+#curtain {
+    position: absolute;
+    display:none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 10;
+
+    background-color: rgb(0, 0, 0); /*dim the background*/
+    opacity: 0.85;
+}
+
+#overlay-text {
+    left: 0;
+    display:none;
+    margin: auto;
+    position: absolute;
+    top: 30%;
+    width: 100%;
+
+    padding-left: 10%;
+    padding-right: 10%;
+
+    z-index: 11;
+
+    color: #ffffff;
+    font-size: 20px;
+    text-align: center;
+}
+
+#info-button {
+    bottom:0;
+    left:0;
+    position: absolute;
+    margin-left: 2%;
+    margin-bottom:2%;
+    text-align: center;
+    font-size: 20px;
+    padding: 5px;
+    cursor: pointer;
+    z-index: 12
+}
+
+#info-button:hover{
+    color: #66a3ff;
+}
+
+#info-button:active{
+    color: #0066ff;
 }

@@ -10,72 +10,78 @@
 
 <body>
 
-<div class="container">
-<div class="buttons">
-    <div id="play-pause"><span id="switcher" class="glyphicon glyphicon-pause"></span></div>
-    <div id="stop"><span class="glyphicon glyphicon-stop"></span></div>
-    <div id="swap"><span class="glyphicon glyphicon-eye-open"></span></div>
-    <!-- THIS IS TEMPORARY -->
-    <div id= "speed">1.0</div>
-    <div id="translate" class="button">Translate</div>
-    <div id="cssload-container">
-        <div class="cssload-speeding-wheel"></div>
-    </div>
-</div>
-<div class="text">
-    <div class="subcontainer">
-        <div id="select"><span class="glyphicon glyphicon-option-vertical"></span>
-            <ul class="sub-menu">
-             <li>What's your name?</li>
-             <li>I live in London.</li>
-             <li>My brother, Jack, is 22 years old.</li>
-             <li>I won't go to the beach if it rains tomorrow.</li>
-           </ul>
+<div class="overlay" id="curtain"></div>
+
+<div class="overlay" id="overlay-text">This project was created for the MSc in Computer Science at University
+of Oxford. The thesis describing this work can be found here: <a href="#">link to paper</a>
+<br/><br/> Work by Nick</div>
+    <div class="container">
+        <div class="buttons">
+            <div id="play-pause" class="media"><span id="switcher" class="glyphicon glyphicon-pause"></span></div>
+            <div id="stop" class="media"><span class="glyphicon glyphicon-stop"></span></div>
+            <div id="swap" class="media"><span class="glyphicon glyphicon-eye-open"></span></div>
+            <!-- THIS IS TEMPORARY -->
+            <div id= "speed" class="media"><span id="speed-val">1.0</span> <span class ="glyphicon glyphicon-step-forward"></span></div>
+            <div id="translate" class="button">Translate</div>
+            <div id="cssload-container">
+                <div class="cssload-speeding-wheel"></div>
+            </div>
         </div>
+        <div class="text">
+            <div class="subcontainer">
+                <div id="select"><span class="glyphicon glyphicon-option-vertical"></span>
+                    <ul class="sub-menu">
+                     <li>What's your name?</li>
+                     <li>I live in London.</li>
+                     <li>My brother, Jack, is 22 years old.</li>
+                     <li>I won't go to the beach if it rains tomorrow.</li>
+                   </ul>
+                </div>
 
-        <input id="english" type="text" placeholder=' english sentence...' name = "input_text">
+                <input id="english" type="text" placeholder=' english sentence...' name = "input_text">
+            </div>
+            <div id="bsl" ><div id="temp">BSL output...</div></div>
+        </div>
     </div>
-    <div id="bsl" ><div id="temp">BSL output...</div></div>
-</div>
-</div>
+<div id="info-button"><span class="glyphicon glyphicon-info-sign"></span></div>
 
-<script src="../static/lib/js/jquery.min.js"></script>
 
-<script src="../static/lib/js/three.js"></script>
+    <script src="../static/lib/js/jquery.min.js"></script>
 
-<script src="../static/lib/js/controls/OrbitControls.js"></script>
+    <script src="../static/lib/js/three.js"></script>
 
-<script src="../static/lib/js/Detector.js"></script>
-<script src="../static/lib/js/libs/stats.min.js"></script>
+    <script src="../static/lib/js/controls/OrbitControls.js"></script>
 
-<script src="../static/lib/js/Tween.js"></script>
+    <script src="../static/lib/js/Detector.js"></script>
+    <script src="../static/lib/js/libs/stats.min.js"></script>
 
-<script type="x-shader/x-vertex" id="vertexShader">
-			varying vec3 vWorldPosition;
-			void main() {
-				vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
-				vWorldPosition = worldPosition.xyz;
-				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-			}
-</script>
+    <script src="../static/lib/js/Tween.js"></script>
 
-<script type="x-shader/x-fragment" id="fragmentShader">
-			uniform vec3 topColor;
-			uniform vec3 bottomColor;
-			uniform float offset;
-			uniform float exponent;
-			varying vec3 vWorldPosition;
-			void main() {
-				float h = normalize( vWorldPosition + offset ).y;
-				gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
-			}
-</script>
+    <script type="x-shader/x-vertex" id="vertexShader">
+                varying vec3 vWorldPosition;
+                void main() {
+                    vec4 worldPosition = modelMatrix * vec4( position, 1.0 );
+                    vWorldPosition = worldPosition.xyz;
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+                }
+    </script>
 
-<!-- here we choose which file we want to run -->
-<!--<script src = ../static/threejs/tests/alphabet-interpreter.js></script>-->
-<script src = '../static/threejs/utils.js'></script>
-<script src = ../static/threejs/main.js></script>
+    <script type="x-shader/x-fragment" id="fragmentShader">
+                uniform vec3 topColor;
+                uniform vec3 bottomColor;
+                uniform float offset;
+                uniform float exponent;
+                varying vec3 vWorldPosition;
+                void main() {
+                    float h = normalize( vWorldPosition + offset ).y;
+                    gl_FragColor = vec4( mix( bottomColor, topColor, max( pow( max( h, 0.0 ), exponent ), 0.0 ) ), 1.0 );
+                }
+    </script>
 
+    <!-- here we choose which file we want to run -->
+    <!--<script src = ../static/threejs/tests/alphabet-interpreter.js></script>-->
+    <script src = '../static/threejs/utils.js'></script>
+    <script src = ../static/threejs/main.js></script>
 </body>
 
 </html>
