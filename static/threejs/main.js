@@ -139,7 +139,7 @@ function init() {
             materials[mat].skinning = true;
             materials[mat].side = THREE.DoubleSide; // make all faces double sided (messes up for some)
         }
-        loadModel(materials);
+        //loadModel(materials);
     });
     window.addEventListener( 'resize', onWindowResize, false );
 }
@@ -333,7 +333,7 @@ function playAnimationSequence(){
 
             // set interface changes
             Interface.resetAllGloss();
-            
+
             finalStep = false;
             done = true; // this way we also set the start button back
         }

@@ -443,6 +443,9 @@ and (max-width: 750px) {
 
     background-color: rgb(0, 0, 0); /*dim the background*/
     opacity: 0.85;
+    /*overflow: auto;*/
+    /*overflow-y: scroll;*/
+
 }
 
 #overlay-text {
@@ -450,17 +453,20 @@ and (max-width: 750px) {
     display:none;
     margin: auto;
     position: absolute;
-    top: 30%;
+    height: 100%;
     width: 100%;
 
     padding-left: 10%;
     padding-right: 10%;
+    padding-top: 15%;
 
     z-index: 11;
 
     color: #ffffff;
     font-size: 20px;
     text-align: center;
+    overflow: scroll;
+    overflow-x:hidden;
 }
 
 #info-button {
