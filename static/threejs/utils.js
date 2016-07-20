@@ -50,17 +50,11 @@ SwitchButton.prototype.switch = function() {
 // used for the loading of translations/animations, modifies css
 function INTERFACE() {
     this.play_pause_button = new SwitchButton('switcher','play', 'pause');
-
-    this.stop_button = new Button('pause');
-
-    this.translate_button = new Button('translate');
-    this.view_button = new Button('view');
     
-    //this.examples_button = new Button('select');
-    
-    this.current_gloss = '';
     this.current_text = '';
     this.gloss_length = 0;      // will hold the number of signs to be played (for gloss highlighting)
+    
+    
 }
 
 INTERFACE.prototype = {
@@ -100,6 +94,10 @@ INTERFACE.prototype = {
     resetAllGloss: function(){
         $("span").css( 'color', document.getElementById('bsl').style.color)
             .css( 'text-shadow', document.getElementById('bsl').style.textShadow);
+    },
+    showNonManual: function(tags, speed){
+        $('#non-manual-text').html(tags.join(', '));
+        $('.helper').fadeIn(200).delay(speed).fadeOut(200);
     }
 };
 

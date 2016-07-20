@@ -182,6 +182,10 @@ over {
     text-decoration: overline;
 }
 
+sup {
+    z-index: 0;
+}
+
 input[type="text"] {
     display: block;
     margin: 0;
@@ -316,6 +320,7 @@ input[type="text"]:focus {
     display:none;
     position: absolute;
     text-align: left;
+    z-index: 5;
 
     top: 100%;
     padding-left:22px;
@@ -393,6 +398,37 @@ and (max-width: 750px) {
 
 .disabled {
     color: #ccc;
+}
+
+.helper{
+    display: none;
+}
+
+#non-manual-square {
+    width: 100px;
+    /*height: 100px;*/
+    position: absolute;
+    top: 70%;
+    /*bottom: 0;*/
+    left: 0;
+    right: 0;
+    margin:auto;
+    text-align: center;
+    display: block;
+    padding:20px;
+
+    background-color: rgb(200, 200, 200); /*dim the background*/
+    opacity: 0.85;
+    border-radius: 10px;
+}
+
+#non-manual-text {
+    margin: auto;
+    width: 100%;
+
+    font-size: 25px;
+    font-weight: bold;
+    color: #333333;
 }
 
 /* for overlay - info menu */

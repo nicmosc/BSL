@@ -333,11 +333,7 @@ function playAnimationSequence(){
 
             // set interface changes
             Interface.resetAllGloss();
-
-            if (NON_MAN_VARS.clips_list.length > 0) {
-                playNonManualSequence(NON_MAN_VARS.current_index + 1);        // last step to finish off then stop
-            }
-
+            
             finalStep = false;
             done = true; // this way we also set the start button back
         }
@@ -361,10 +357,16 @@ function nonManualLoop(sign_index){
     if (sign_index < non_manual_clips.length && sign_index >= 0) {
         // for any clip that begins at this point (given by the clip index that is playing)
         var clips = non_manual_clips[sign_index].start;
+        var clip_names = [];
         for (i = 0; i < clips.length; i++) {
             mixer.clipAction(clips[i]).reset();
             mixer.clipAction(clips[i]).setLoop(THREE.LoopOnce);
             mixer.clipAction(clips[i]).play();
+
+            clip_names.push(clips[i].name);
+        }
+        if (clip_names.length > 0) {
+            Interface.showNonManual(clip_names, 500/animation_speed);        // show the non manual features being used at this time
         }
     }
 
@@ -397,6 +399,7 @@ function modifierLoop(clip){
             //console.log(manual_clips[fadeCounter]);
             applyModifier(mod_list[i], clip.clip);
         }
+        Interface.showNonManual(mod_list, 500/animation_speed);
     }
 }
 
@@ -502,7 +505,7 @@ function animate() {
                 mixer.clipAction(manual_clips[fadeCounter].clip).paused = false;
             }
 
-            if (!finalStep && NON_MAN_VARS.clips_list.length > 0) {      // no point in doing this if the lists are empty){
+            if ( NON_MAN_VARS.clips_list.length > 0) {      // no point in doing this if the lists are empty){
                 playNonManualSequence(manual_clips[fadeCounter].index); // get the current clip index and pass it
                 checkStatusNonManualClips();        // for pausing
             }
@@ -642,17 +645,12 @@ $('#translate').on('click', function() {
 
 $('#swap').on('click', function() {
     firstPerson = !firstPerson;
-    //updateSpeed(0.4);
-    //animation_speed = 0.4
 });
 
 $('#stop').on('click', function() {
     if(started){
         cancelled = true;
-        //Interface.play_pause_button.pause(); // set back the play icon
     }
-    //updateSpeed(2.0);
-    //animation_speed = 2.0
 });
 
 $('#play-pause').on('click', function(){
