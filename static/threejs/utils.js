@@ -54,7 +54,6 @@ function INTERFACE() {
     this.current_text = '';
     this.gloss_length = 0;      // will hold the number of signs to be played (for gloss highlighting)
     
-    
 }
 
 INTERFACE.prototype = {

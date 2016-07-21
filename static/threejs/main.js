@@ -700,9 +700,36 @@ $('#info-button').on('click', function(){
     $('.overlay').slideToggle('fast');
 });
 
-// window.onload = function() {
-//     var vague = $blurred.find('iframe').Vague({
-//       intensity:5 //blur intensity
-//     });
-//     vague.blur();
-// };
+$('#options').on('click', function(){
+    
+    console.log('options');
+});
+
+$('a#showdir').on('click', function(){
+    // temporary
+    if (Interface.available_signs_show){
+        $('#dir-result').html('');
+        Interface.available_signs_show = false;
+    }
+    else {
+        $.getJSON('/_print_dir', function (data) {
+            result = data.result;
+            var string_res = '';
+            for (i = 0; i < result.length; i++) {
+                if (result[i].substr(result[i].length - 1) == '/') {
+                    string_res += '<br/><b>' + result[i] + '</b><br/>';
+                }
+                else {
+                    string_res += result[i] + ', ';
+                }
+            }
+            console.log(string_res);
+            $('#dir-result').html(string_res);
+            Interface.available_signs_show = true;
+        });
+    }
+});
+
+/** GET FILES IN DIR HELPER METHOD **/
+// helper function for cross-browser request object
+//echo 'hello'

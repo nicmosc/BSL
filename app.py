@@ -12,6 +12,7 @@
 
 from flask import Flask, render_template, request, jsonify
 from static.py.analyser import Analyser
+from static.py.utils import list_files
 import sys
 from os import devnull
 
@@ -50,6 +51,11 @@ def process_text():
     # return jsonify(result=data)
 
     return jsonify(result=(data[1],data[2]))
+
+@app.route('/_print_dir')
+def print_dir():
+    res = list(list_files('static/res/animations'))
+    return jsonify(result=res)
 
 if __name__ == '__main__':
     # app.run(

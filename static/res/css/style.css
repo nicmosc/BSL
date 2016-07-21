@@ -348,58 +348,6 @@ input[type="text"]:focus {
     border-bottom: solid 2px #969696;
 }
 
-/* PHONES CODE */
-/* Portrait and Landscape */
-@media only screen
-and (max-width: 750px) {
-
-    .subcontainer {
-        width: 100%;
-    }
-
-    #select {
-        margin-left: 1%;
-        padding-left: 1px;
-        padding-right: 1px;
-        width: 20px;
-    }
-
-    #english {
-        /* Firefox */
-        width: -moz-calc(98% - 22px);
-        /* WebKit */
-        width: -webkit-calc(98% - 22px);
-        /* Opera */
-        width: -o-calc(98% - 22px);
-        /* Standard */
-        width: calc(98% - 22px);
-
-    }
-
-    #bsl {
-        float: left;
-        width: 98%;
-        margin-top: 60px;
-        margin-left: 1%;
-    }
-
-    .media,#play-pause {
-        padding-left: 1em;
-        padding-right: 1em;
-    }
-
-}
-
-.log {
-    padding: 3px 5px;
-    margin: 5px;
-    display: inline-block;
-}
-
-.disabled {
-    color: #ccc;
-}
-
 .helper{
     display: none;
 }
@@ -473,19 +421,82 @@ and (max-width: 750px) {
     bottom:0;
     left:0;
     position: absolute;
-    margin-left: 2%;
-    margin-bottom:2%;
+    margin-left: 15px;
+    margin-bottom:15px;
     text-align: center;
     font-size: 20px;
     padding: 5px;
     cursor: pointer;
-    z-index: 12
+    z-index: 12;
 }
 
-#info-button:hover{
+#options {
+    position:absolute;
+    bottom:0;
+    left:0;
+    margin-left: 50px;
+    margin-bottom:15px;
+    font-size: 18px;
+    padding: 6px;
+    cursor: pointer;
+}
+
+#info-button:hover, #options:hover{
     color: #66a3ff;
 }
 
-#info-button:active{
+#info-button:active, #options:active{
     color: #0066ff;
+}
+
+/* PHONES CODE */
+/* Portrait and Landscape */
+@media only screen
+and (max-width: 750px) {
+
+    .subcontainer {
+        width: 100%;
+    }
+
+    #select {
+        margin-left: 1%;
+        padding-left: 1px;
+        padding-right: 1px;
+        width: 20px;
+    }
+
+    #english {
+        /* Firefox */
+        width: -moz-calc(98% - 22px);
+        /* WebKit */
+        width: -webkit-calc(98% - 22px);
+        /* Opera */
+        width: -o-calc(98% - 22px);
+        /* Standard */
+        width: calc(98% - 22px);
+
+    }
+
+    #bsl {
+        float: left;
+        width: 98%;
+        margin-top: 60px;
+        margin-left: 1%;
+    }
+
+    .media,#play-pause {
+        padding-left: 1em;
+        padding-right: 1em;
+    }
+
+}
+
+.log {
+    padding: 3px 5px;
+    margin: 5px;
+    display: inline-block;
+}
+
+.disabled {
+    color: #ccc;
 }

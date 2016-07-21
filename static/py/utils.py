@@ -2,6 +2,7 @@
 
 from datetime import date
 from nltk.corpus import names
+import os
 
 # formats numbers in the way we want them
 def formatNumber(textnum):
@@ -98,3 +99,19 @@ def toUpper(words):
         if 'index' not in word:  # do not uppercase Index
             words[i] = word.upper()
     return words
+
+def list_files(startpath):
+    for root, dirs, files in os.walk(startpath):
+        level = root.replace(startpath, '').count(os.sep)
+        indent = ' ' * 4 * (level)
+        if os.path.basename(root) not in ['temp', 'init', 'directional', 'facial', 'hand_shapes']:
+            yield '{}{}/'.format(indent, os.path.basename(root))
+            subindent = ' ' * 4 * (level + 1)
+            first_file = True
+            for f in files:
+                if f.endswith('.js'):
+                    if first_file:
+                        first_file = False
+                        yield '{}{}'.format(subindent, f.strip('.js'))
+                    else:
+                        yield f.strip('.js')
