@@ -13,7 +13,7 @@ class Parser:
         # first check if the stanford website is accessible
         status_code = 0
         try:
-            initRequest = requests.post("http://nlp.stanford.edu:8080/parser/index.jsp", timeout=1) # test if the parser is still at this address
+            initRequest = requests.post("http://nlp.stanford.edu:8080/parser/index.jsp", timeout=5) # test if the parser is still at this address
             status_code = initRequest.status_code
 
         except requests.ConnectionError:
@@ -22,7 +22,7 @@ class Parser:
             print "Response too slow, using offline parser"
 
         # for testing
-        #status_code = 1
+        status_code = 1
 
         if (status_code == 200): # if it's fine
             self.online = True
@@ -34,8 +34,10 @@ class Parser:
                 os.environ['STANFORD_PARSER'] = APP_PARSER
                 os.environ['STANFORD_MODELS'] = APP_PARSER
             else:
-                os.environ['STANFORD_PARSER'] = '../lib/stanford-parser-full'
-                os.environ['STANFORD_MODELS'] = '../lib/stanford-parser-full'
+                #os.environ['STANFORD_PARSER'] = '../lib/stanford-parser-full'
+                #os.environ['STANFORD_MODELS'] = '../lib/stanford-parser-full'
+                os.environ['STANFORD_PARSER'] = '../lib/stanford-parser-2013'
+                os.environ['STANFORD_MODELS'] = '../lib/stanford-parser-2013'
 
             # set up tree parser
             self.parser = StanfordParser()
