@@ -37,6 +37,8 @@ a {
     width: 100%;
 }
 
+/** MEDIA BUTTONS OPTIONS **/
+
 .buttons:before,
 .buttons:after {
     content: "";
@@ -66,11 +68,6 @@ a {
     border-radius: .2em;
 }
 
-#speed {
-    padding-right: 1em;
-    padding-left: 1em;
-}
-
 .media:hover, #play-pause:hover, #select:hover {
     outline: none;
     border-bottom: solid 2px #969696;
@@ -95,6 +92,8 @@ a {
 #translate:hover {
     background: #0066ff;
 }
+
+/** TEXT INPUT/OUTPUT STYLE **/
 
 .text:before,
 .text:after {
@@ -348,6 +347,8 @@ input[type="text"]:focus {
     border-bottom: solid 2px #969696;
 }
 
+/** NON MANUAL SIGNS HELPER **/
+
 .helper{
     display: none;
 }
@@ -365,7 +366,7 @@ input[type="text"]:focus {
     display: block;
     padding:20px;
 
-    background-color: rgb(200, 200, 200); /*dim the background*/
+    background-color: rgb(230, 230, 230); /*dim the background*/
     opacity: 0.85;
     border-radius: 10px;
 }
@@ -415,6 +416,7 @@ input[type="text"]:focus {
     text-align: center;
     overflow: scroll;
     overflow-x:hidden;
+    overflow-y: scroll;
 }
 
 #info-button {
@@ -430,6 +432,42 @@ input[type="text"]:focus {
     z-index: 12;
 }
 
+/* for overlay - options menu */
+#white-curtain {
+    position: absolute;
+    display:none;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 13;
+
+    background-color: rgb(255, 255, 255); /*dim the background*/
+    opacity: 0.9;
+
+}
+
+#menu-text {
+    left: 0;
+    display:none;
+    margin: auto;
+    position: absolute;
+    height: 100%;
+    width: 100%;
+
+    padding-left: 10%;
+    padding-right: 10%;
+    padding-top: 5%;
+
+    z-index: 14;
+
+    color: #333333;
+    font-size: 20px;
+    text-align: left;
+    overflow: scroll;
+    overflow-x:hidden;
+}
+
 #options {
     position:absolute;
     bottom:0;
@@ -439,6 +477,14 @@ input[type="text"]:focus {
     font-size: 18px;
     padding: 6px;
     cursor: pointer;
+    z-index: 14;
+}
+
+#ex1Slider .slider-selection {
+	background: #BABABA;
+}
+#ex1Slider .slider-handle {
+    background: #66a3ff;
 }
 
 #info-button:hover, #options:hover{

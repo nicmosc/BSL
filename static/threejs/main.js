@@ -139,7 +139,7 @@ function init() {
             materials[mat].skinning = true;
             materials[mat].side = THREE.DoubleSide; // make all faces double sided (messes up for some)
         }
-        //loadModel(materials);
+        loadModel(materials);
     });
     window.addEventListener( 'resize', onWindowResize, false );
 }
@@ -662,6 +662,7 @@ $('#play-pause').on('click', function(){
     }
 });
 
+// EXAMPLE SENTENCES SELECTION
 $('#select').on('click', function(){
     // open the drop down menu with options and fill the English field with the selected sentence
     //$('.sub-menu').show().animate();
@@ -682,27 +683,11 @@ $('#select').on('click', function(){
     }); event.stopPropagation();
 });
 
-$('#speed').on('click', function(){
-    animation_speed += 0.1;
-    if(animation_speed > 2.0){   // go back down
-        animation_speed = 0.2;
-    }
-
-    // round value to 1 decimal
-    animation_speed = Math.round(animation_speed*10)/10;
-
-    updateSpeed(animation_speed);
-    //$(this).text(animation_speed);
-    $('#speed-val').html(animation_speed);
-});
+/** INFO MENU JS **/
 
 $('#info-button').on('click', function(){
     $('.overlay').slideToggle('fast');
-});
-
-$('#options').on('click', function(){
-    
-    console.log('options');
+    $('#options').toggle();
 });
 
 $('a#showdir').on('click', function(){
@@ -730,6 +715,22 @@ $('a#showdir').on('click', function(){
     }
 });
 
-/** GET FILES IN DIR HELPER METHOD **/
-// helper function for cross-browser request object
-//echo 'hello'
+/** OPTIONS MENU JS **/
+
+$('#options').on('click', function(){
+    $('.overlay-menu').slideToggle('fast');
+    $('#info-button').toggle();
+});
+
+// JSLIDER
+var slider = new Slider('#ex1', {
+	formatter: function(value) {
+        animation_speed = value.toFixed(1);
+        updateSpeed(animation_speed);
+		$('#speed').html(animation_speed);
+	}
+});
+
+$('#non-man-help').on('click', function() {
+    Interface.show_non_manual = this.checked;
+});

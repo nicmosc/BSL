@@ -7,10 +7,12 @@
     <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <!--<link rel="stylesheet" href="../static/res/css/bootstrap.css">-->
     <link rel="stylesheet" href="../static/res/css/style.css">
+    <link rel="stylesheet" href="../static/lib/js/range-slider/bootstrap-slider.min.css">
 </head>
 
 <body>
 
+<!-- INFO MENU TEXT -->
 <div class="overlay" id="curtain"></div>
 
 <div class="overlay" id="overlay-text">
@@ -22,7 +24,12 @@ of Oxford. The thesis describing this work can be found here: <a href="#">link t
         The system is still in conceptual form with this being the first version. Complex sentence constructs, including those containing
         classifier predicates and agreement verbs, will not be handled correctly. The number of signs availabl is limited, however more will
         be added with time. <a href="#" id="showdir">Here</a> is a comprehensive list of all currently available signs.
-        <div id="dir-result" style="white-space: pre;"></div>
+        <div id="dir-result" style="white-space: pre-wrap;"></div>
+        <h2>Manual features</h2>
+        <ul>
+            <li><b>poss_</b>: Possessive pronoun equivalent in English</li>
+            <li><b>ix_</b>: Index, used for pronouns in English, "that" and identifying people when given names</li>
+        </ul>
         <h2>Non-manual features</h2>
         <ul>
             <li><b>hn</b>: Head Nod, identifies the subject in the sentence</li>
@@ -40,25 +47,37 @@ of Oxford. The thesis describing this work can be found here: <a href="#">link t
         </ul>
     </div>
 </div>
+<!-- OPTIONS MENU -->
+<div class="overlay-menu" id="white-curtain"></div>
+
+<div class="overlay-menu" id="menu-text">
+    <h2 style="margin-bottom: 50px">Animation options</h2>
+    Speed: <span id="speed" style="padding-right: 20px">1.0</span><input id="ex1" data-slider-id='ex1Slider' type="text" data-slider-min="0.2" data-slider-max="2.0" data-slider-step="0.1" data-slider-value="1.0" data-slider-tooltip="hide"/>
+    <br/><br/>
+    Automatic camera: <input type="checkbox" name="auto-camera" id="auto-camera">
+    <br/><br/>
+    Show non-manual features: <input type="checkbox" name="non-man-help" id="non-man-help">
+</div>
 
 <div class = "helper">
     <div id = "non-manual-square">
         <span id="non-manual-text"></span>
     </div>
 </div>
+    <!-- MAIN INTERFACE -->
     <div class="container">
         <div class="buttons">
+            <!-- BUTTONS INTERFACE -->
             <div id="play-pause" class="media"><span id="switcher" class="glyphicon glyphicon-pause"></span></div>
             <div id="stop" class="media"><span class="glyphicon glyphicon-stop"></span></div>
             <div id="swap" class="media"><span class="glyphicon glyphicon-eye-open"></span></div>
-            <!-- THIS IS TEMPORARY -->
-            <div id= "speed" class="media"><span id="speed-val">1.0</span> <span class ="glyphicon glyphicon-step-forward"></span></div>
             <div id="translate" class="button">Translate</div>
             <div id="cssload-container">
                 <div class="cssload-speeding-wheel"></div>
             </div>
         </div>
         <div class="text">
+            <!-- EXAMPLE SENTENCES -->
             <div class="subcontainer">
                 <div id="select"><span class="glyphicon glyphicon-option-vertical"></span>
                     <ul class="sub-menu">
@@ -68,14 +87,17 @@ of Oxford. The thesis describing this work can be found here: <a href="#">link t
                      <li>I won't go to the beach if it rains tomorrow.</li>
                    </ul>
                 </div>
-
+                <!-- TEXT INTERFACE -->
                 <input id="english" type="text" placeholder=' english sentence...' name = "input_text">
             </div>
             <div id="bsl" ><div id="temp">BSL output...</div></div>
         </div>
     </div>
+<!-- BOTTOM BUTTONS OPTIONS/INFO -->
 <div id="info-button"><span class="glyphicon glyphicon-info-sign"></span></div>
 <div id="options">Options</div>
+
+    <script src="../static/lib/js/range-slider/bootstrap-slider.min.js"></script>
 
     <script src="../static/lib/js/jquery.min.js"></script>
 
