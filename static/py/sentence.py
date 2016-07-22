@@ -705,6 +705,7 @@ class Word:
         else:
             wn_tag = penn_to_wn(tag)
             if wn_tag != None:
+                print 'before lemmatizer'
                 self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
                 self.setCategory(wn_tag)
             else:
