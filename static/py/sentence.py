@@ -704,12 +704,13 @@ class Word:
             self.root = self.text
         else:
             wn_tag = penn_to_wn(tag)
-            if wn_tag != None:
-                print 'before lemmatizer'
-                self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
-                self.setCategory(wn_tag)
-            else:
-                self.root = self.text
+            # if wn_tag != None:
+            #     print 'before lemmatizer'
+            #     self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
+            #     self.setCategory(wn_tag)
+            #     print 'after lemmatizer'
+            # else:
+            self.root = self.text
             # after getting the cateogory
             if isMonth(self.text):
                 self.root = abbreviateMonth(self.text)
