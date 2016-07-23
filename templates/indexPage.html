@@ -4,13 +4,16 @@
     <title> English to BSL </title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
-    <!--<link rel="stylesheet" href="../static/res/css/bootstrap.css">-->
+    <!--<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">-->
+    <link rel="stylesheet" href="../static/res/css/bootstrap.min.css">
     <link rel="stylesheet" href="../static/res/css/style.css">
     <link rel="stylesheet" href="../static/lib/js/range-slider/bootstrap-slider.min.css">
 </head>
 
 <body>
+
+<div class="flash"></div>
+<div id="notification-text"></div>
 
 <!-- INFO MENU TEXT -->
 <div class="overlay" id="curtain"></div>
@@ -79,7 +82,7 @@ of Oxford. The thesis describing this work can be found here: <a href="#">link t
         <div class="text">
             <!-- EXAMPLE SENTENCES -->
             <div class="subcontainer">
-                <div id="select"><span class="glyphicon glyphicon-option-vertical"></span>
+                <div id="select"><span class="glyphicon glyphicon-font"></span><!--<span style="font-weight: bold">?</span>-->
                     <ul class="sub-menu">
                      <li>What's your name?</li>
                      <li>I live in London.</li>
@@ -98,6 +101,7 @@ of Oxford. The thesis describing this work can be found here: <a href="#">link t
 <div id="options">Options</div>
 
     <script src="../static/lib/js/range-slider/bootstrap-slider.min.js"></script>
+    <script src="../static/lib/js/bootstrap.min.js"></script>
 
     <script src="../static/lib/js/jquery.min.js"></script>
 

@@ -2,9 +2,9 @@ var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var container, stats;
 var camera, fpCamera, scene, renderer, controls, cameraTarget;
-var firstPerson, started, displayTranslation, paused, cancelled, done = false;
+var firstPerson, started, displayTranslation, paused, cancelled, done = false;  // animation loop variables
 
-var skinnedMesh;
+var skinnedMesh;    // holds the model
 
 // animation stuff
 var mixer,manual_clips, non_manual_clips; // make them global for testing
@@ -144,6 +144,14 @@ function init() {
     window.addEventListener( 'resize', onWindowResize, false );
 }
 
+function onWindowResize() {
+    camera.aspect = window.innerWidth / window.innerHeight;
+    camera.updateProjectionMatrix();
+    fpCamera.aspect = window.innerWidth / window.innerHeight;
+    fpCamera.updateProjectionMatrix();
+    renderer.setSize( window.innerWidth, window.innerHeight );
+}
+
 function loadModel(materials){
     var loader = new THREE.ObjectLoader();
     loader.load(URL.model, function ( object ) {
@@ -159,13 +167,22 @@ function loadModel(materials){
 
 // the next function is to test the concatenation/mixing
 function setupAnimations(urlArray){
+    total_signs = urlArray.length;
+    can_be_signed = 0;         // determines how many words in the resulting sentence can be signed, if more than some number cannot, we don't sign anything
+    counter = 0;
     urlArray.forEach(function (url, i){
         var animations_url = '../static/res/animations/' + url.path + '/' +url.name + '.js';
         $.getJSON(animations_url, function (json){
             clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
             console.log(clip, i);
 
+            // increase the number of total signable words
+            can_be_signed += 1;
+
             updateManualClipList({clip: clip, index: url.index}, i);
+
+            counter+=1
+            my_always(counter, total_signs);
 
             // if the sign isn't found use the default "unknown" animation
         }).fail(function (jqXHR, textStatus, errorThrown) {
@@ -174,37 +191,57 @@ function setupAnimations(urlArray){
             $.getJSON(animations_url, function (json){
                 clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
                 updateManualClipList({clip: clip, index: url.index}, i);
+
+                counter+=1;
+                my_always(counter, total_signs)
             });
-        }).always(function () {
-            console.log("complete");
-            if(i == urlArray.length-1){
-                if (!started) playInit();
-                else {
-                    if (URL.non_manual_names.length > 0) { // if no non manuals are needed, skip this step
-                        console.log('done loading manual', manual_clips);
-                        setupNonManual();
-                    }
-                    else {
-                        console.log('done loading manual', manual_clips);
-                        displayTranslation = true;
-                    }
-                }
-            }
         });
     });
 }
 
+function my_always(counter, length){
+    console.log("complete");
+    if(counter == length){     // when we're doing loading everything
+        if (!started) playInit();
+        else {
+            if (estimateIfCanSign(total_signs, can_be_signed)){     // if we have enough data to sign
+                if (URL.non_manual_names.length > 0) { // if no non manuals are needed, skip this step
+                    console.log('done loading manual, next non-manual', manual_clips);
+                    setupNonManual();
+                }
+                else {
+                    console.log('done loading manual', manual_clips);
+                    displayTranslation = true;
+                }
+            }
+            else {      // otherwise say we cant and show gloss with highlighted gloss in red (those which are unknown)
+                console.log('cannot display',manual_clips);
+                for (i = 0; i<total_signs; i++){
+                    if (manual_clips[i+2].clip.name == 'unknown_0') {
+                        Interface.highlightGloss(i, false);
+                    }
+                }
+                // display message
+                flashScreen();
+                Interface.disableSpinner('cssload-container');  // stop loading
+            }
+        }
+    }
+}
+
 // this function sets up the non-manual animations for the clips
 function setupNonManual(){
+    counter = 0;
     URL.non_manual_names.forEach(function (url, i){
         var animations_url = '../static/res/animations/non-manual/' +url + '.js';
         $.getJSON(animations_url, function (json){
             clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
             updateNonManualClipList(clip);
-            if (i == URL.non_manual_names.length-1) {    // once we have loaded all the non_manual_clips, go on to the next step
-                    console.log('done loading non manual', non_manual_clips);
-                    displayTranslation = true;
-                }
+            counter+=1;
+            if (counter == URL.non_manual_names.length) {    // once we have loaded all the non_manual_clips, go on to the next step
+                console.log('done loading non manual', non_manual_clips);
+                displayTranslation = true;
+            }
         });
     });
 }
@@ -236,18 +273,20 @@ function updateNonManualClipList(clip){
     }
 }
 
+function estimateIfCanSign(total, can_sign){
+    console.log(total, can_sign);
+
+    // if more than 30% of the sentene cannot be signed we don't show anything
+    // if translate is pressed again the signs will be played anyway
+    ratio = can_sign/total;
+    console.log(ratio);
+    return ratio >= 0.3;
+}
+
 function playInit(){
     // play idle and blinking first
     mixer.clipAction(manual_clips[0].clip).play();  // play blinking and idle
     mixer.clipAction(manual_clips[1].clip).play();
-}
-
-function onWindowResize() {
-    camera.aspect = window.innerWidth / window.innerHeight;
-    camera.updateProjectionMatrix();
-    fpCamera.aspect = window.innerWidth / window.innerHeight;
-    fpCamera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 function resetClipAndUrlArrays(){
@@ -469,6 +508,16 @@ function updateInterpolation(speed){
     }
 }
 
+function swapCamera(){
+    var tween = new TWEEN.Tween(camera.position);
+    console.log(camera);
+    // tween.to({timeScale: animation_speed*1.5}, duration)
+    //     .delay(duration/3)
+    //     .easing(TWEEN.Easing.Quadratic.InOut)
+    //     .onUpdate(function() {console.log("tween changed "+this.timeScale);} )
+    //     .start(); // interpolate to a faster timescale for the duration of the clip - 0.3
+    tween.to({x: 0, y: 3.7, z:0.15}, 2000).start();
+}
 
 /*********** MAIN ANIMATION LOOP ************/
 function animate() {
@@ -564,17 +613,19 @@ function resetNonManual(){
 }
 
 function colorGloss(){
-    //console.log(fadeCounter);
-
     // if current gloss is unknown
     var exists = true;
-    //console.log('clip name '+ manual_clips[fadeCounter+1].clip.name);
     if (manual_clips[fadeCounter+1].clip.name.indexOf('unknown_0') > -1){   // check if name is (or contains unknown_0, in case it is repeated)
         exists = false
     }
 
     Interface.highlightGloss(fadeCounter-1, exists);    // temporary solution for accessing the div id, (we go back one because of the idle and blinking)
     Interface.resetGloss(fadeCounter-2);        // could also set the id directly to match fadeCounter?
+}
+function flashScreen(){
+    $('.flash').fadeIn(100).delay(200).fadeOut(200);
+    $('#notification-text').html('CANNOT DISPLAY')
+        .fadeIn(100).delay(2000).fadeOut(400);
 }
 
 /// INTERFACE RELATED STUFF
@@ -645,6 +696,7 @@ $('#translate').on('click', function() {
 
 $('#swap').on('click', function() {
     firstPerson = !firstPerson;
+    //swapCamera();
 });
 
 $('#stop').on('click', function() {

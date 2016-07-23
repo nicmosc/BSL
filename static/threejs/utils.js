@@ -54,7 +54,8 @@ function INTERFACE() {
     this.current_text = '';
     this.gloss_length = 0;      // will hold the number of signs to be played (for gloss highlighting)
     this.available_signs_show = false;
-    this.show_non_manual = false;
+    this.show_non_manual = false;       // will display the non-manual features happening at that time
+    this.auto_camera = false;           // camera automatically rotates to first person when fingerspelling
 }
 
 INTERFACE.prototype = {
