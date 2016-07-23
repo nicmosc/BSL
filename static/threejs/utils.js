@@ -123,8 +123,3 @@ URLS.prototype = {
         this.modifiers = [];
     }
 };
-
-NON_MAN_VARS = {
-    current_index: -1,
-    clips_list: []
-};

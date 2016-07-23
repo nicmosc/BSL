@@ -1,10 +1,11 @@
 var SCREEN_WIDTH = window.innerWidth;
 var SCREEN_HEIGHT = window.innerHeight;
 var container, stats;
-var camera, fpCamera, scene, renderer, controls, cameraTarget;
-var firstPerson, started, displayTranslation, paused, cancelled, done = false;  // animation loop variables
+var camera, scene, renderer, controls, camera_target;
+// var fpCamera;
+var first_person, started, display_translation, paused, cancelled, done = false;  // animation loop variables
 
-var skinnedMesh;    // holds the model
+var skinned_mesh;    // holds the model
 
 // animation stuff
 var mixer,manual_clips, non_manual_clips; // make them global for testing
@@ -15,6 +16,35 @@ var clock = new THREE.Clock();
 
 var Interface = new INTERFACE();
 var URL = new URLS();
+
+// non-manual variable holders
+NON_MAN_VARS = {
+    current_index: -1,
+    clips_list: []
+};
+
+CAM_VARS = {
+    position: {x: 0,y:5, z:10},
+    fov: 30,
+    near: 1,
+    targetZ: 0,
+    targetY: 4,
+    controls_enabled: true
+};
+
+FPS_CAM_VARS = {
+    position: {x:0,y:3.5, z:0.15},
+    fov: 80,
+    near: 0.1,
+    targetZ: 10,
+    targetY: 0,
+    controls_enabled: false
+};
+
+// for swaping camera
+var position_tween, camera_tween, target_tween;
+var auto_cam = false;  // for automatic camera
+var swap_counter = 1;
 
 //testing
 var sorted, firstStep, continuousStep, finalStep = false;
@@ -85,18 +115,11 @@ function init() {
     renderer.gammaOutput = true;
 
     // STANDARD CAMERA
+    camera = new THREE.PerspectiveCamera( CAM_VARS.fov, SCREEN_WIDTH / SCREEN_HEIGHT, CAM_VARS.near, 10000 );
+    camera.position.set(0, CAM_VARS.position.y, CAM_VARS.position.z);
 
-    camera = new THREE.PerspectiveCamera( 30, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000 );
-    camera.position.set(0, 5, 10 );
-    //camera.up.set(0,0,1);
-    cameraTarget = new THREE.Mesh( new THREE.CubeGeometry(0,0,0)); // so that the camera follows the head correctly
-    cameraTarget.position.y = 4;
-
-    // FIRST PERSON CAMERA
-
-    fpCamera = new THREE.PerspectiveCamera( 80, SCREEN_WIDTH / SCREEN_HEIGHT, 0.1, 10000);
-    fpCamera.position.set(0, 3.7, 0.15 );
-    fpCamera.lookAt(new THREE.Vector3(0,0,10));
+    camera_target = new THREE.Mesh( new THREE.CubeGeometry(0,0,0)); // so that the camera follows the head correctly
+    camera_target.position.y = 4;
 
     // CONTROLS
 
@@ -147,20 +170,20 @@ function init() {
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    fpCamera.aspect = window.innerWidth / window.innerHeight;
-    fpCamera.updateProjectionMatrix();
+    //fpCamera.aspect = window.innerWidth / window.innerHeight;
+    //fpCamera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
 function loadModel(materials){
     var loader = new THREE.ObjectLoader();
     loader.load(URL.model, function ( object ) {
-        skinnedMesh = new THREE.SkinnedMesh(object.children[0].geometry, new THREE.MeshFaceMaterial(materials));
-        scene.add(skinnedMesh);
+        skinned_mesh = new THREE.SkinnedMesh(object.children[0].geometry, new THREE.MeshFaceMaterial(materials));
+        scene.add(skinned_mesh);
         //helper = new THREE.SkeletonHelper( skinnedMesh );
         //helper.material.linewidth = 3;
         //scene.add( helper );
-        mixer = new THREE.AnimationMixer(skinnedMesh);    // set up the mixer
+        mixer = new THREE.AnimationMixer(skinned_mesh);    // set up the mixer
         setupAnimations(URL.base);   // we initalise the base url (the other two will obviously be empty)
     });
 }
@@ -211,7 +234,7 @@ function my_always(counter, length){
                 }
                 else {
                     console.log('done loading manual', manual_clips);
-                    displayTranslation = true;
+                    display_translation = true;
                 }
             }
             else {      // otherwise say we cant and show gloss with highlighted gloss in red (those which are unknown)
@@ -222,7 +245,7 @@ function my_always(counter, length){
                     }
                 }
                 // display message
-                flashScreen();
+                flashScreen('CANNOT DISPLAY');
                 Interface.disableSpinner('cssload-container');  // stop loading
             }
         }
@@ -240,7 +263,7 @@ function setupNonManual(){
             counter+=1;
             if (counter == URL.non_manual_names.length) {    // once we have loaded all the non_manual_clips, go on to the next step
                 console.log('done loading non manual', non_manual_clips);
-                displayTranslation = true;
+                display_translation = true;
             }
         });
     });
@@ -373,6 +396,10 @@ function playAnimationSequence(){
             // set interface changes
             Interface.resetAllGloss();
 
+            if(auto_cam && first_person){
+                swapCamera();
+            }
+
             finalStep = false;
             done = true; // this way we also set the start button back
         }
@@ -457,7 +484,7 @@ function applyModifier(mod, clip){
         tween.to({timeScale: animation_speed*1.5}, duration)
             .delay(duration/3)
             .easing(TWEEN.Easing.Quadratic.InOut)
-            .onUpdate(function() {console.log("tween changed "+this.timeScale);} )
+            //.onUpdate(function() {console.log("tween changed "+this.timeScale);} )
             .start(); // interpolate to a faster timescale for the duration of the clip - 0.3
     }
     else if (mod == 'sp'){  // superlative = long hold and sign even faster
@@ -466,7 +493,7 @@ function applyModifier(mod, clip){
         tween.to({timeScale: animation_speed*1.7}, duration)
             .delay(duration/1.5)
             .easing(TWEEN.Easing.Quartic.InOut)
-            .onUpdate(function() {console.log("tween changed "+this.timeScale);} )
+            //.onUpdate(function() {console.log("tween changed "+this.timeScale);} )
             .start(); // interpolate to a faster timescale for the duration of the clip - 0.3
     }
     else if (mod == 'pause'){   // hold at the end of the clip
@@ -478,10 +505,10 @@ function applyModifier(mod, clip){
 
 // only gets called when we change the speed
 function updateSpeed(speed){
-    console.log('updating speed');
+    //console.log('updating speed');
     for (i = 0; i<manual_clips.length; i++) {
         // this is because of a mistake during the animations
-        console.log(i);
+        //console.log(i);
         s = speed;
         if (i > 1) {
             if (URL.manual[i - 2].path == 'numbers' || URL.manual[i - 2].path == 'alphabet') {
@@ -508,15 +535,42 @@ function updateInterpolation(speed){
     }
 }
 
-function swapCamera(){
-    var tween = new TWEEN.Tween(camera.position);
-    console.log(camera);
-    // tween.to({timeScale: animation_speed*1.5}, duration)
-    //     .delay(duration/3)
-    //     .easing(TWEEN.Easing.Quadratic.InOut)
-    //     .onUpdate(function() {console.log("tween changed "+this.timeScale);} )
-    //     .start(); // interpolate to a faster timescale for the duration of the clip - 0.3
-    tween.to({x: 0, y: 3.7, z:0.15}, 2000).start();
+function autoChangeCamera(counter){
+    if(swap_counter != counter) {
+        if(URL.manual[counter].path == 'alphabet' && !first_person){ // if the sign is fingerspelled, switch to fpv
+            swapCamera(500);
+        }
+        else if (URL.manual[counter].path != 'alphabet' && first_person) {
+            swapCamera(500);
+        }
+        console.log(URL.manual[counter]);
+        // if(URL.manual[counter-1])
+        swap_counter = counter;
+    }
+}
+
+function swapCamera(speed_){
+
+    var speed = (speed_ !== undefined) ? speed_ : 1500;     // default value
+
+    first_person = !first_person;
+
+    var toWhat;
+
+    // initalise tweening vars
+    position_tween = new TWEEN.Tween(camera.position);
+    camera_tween = new TWEEN.Tween(camera);
+    target_tween = new TWEEN.Tween(camera_target.position);
+
+    if (first_person) {toWhat = FPS_CAM_VARS; flashScreen(false,'First Person');}
+    else {toWhat = CAM_VARS; flashScreen(false,'Default View');}
+
+    controls.enabled = toWhat.controls_enabled;
+    position_tween.to({x: toWhat.position.x, y: toWhat.position.y, z:toWhat.position.z}, speed).start();
+    camera_tween.to({near:toWhat.near, fov:toWhat.fov}, speed).start();
+    target_tween.to({z: toWhat.targetZ}, speed)
+        .onUpdate(function(){ onWindowResize();}).start();
+        //.onComplete(renderer.setSize( window.innerWidth, window.innerHeight));
 }
 
 /*********** MAIN ANIMATION LOOP ************/
@@ -524,7 +578,7 @@ function animate() {
 
     requestAnimationFrame( animate );
 
-    if(displayTranslation){ // for testing, will normally be activated once the animation sequence has been formed
+    if(display_translation){ // for testing, will normally be activated once the animation sequence has been formed
         console.log('starting');
 
         Interface.disableSpinner('cssload-container');  // stop loading
@@ -535,7 +589,7 @@ function animate() {
         updateSpeed(animation_speed);   // update before playing to be sure
 
         firstStep = true;
-        displayTranslation = false;    // avoid repeating this multiple times
+        display_translation = false;    // avoid repeating this multiple times
     }
 
     playAnimationSequence();
@@ -554,11 +608,14 @@ function animate() {
                 mixer.clipAction(manual_clips[fadeCounter].clip).paused = false;
             }
 
+            if (auto_cam){
+                autoChangeCamera(fadeCounter-2);
+            }
+
             if ( NON_MAN_VARS.clips_list.length > 0) {      // no point in doing this if the lists are empty){
                 playNonManualSequence(manual_clips[fadeCounter].index); // get the current clip index and pass it
                 checkStatusNonManualClips();        // for pausing
             }
-
         }
 
         // if cancelled reset all variables to initial state
@@ -576,20 +633,14 @@ function animate() {
             console.log(paused, cancelled, done, started);
         }
     }
-
-    camera.lookAt(cameraTarget.position);
     render();
-    stats.update();
-    TWEEN.update();     // for the modifiers we use TWEEN
 }
 
 function render() {
-    if(firstPerson) {
-        renderer.render(scene, fpCamera);
-    }
-    else{
-        renderer.render(scene, camera);
-    }
+    camera.lookAt(camera_target.position);
+    renderer.render(scene, camera);
+    stats.update();
+    TWEEN.update();     // for the modifiers we use TWEEN
 }
 
 function resetAllManualVars(){
@@ -622,9 +673,15 @@ function colorGloss(){
     Interface.highlightGloss(fadeCounter-1, exists);    // temporary solution for accessing the div id, (we go back one because of the idle and blinking)
     Interface.resetGloss(fadeCounter-2);        // could also set the id directly to match fadeCounter?
 }
-function flashScreen(){
-    $('.flash').fadeIn(100).delay(200).fadeOut(200);
-    $('#notification-text').html('CANNOT DISPLAY')
+function flashScreen(flash,str){
+    var colour = "#333333";
+    if (flash) {
+        $('.flash').fadeIn(100).delay(200).fadeOut(200);
+        colour = "#ff0000";
+    }
+
+    $('#notification-text').html(str)
+        .css("color", colour)
         .fadeIn(100).delay(2000).fadeOut(400);
 }
 
@@ -690,13 +747,13 @@ $('#translate').on('click', function() {
     else {
         console.log('text is the same');
         started = true;
-        displayTranslation = true;
+        display_translation = true;
     }
 });
 
 $('#swap').on('click', function() {
-    firstPerson = !firstPerson;
-    //swapCamera();
+    //firstPerson = !firstPerson;
+    swapCamera();
 });
 
 $('#stop').on('click', function() {
@@ -785,4 +842,8 @@ var slider = new Slider('#ex1', {
 
 $('#non-man-help').on('click', function() {
     Interface.show_non_manual = this.checked;
+});
+
+$('#auto-camera').on('click', function() {
+    auto_cam = this.checked;
 });

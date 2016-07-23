@@ -510,9 +510,9 @@ input[type="text"]:focus {
 #notification-text{
     display:none;
     left: 0;
-    line-height: 200px;
+    line-height: 2px;
     margin: auto;
-    margin-top: -100px;
+    margin-top: -1px;
     position: absolute;
     top: 60%;
     width: 100%;
@@ -521,7 +521,6 @@ input[type="text"]:focus {
     text-align: center;
     font-size: 25px;
     font-weight: bold;
-    color: #ff0000;
 }
 
 /* PHONES CODE */
