@@ -170,8 +170,6 @@ function init() {
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    //fpCamera.aspect = window.innerWidth / window.innerHeight;
-    //fpCamera.updateProjectionMatrix();
     renderer.setSize( window.innerWidth, window.innerHeight );
 }
 
@@ -189,45 +187,34 @@ function loadModel(materials){
 }
 
 // the next function is to test the concatenation/mixing
-function setupAnimations(urlArray){
+function setupAnimations(urlArray) {
     total_signs = urlArray.length;
-    can_be_signed = 0;         // determines how many words in the resulting sentence can be signed, if more than some number cannot, we don't sign anything
+    can_be_signed = total_signs;   // determines how many words in the resulting sentence can be signed, if more than some number cannot, we don't sign anything
+
+    var promises_ = [];
     counter = 0;
-    urlArray.forEach(function (url, i){
-        var animations_url = '../static/res/animations/' + url.path + '/' +url.name + '.js';
-        $.getJSON(animations_url, function (json){
-            clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
-            console.log(clip, i);
 
-            // increase the number of total signable words
-            can_be_signed += 1;
-
-            updateManualClipList({clip: clip, index: url.index}, i);
-
-            counter+=1
-            my_always(counter, total_signs);
-
-            // if the sign isn't found use the default "unknown" animation
-        }).fail(function (jqXHR, textStatus, errorThrown) {
-            console.log(textStatus,errorThrown);
-            animations_url = '../static/res/animations/init/unknown_0.js';
-            $.getJSON(animations_url, function (json){
-                clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
-                updateManualClipList({clip: clip, index: url.index}, i);
-
-                counter+=1;
-                my_always(counter, total_signs)
-            });
-        });
-    });
+    for (i = 0; i < total_signs; i++) {
+        // $.getJSON returns a promise
+        var animations_url = '../static/res/animations/' + urlArray[i].path + '/' + urlArray[i].name + '.js';
+        promises_.push($.getJSON(animations_url));
+    }
+    whenDoneLoading(promises_, urlArray);
 }
 
-function my_always(counter, length){
-    console.log("complete");
-    if(counter == length){     // when we're doing loading everything
-        if (!started) playInit();
+function whenDoneLoading(promises, urls){
+    // Combine all promises
+    $.when.apply($, promises).then(function () {
+        console.log("done loading promises");
+        for (i = 0; i < arguments.length; i++) {
+            var clip = THREE.AnimationClip.parseAnimation(arguments[i][0].animations[0], arguments[i][0].bones);
+            manual_clips.push({clip: clip, index: urls[i].index});
+            console.log(clip, arguments[i]);
+        }
+
+        if (!started) {playInit(); initScreen(false);}
         else {
-            if (estimateIfCanSign(total_signs, can_be_signed)){     // if we have enough data to sign
+            if (estimateIfCanSign(total_signs, can_be_signed)) {     // if we have enough data to sign
                 if (URL.non_manual_names.length > 0) { // if no non manuals are needed, skip this step
                     console.log('done loading manual, next non-manual', manual_clips);
                     setupNonManual();
@@ -238,9 +225,9 @@ function my_always(counter, length){
                 }
             }
             else {      // otherwise say we cant and show gloss with highlighted gloss in red (those which are unknown)
-                console.log('cannot display',manual_clips);
-                for (i = 0; i<total_signs; i++){
-                    if (manual_clips[i+2].clip.name == 'unknown_0') {
+                console.log('cannot display', manual_clips);
+                for (i = 0; i < total_signs; i++) {
+                    if (manual_clips[i + 2].clip.name == 'unknown_0') {
                         Interface.highlightGloss(i, false);
                     }
                 }
@@ -249,7 +236,17 @@ function my_always(counter, length){
                 Interface.disableSpinner('cssload-container');  // stop loading
             }
         }
-    }
+    }, function(){  // if any of the animations cannot be found we throw an error and replace the
+                    // not found json with the unknown
+        console.log('error',promises);
+        for (i = 0; i < promises.length; i++){
+            if(promises[i].status == 404){
+                can_be_signed -= 1;
+                promises[i] = $.getJSON('../static/res/animations/init/unknown_0.js');
+            }
+        }
+        whenDoneLoading(promises, urls);
+    });
 }
 
 // this function sets up the non-manual animations for the clips
@@ -267,15 +264,6 @@ function setupNonManual(){
             }
         });
     });
-}
-
-function updateManualClipList(clip, index){
-    if(!started) {      // if we are still loading the initial animations
-        manual_clips.splice(index, 0, clip);   // insert object
-    }
-    else{
-        manual_clips.splice(index+2, 0, clip);   // insert object 2 indexes further
-    }
 }
 
 function updateNonManualClipList(clip){
@@ -685,6 +673,17 @@ function flashScreen(flash,str){
         .fadeIn(100).delay(2000).fadeOut(400);
 }
 
+function initScreen(status){
+    if(status){
+        $('#curtain').show();
+        $('#notification-text').html("<span style='color: #ffffff'>Loading model...</span>").show();
+    }
+    else{
+        $('#curtain').fadeOut(500);
+        $('#notification-text').fadeOut(500);
+    }
+}
+
 /// INTERFACE RELATED STUFF
 
 $('#translate').on('click', function() {
@@ -846,4 +845,8 @@ $('#non-man-help').on('click', function() {
 
 $('#auto-camera').on('click', function() {
     auto_cam = this.checked;
+});
+
+$(document).ready(function(){
+    initScreen(true);
 });
