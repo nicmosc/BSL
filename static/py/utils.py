@@ -112,6 +112,6 @@ def list_files(startpath):
                 if f.endswith('.js'):
                     if first_file:
                         first_file = False
-                        yield '{}{}'.format(subindent, f.strip('.js'))
+                        yield '{}{}'.format(subindent, f.replace('.js',""))
                     else:
-                        yield f.strip('.js')
+                        yield f.replace('.js',"")
