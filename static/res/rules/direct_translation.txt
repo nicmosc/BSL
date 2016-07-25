@@ -15,6 +15,11 @@ time last -> past time
 year old -> _ age
 time what -> what time
 happy year new -> happy new year
+year next -> next-year _
+week next -> next-week _
+day next -> next-day _
+year last -> last-year _
+week last -> last-week _
 
 DT
 a->_

@@ -55,7 +55,11 @@ function INTERFACE() {
     this.gloss_length = 0;      // will hold the number of signs to be played (for gloss highlighting)
     this.available_signs_show = false;
     this.show_non_manual = false;       // will display the non-manual features happening at that time
-    this.auto_camera = false;           // camera automatically rotates to first person when fingerspelling
+    
+    // for checking the correct spelling of input
+    this.typingTimer = 0;
+    this.doneTypingInterval = 1000;
+    this.$input = $('#english');
 }
 
 INTERFACE.prototype = {

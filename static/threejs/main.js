@@ -8,7 +8,7 @@ var first_person, started, display_translation, paused, cancelled, done = false;
 var skinned_mesh;    // holds the model
 
 // animation stuff
-var mixer,manual_clips, non_manual_clips; // make them global for testing
+var mixer, manual_clips, non_manual_clips; // make them global for testing
 var animation_speed = 1.0;  // standard speed -> will be 1 for everything and 1.5 for the signs that seem a bit slow
 var interpolation_speed = 0.5;
 
@@ -24,7 +24,7 @@ NON_MAN_VARS = {
 };
 
 CAM_VARS = {
-    position: {x: 0,y:5, z:10},
+    position: {x: 0, y: 5, z: 10},
     fov: 30,
     near: 1,
     targetZ: 0,
@@ -33,7 +33,7 @@ CAM_VARS = {
 };
 
 FPS_CAM_VARS = {
-    position: {x:0,y:3.5, z:0.15},
+    position: {x: 0, y: 3.5, z: 0.15},
     fov: 80,
     near: 0.1,
     targetZ: 10,
@@ -57,8 +57,8 @@ function init() {
 
     manual_clips = new Array;
 
-    container = document.createElement( 'div' );
-    document.body.appendChild( container );
+    container = document.createElement('div');
+    document.body.appendChild(container);
 
     // SCENE
 
@@ -66,64 +66,64 @@ function init() {
 
     // LIGHTS
 
-    var light = new THREE.DirectionalLight( 0xaabbff, 0.3 );
+    var light = new THREE.DirectionalLight(0xaabbff, 0.3);
     light.position.x = 300;
     light.position.y = 250;
     light.position.z = 500;
-    scene.add( light );
+    scene.add(light);
 
-    light = new THREE.DirectionalLight( 0xaabbff, 0.3 );
+    light = new THREE.DirectionalLight(0xaabbff, 0.3);
     light.position.x = 0;
     light.position.y = 250;
     light.position.z = 0;
-    scene.add( light );
+    scene.add(light);
 
-    var ambient = new THREE.AmbientLight( 0x404040 ); // soft white light
-    scene.add( ambient );
+    var ambient = new THREE.AmbientLight(0x404040); // soft white light
+    scene.add(ambient);
 
     // SKYDOME
 
-    var vertexShader = document.getElementById( 'vertexShader' ).textContent;
-    var fragmentShader = document.getElementById( 'fragmentShader' ).textContent;
+    var vertexShader = document.getElementById('vertexShader').textContent;
+    var fragmentShader = document.getElementById('fragmentShader').textContent;
     var uniforms = {
-        topColor: 	 { type: "c", value: new THREE.Color( 0x0077ff ) },
-        bottomColor: { type: "c", value: new THREE.Color( 0xffffff ) },
-        offset:		 { type: "f", value: 400 },
-        exponent:	 { type: "f", value: 0.6 }
+        topColor: {type: "c", value: new THREE.Color(0x0077ff)},
+        bottomColor: {type: "c", value: new THREE.Color(0xffffff)},
+        offset: {type: "f", value: 400},
+        exponent: {type: "f", value: 0.6}
     };
-    uniforms.topColor.value.copy( light.color );
+    uniforms.topColor.value.copy(light.color);
 
-    var skyGeo = new THREE.SphereGeometry( 4000, 32, 15 );
-    var skyMat = new THREE.ShaderMaterial( {
+    var skyGeo = new THREE.SphereGeometry(4000, 32, 15);
+    var skyMat = new THREE.ShaderMaterial({
         uniforms: uniforms,
         vertexShader: vertexShader,
         fragmentShader: fragmentShader,
         side: THREE.BackSide
-    } );
+    });
 
-    var sky = new THREE.Mesh( skyGeo, skyMat );
-    scene.add( sky );
+    var sky = new THREE.Mesh(skyGeo, skyMat);
+    scene.add(sky);
 
     // RENDERER
 
-    renderer = new THREE.WebGLRenderer( { antialias: true } );
-    renderer.setPixelRatio( window.devicePixelRatio );
-    renderer.setSize( SCREEN_WIDTH, SCREEN_HEIGHT );
-    container.appendChild( renderer.domElement );
+    renderer = new THREE.WebGLRenderer({antialias: true});
+    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+    container.appendChild(renderer.domElement);
 
     renderer.gammaInput = true;
     renderer.gammaOutput = true;
 
     // STANDARD CAMERA
-    camera = new THREE.PerspectiveCamera( CAM_VARS.fov, SCREEN_WIDTH / SCREEN_HEIGHT, CAM_VARS.near, 10000 );
+    camera = new THREE.PerspectiveCamera(CAM_VARS.fov, SCREEN_WIDTH / SCREEN_HEIGHT, CAM_VARS.near, 10000);
     camera.position.set(0, CAM_VARS.position.y, CAM_VARS.position.z);
 
-    camera_target = new THREE.Mesh( new THREE.CubeGeometry(0,0,0)); // so that the camera follows the head correctly
+    camera_target = new THREE.Mesh(new THREE.CubeGeometry(0, 0, 0)); // so that the camera follows the head correctly
     camera_target.position.y = 4;
 
     // CONTROLS
 
-    controls = new THREE.OrbitControls( camera, renderer.domElement );
+    controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.minDistance = 7;   // reduce zooming options (so that we cannot see inside the model)
     controls.maxDistance = 15;
     controls.maxPolarAngle = 0.9 * Math.PI / 2;
@@ -132,15 +132,15 @@ function init() {
 
     // STATS
     stats = new Stats();
-    container.appendChild( stats.domElement );
+    container.appendChild(stats.domElement);
 
     // MODEL
-    $.getJSON(URL.model, function(json){
+    $.getJSON(URL.model, function (json) {
 
         var matLoader = new THREE.ObjectLoader(); // this loader will be used to parse JSON textures into THREE textures
 
         // the following sequence is analogous to the source code
-        matLoader.texturePath = URL.model.substring( 0, URL.model.lastIndexOf( '/' ) + 1 );
+        matLoader.texturePath = URL.model.substring(0, URL.model.lastIndexOf('/') + 1);
         var images = matLoader.parseImages(json.images);
         var textures = matLoader.parseTextures(json.textures, images);
         var threeMaterials = matLoader.parseMaterials(json.materials, textures);
@@ -149,11 +149,11 @@ function init() {
         // first load all the materials needed (as ObjectLoader does not support multiple materials)
 
         var materials = [];
-        for(var mat = 0; mat < json.geometries[0].materials.length; mat++){
+        for (var mat = 0; mat < json.geometries[0].materials.length; mat++) {
             var name = json.geometries[0].materials[mat].DbgName;
             var material;
-            for(var id in threeMaterials){
-                if(threeMaterials[id].name == name){
+            for (var id in threeMaterials) {
+                if (threeMaterials[id].name == name) {
                     material = threeMaterials[id];
                     break;
                 }
@@ -164,18 +164,18 @@ function init() {
         }
         loadModel(materials);
     });
-    window.addEventListener( 'resize', onWindowResize, false );
+    window.addEventListener('resize', onWindowResize, false);
 }
 
 function onWindowResize() {
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    renderer.setSize( window.innerWidth, window.innerHeight );
+    renderer.setSize(window.innerWidth, window.innerHeight);
 }
 
-function loadModel(materials){
+function loadModel(materials) {
     var loader = new THREE.ObjectLoader();
-    loader.load(URL.model, function ( object ) {
+    loader.load(URL.model, function (object) {
         skinned_mesh = new THREE.SkinnedMesh(object.children[0].geometry, new THREE.MeshFaceMaterial(materials));
         scene.add(skinned_mesh);
         //helper = new THREE.SkeletonHelper( skinnedMesh );
@@ -202,17 +202,27 @@ function setupAnimations(urlArray) {
     whenDoneLoading(promises_, urlArray);
 }
 
-function whenDoneLoading(promises, urls){
+function whenDoneLoading(promises, urls) {
     // Combine all promises
     $.when.apply($, promises).then(function () {
-        console.log("done loading promises");
-        for (i = 0; i < arguments.length; i++) {
-            var clip = THREE.AnimationClip.parseAnimation(arguments[i][0].animations[0], arguments[i][0].bones);
-            manual_clips.push({clip: clip, index: urls[i].index});
-            console.log(clip, arguments[i]);
+        console.log("done loading promises", arguments);
+        var clip;
+        if (promises.length == 1){     // if we only need one animation
+            clip = THREE.AnimationClip.parseAnimation(arguments[0].animations[0], arguments[0].bones);
+            manual_clips.push({clip: clip, index: urls[0].index});
+        }
+        else {
+            for (i = 0; i < arguments.length; i++) {
+                clip = THREE.AnimationClip.parseAnimation(arguments[i][0].animations[0], arguments[i][0].bones);
+                manual_clips.push({clip: clip, index: urls[i].index});
+                console.log(clip, arguments[i]);
+            }
         }
 
-        if (!started) {playInit(); initScreen(false);}
+        if (!started) {
+            playInit();
+            initScreen(false);
+        }
         else {
             if (estimateIfCanSign(total_signs, can_be_signed)) {     // if we have enough data to sign
                 if (URL.non_manual_names.length > 0) { // if no non manuals are needed, skip this step
@@ -232,15 +242,15 @@ function whenDoneLoading(promises, urls){
                     }
                 }
                 // display message
-                flashScreen('CANNOT DISPLAY');
+                flashScreen(true,'CANNOT DISPLAY');
                 Interface.disableSpinner('cssload-container');  // stop loading
             }
         }
-    }, function(){  // if any of the animations cannot be found we throw an error and replace the
-                    // not found json with the unknown
-        console.log('error',promises);
-        for (i = 0; i < promises.length; i++){
-            if(promises[i].status == 404){
+    }, function () {  // if any of the animations cannot be found we throw an error and replace the
+        // not found json with the unknown
+        console.log('error', promises);
+        for (i = 0; i < promises.length; i++) {
+            if (promises[i].status == 404) {
                 can_be_signed -= 1;
                 promises[i] = $.getJSON('../static/res/animations/init/unknown_0.js');
             }
@@ -250,14 +260,14 @@ function whenDoneLoading(promises, urls){
 }
 
 // this function sets up the non-manual animations for the clips
-function setupNonManual(){
+function setupNonManual() {
     counter = 0;
-    URL.non_manual_names.forEach(function (url, i){
-        var animations_url = '../static/res/animations/non-manual/' +url + '.js';
-        $.getJSON(animations_url, function (json){
+    URL.non_manual_names.forEach(function (url, i) {
+        var animations_url = '../static/res/animations/non-manual/' + url + '.js';
+        $.getJSON(animations_url, function (json) {
             clip = THREE.AnimationClip.parseAnimation(json.animations[0], json.bones);
             updateNonManualClipList(clip);
-            counter+=1;
+            counter += 1;
             if (counter == URL.non_manual_names.length) {    // once we have loaded all the non_manual_clips, go on to the next step
                 console.log('done loading non manual', non_manual_clips);
                 display_translation = true;
@@ -266,17 +276,17 @@ function setupNonManual(){
     });
 }
 
-function updateNonManualClipList(clip){
+function updateNonManualClipList(clip) {
 
     NON_MAN_VARS.clips_list.push(clip);       // used to keep track of playing status
 
-    for (i = 0; i<non_manual_clips.length; i++){
-        for (j = 0; j<non_manual_clips[i].start.length; j++){     // start
+    for (i = 0; i < non_manual_clips.length; i++) {
+        for (j = 0; j < non_manual_clips[i].start.length; j++) {     // start
             if (non_manual_clips[i].start[j] == clip.name) {
                 non_manual_clips[i].start[j] = clip;      // replace with clip object
             }
         }
-        for (j = 0; j<non_manual_clips[i].end.length; j++){   // end
+        for (j = 0; j < non_manual_clips[i].end.length; j++) {   // end
             if (non_manual_clips[i].end[j] == clip.name) {
                 non_manual_clips[i].end[j] = clip;      // replace with clip object
             }
@@ -284,42 +294,42 @@ function updateNonManualClipList(clip){
     }
 }
 
-function estimateIfCanSign(total, can_sign){
+function estimateIfCanSign(total, can_sign) {
     console.log(total, can_sign);
 
     // if more than 30% of the sentene cannot be signed we don't show anything
     // if translate is pressed again the signs will be played anyway
-    ratio = can_sign/total;
+    ratio = can_sign / total;
     console.log(ratio);
     return ratio >= 0.3;
 }
 
-function playInit(){
+function playInit() {
     // play idle and blinking first
     mixer.clipAction(manual_clips[0].clip).play();  // play blinking and idle
     mixer.clipAction(manual_clips[1].clip).play();
 }
 
-function resetClipAndUrlArrays(){
+function resetClipAndUrlArrays() {
     URL.reset();      // reset animation urls
     manual_clips.length = 2;   // remove all elements except the first two (idle and blinking)
     NON_MAN_VARS.clips_list = [];
 }
 
-function playAnimationSequence(){
+function playAnimationSequence() {
 
     /** first step **/
-    if(firstStep){
+    if (firstStep) {
         console.log("at first step");
 
         // set up the next clip to be interpolated
-        mixer.clipAction(manual_clips[fadeCounter+1].clip).setLoop(THREE.LoopOnce);
-        mixer.clipAction(manual_clips[fadeCounter+1].clip).reset();
-        mixer.clipAction(manual_clips[fadeCounter+1].clip).play();
+        mixer.clipAction(manual_clips[fadeCounter + 1].clip).setLoop(THREE.LoopOnce);
+        mixer.clipAction(manual_clips[fadeCounter + 1].clip).reset();
+        mixer.clipAction(manual_clips[fadeCounter + 1].clip).play();
         // set modifiers (needs to be done here)
-        modifierLoop(manual_clips[fadeCounter+1]);
+        modifierLoop(manual_clips[fadeCounter + 1]);
 
-        mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter+1].clip), interpolation_speed, false);
+        mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), interpolation_speed, false);
 
         // set interface changes
         colorGloss();
@@ -329,8 +339,8 @@ function playAnimationSequence(){
         continuousStep = true;
     }
 
-    if(continuousStep){
-        if(URL.manual.length > 1) {  // if we only have to play 1 animation, we skip the middle step
+    if (continuousStep) {
+        if (URL.manual.length > 1) {  // if we only have to play 1 animation, we skip the middle step
 
             // TEMPORARY REMOVE LATER
             // REMEMBER TO PAUSE LIKE BELOW FOR NON MANUAL CLIPS
@@ -340,9 +350,9 @@ function playAnimationSequence(){
                 mixer.clipAction(manual_clips[fadeCounter].clip).paused = true;  // pause current clip
 
                 // if the same letter repeats, we need to change its name
-                if(manual_clips[fadeCounter].clip.name == manual_clips[fadeCounter+1].clip.name){
-                    manual_clips[fadeCounter+1].clip.name += '_1';
-                    console.log(manual_clips[fadeCounter+1].clip.name);
+                if (manual_clips[fadeCounter].clip.name == manual_clips[fadeCounter + 1].clip.name) {
+                    manual_clips[fadeCounter + 1].clip.name += '_1';
+                    console.log(manual_clips[fadeCounter + 1].clip.name);
                 }
 
                 // setup next clip like in first step
@@ -351,7 +361,7 @@ function playAnimationSequence(){
                 mixer.clipAction(manual_clips[fadeCounter + 1].clip).play();
 
                 // set modifiers (needs to be done here)
-                modifierLoop(manual_clips[fadeCounter+1]);
+                modifierLoop(manual_clips[fadeCounter + 1]);
 
                 mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), interpolation_speed, false);
 
@@ -365,17 +375,17 @@ function playAnimationSequence(){
                 fadeCounter++;
             }
         }
-        else{
+        else {
             continuousStep = false;
             finalStep = true;
         }
     }
 
     /** final step **/
-    if(finalStep){
+    if (finalStep) {
 
         // pause clip to have time to fade
-        if(mixer.clipAction(manual_clips[fadeCounter].clip).time > (manual_clips[fadeCounter].clip.duration-0.1)) { // this line is identical
+        if (mixer.clipAction(manual_clips[fadeCounter].clip).time > (manual_clips[fadeCounter].clip.duration - 0.1)) { // this line is identical
             console.log("at final step");
             mixer.clipAction(manual_clips[fadeCounter].clip).paused = true;
             mixer.clipAction(manual_clips[1].clip).reset();     // assuming idle is the second clip ALWAYS
@@ -384,7 +394,7 @@ function playAnimationSequence(){
             // set interface changes
             Interface.resetAllGloss();
 
-            if(auto_cam && first_person){
+            if (auto_cam && first_person) {
                 swapCamera();
             }
 
@@ -394,10 +404,10 @@ function playAnimationSequence(){
     }
 }
 
-function playNonManualSequence(sign_index){
+function playNonManualSequence(sign_index) {
 
-    if (sign_index != NON_MAN_VARS.current_index){      // if we change sign
-        console.log('sign_index '+sign_index);
+    if (sign_index != NON_MAN_VARS.current_index) {      // if we change sign
+        console.log('sign_index ' + sign_index);
         nonManualLoop(sign_index);                                // go through the non manual loop to set clips
 
         //modifierLoop(sign_index);           // do the same for the modifiers
@@ -406,7 +416,7 @@ function playNonManualSequence(sign_index){
     }
 }
 
-function nonManualLoop(sign_index){
+function nonManualLoop(sign_index) {
 
     if (sign_index < non_manual_clips.length && sign_index >= 0) {
         // for any clip that begins at this point (given by the clip index that is playing)
@@ -420,7 +430,7 @@ function nonManualLoop(sign_index){
             clip_names.push(clips[i].name);
         }
         if (clip_names.length > 0) {
-            Interface.showNonManual(clip_names, 500/animation_speed);        // show the non manual features being used at this time
+            Interface.showNonManual(clip_names, 500 / animation_speed);        // show the non manual features being used at this time
         }
     }
 
@@ -436,55 +446,55 @@ function nonManualLoop(sign_index){
     }
 }
 
-function checkStatusNonManualClips(){
+function checkStatusNonManualClips() {
     var clips = NON_MAN_VARS.clips_list;
-    for (i = 0; i < clips.length; i++){
+    for (i = 0; i < clips.length; i++) {
         if (mixer.clipAction(clips[i]).time > (clips[i].duration - 0.1)) {
             mixer.clipAction(clips[i]).paused = true;  // pause current clip
         }
     }
 }
 
-function modifierLoop(clip){
-    mod_list =URL.modifiers[clip.index].modifiers;
-    if (mod_list.length > 0){  // if there is a modifier applied to the sign at this index, apply it
+function modifierLoop(clip) {
+    mod_list = URL.modifiers[clip.index].modifiers;
+    if (mod_list.length > 0) {  // if there is a modifier applied to the sign at this index, apply it
         //console.log("modifier " +sign_index+ ' '+mod_list);
-        for (i = 0; i< mod_list.length; i++){
+        for (i = 0; i < mod_list.length; i++) {
             //console.log(manual_clips[fadeCounter]);
             applyModifier(mod_list[i], clip.clip);
         }
-        Interface.showNonManual(mod_list, 500/animation_speed);
+        Interface.showNonManual(mod_list, 500 / animation_speed);
     }
 }
 
 // if a modifier applies to this sign, we check the mod type and change the clip
-function applyModifier(mod, clip){
+function applyModifier(mod, clip) {
     // uses the TWEEN library
 
     var tween = new TWEEN.Tween(mixer.clipAction(clip));
-    var duration = (clip.duration-0.3)*1000/animation_speed;    // milliseconds
+    var duration = (clip.duration - 0.3) * 1000 / animation_speed;    // milliseconds
 
     console.log(mod, clip, duration, mixer.clipAction(clip).timeScale, tween);
 
-    if (mod == 'cp'){       // comparartive = small hold at the beginning and sign faster
+    if (mod == 'cp') {       // comparartive = small hold at the beginning and sign faster
         mixer.clipAction(clip).paused = true;
-        mixer.clipAction(clip).timeScale = 0.2*animation_speed;
-        tween.to({timeScale: animation_speed*1.5}, duration)
-            .delay(duration/3)
+        mixer.clipAction(clip).timeScale = 0.2 * animation_speed;
+        tween.to({timeScale: animation_speed * 1.5}, duration)
+            .delay(duration / 3)
             .easing(TWEEN.Easing.Quadratic.InOut)
             //.onUpdate(function() {console.log("tween changed "+this.timeScale);} )
             .start(); // interpolate to a faster timescale for the duration of the clip - 0.3
     }
-    else if (mod == 'sp'){  // superlative = long hold and sign even faster
+    else if (mod == 'sp') {  // superlative = long hold and sign even faster
         mixer.clipAction(clip).paused = true;
-        mixer.clipAction(clip).timeScale = 0.1*animation_speed;
-        tween.to({timeScale: animation_speed*1.7}, duration)
-            .delay(duration/1.5)
+        mixer.clipAction(clip).timeScale = 0.1 * animation_speed;
+        tween.to({timeScale: animation_speed * 1.7}, duration)
+            .delay(duration / 1.5)
             .easing(TWEEN.Easing.Quartic.InOut)
             //.onUpdate(function() {console.log("tween changed "+this.timeScale);} )
             .start(); // interpolate to a faster timescale for the duration of the clip - 0.3
     }
-    else if (mod == 'pause'){   // hold at the end of the clip
+    else if (mod == 'pause') {   // hold at the end of the clip
         console.log('pause detected');
         //mixer.clipAction(clip).duration = clip.duration+2.0;  // add some more delay
         clip.duration += 0.2 / animation_speed;
@@ -492,9 +502,9 @@ function applyModifier(mod, clip){
 }
 
 // only gets called when we change the speed
-function updateSpeed(speed){
+function updateSpeed(speed) {
     //console.log('updating speed');
-    for (i = 0; i<manual_clips.length; i++) {
+    for (i = 0; i < manual_clips.length; i++) {
         // this is because of a mistake during the animations
         //console.log(i);
         s = speed;
@@ -505,27 +515,27 @@ function updateSpeed(speed){
         }
         mixer.clipAction(manual_clips[i].clip).setEffectiveTimeScale(s);
     }
-    for (i=0; i < NON_MAN_VARS.clips_list.length; i++){
+    for (i = 0; i < NON_MAN_VARS.clips_list.length; i++) {
         mixer.clipAction(NON_MAN_VARS.clips_list[i]).setEffectiveTimeScale(speed);
     }
     updateInterpolation(speed);
 }
 
-function updateInterpolation(speed){
-    if (speed > 1.5){   // we keep the standard interpolation for anything higher than 1.0
+function updateInterpolation(speed) {
+    if (speed > 1.5) {   // we keep the standard interpolation for anything higher than 1.0
         interpolation_speed = 0.3;
     }
-    else if (speed < 0.5){
+    else if (speed < 0.5) {
         interpolation_speed = 3.0;
     }
-    else{   // else we calculate the correct speed (should be 1.0 for speed = 0.5)
-        interpolation_speed = 0.5/speed;
+    else {   // else we calculate the correct speed (should be 1.0 for speed = 0.5)
+        interpolation_speed = 0.5 / speed;
     }
 }
 
-function autoChangeCamera(counter){
-    if(swap_counter != counter) {
-        if(URL.manual[counter].path == 'alphabet' && !first_person){ // if the sign is fingerspelled, switch to fpv
+function autoChangeCamera(counter) {
+    if (swap_counter != counter) {
+        if (URL.manual[counter].path == 'alphabet' && !first_person) { // if the sign is fingerspelled, switch to fpv
             swapCamera(500);
         }
         else if (URL.manual[counter].path != 'alphabet' && first_person) {
@@ -537,7 +547,7 @@ function autoChangeCamera(counter){
     }
 }
 
-function swapCamera(speed_){
+function swapCamera(speed_) {
 
     var speed = (speed_ !== undefined) ? speed_ : 1500;     // default value
 
@@ -550,23 +560,31 @@ function swapCamera(speed_){
     camera_tween = new TWEEN.Tween(camera);
     target_tween = new TWEEN.Tween(camera_target.position);
 
-    if (first_person) {toWhat = FPS_CAM_VARS; flashScreen(false,'First Person');}
-    else {toWhat = CAM_VARS; flashScreen(false,'Default View');}
+    if (first_person) {
+        toWhat = FPS_CAM_VARS;
+        flashScreen(false, 'First Person');
+    }
+    else {
+        toWhat = CAM_VARS;
+        flashScreen(false, 'Default View');
+    }
 
     controls.enabled = toWhat.controls_enabled;
-    position_tween.to({x: toWhat.position.x, y: toWhat.position.y, z:toWhat.position.z}, speed).start();
-    camera_tween.to({near:toWhat.near, fov:toWhat.fov}, speed).start();
+    position_tween.to({x: toWhat.position.x, y: toWhat.position.y, z: toWhat.position.z}, speed).start();
+    camera_tween.to({near: toWhat.near, fov: toWhat.fov}, speed).start();
     target_tween.to({z: toWhat.targetZ}, speed)
-        .onUpdate(function(){ onWindowResize();}).start();
-        //.onComplete(renderer.setSize( window.innerWidth, window.innerHeight));
+        .onUpdate(function () {
+            onWindowResize();
+        }).start();
+    //.onComplete(renderer.setSize( window.innerWidth, window.innerHeight));
 }
 
 /*********** MAIN ANIMATION LOOP ************/
 function animate() {
 
-    requestAnimationFrame( animate );
+    requestAnimationFrame(animate);
 
-    if(display_translation){ // for testing, will normally be activated once the animation sequence has been formed
+    if (display_translation) { // for testing, will normally be activated once the animation sequence has been formed
         console.log('starting');
 
         Interface.disableSpinner('cssload-container');  // stop loading
@@ -582,11 +600,11 @@ function animate() {
 
     playAnimationSequence();
 
-    if(mixer) {
+    if (mixer) {
         mixer.update(clock.getDelta());
 
         // should move all of this somewhere else
-        if(firstStep || continuousStep || finalStep) {
+        if (firstStep || continuousStep || finalStep) {
             if (paused) {
                 mixer.clipAction(manual_clips[0].clip).paused = true;      // also stop the blinking : will have to apply to all animations (facial expressions etc)
                 mixer.clipAction(manual_clips[fadeCounter].clip).paused = true;
@@ -596,24 +614,24 @@ function animate() {
                 mixer.clipAction(manual_clips[fadeCounter].clip).paused = false;
             }
 
-            if (auto_cam){
-                autoChangeCamera(fadeCounter-2);
+            if (auto_cam) {
+                autoChangeCamera(fadeCounter - 2);
             }
 
-            if ( NON_MAN_VARS.clips_list.length > 0) {      // no point in doing this if the lists are empty){
+            if (NON_MAN_VARS.clips_list.length > 0) {      // no point in doing this if the lists are empty){
                 playNonManualSequence(manual_clips[fadeCounter].index); // get the current clip index and pass it
                 checkStatusNonManualClips();        // for pausing
             }
         }
 
         // if cancelled reset all variables to initial state
-        if(cancelled){
+        if (cancelled) {
             resetAllManualVars();
             resetNonManual();
         }
 
         // reset variables to first state
-        if(done){
+        if (done) {
             Interface.play_pause_button.pause();     // set back to play
             resetNonManual();
             done = false;
@@ -631,7 +649,7 @@ function render() {
     TWEEN.update();     // for the modifiers we use TWEEN
 }
 
-function resetAllManualVars(){
+function resetAllManualVars() {
     firstStep = false;
     continuousStep = false;
     finalStep = true;
@@ -644,24 +662,24 @@ function resetAllManualVars(){
 }
 
 // when cancelled or done with the animation loop,
-function resetNonManual(){
+function resetNonManual() {
     var clips = NON_MAN_VARS.clips_list;
-    for (i = 0; i < clips.length; i++){
+    for (i = 0; i < clips.length; i++) {
         mixer.clipAction(clips[i]).crossFadeTo(mixer.clipAction(manual_clips[1].clip), interpolation_speed, false);  // fade out at the end to be sure
     }
 }
 
-function colorGloss(){
+function colorGloss() {
     // if current gloss is unknown
     var exists = true;
-    if (manual_clips[fadeCounter+1].clip.name.indexOf('unknown_0') > -1){   // check if name is (or contains unknown_0, in case it is repeated)
+    if (manual_clips[fadeCounter + 1].clip.name.indexOf('unknown_0') > -1) {   // check if name is (or contains unknown_0, in case it is repeated)
         exists = false
     }
 
-    Interface.highlightGloss(fadeCounter-1, exists);    // temporary solution for accessing the div id, (we go back one because of the idle and blinking)
-    Interface.resetGloss(fadeCounter-2);        // could also set the id directly to match fadeCounter?
+    Interface.highlightGloss(fadeCounter - 1, exists);    // temporary solution for accessing the div id, (we go back one because of the idle and blinking)
+    Interface.resetGloss(fadeCounter - 2);        // could also set the id directly to match fadeCounter?
 }
-function flashScreen(flash,str){
+function flashScreen(flash, str) {
     var colour = "#333333";
     if (flash) {
         $('.flash').fadeIn(100).delay(200).fadeOut(200);
@@ -673,12 +691,12 @@ function flashScreen(flash,str){
         .fadeIn(100).delay(2000).fadeOut(400);
 }
 
-function initScreen(status){
-    if(status){
+function initScreen(status) {
+    if (status) {
         $('#curtain').show();
         $('#notification-text').html("<span style='color: #ffffff'>Loading model...</span>").show();
     }
-    else{
+    else {
         $('#curtain').fadeOut(500);
         $('#notification-text').fadeOut(500);
     }
@@ -686,7 +704,7 @@ function initScreen(status){
 
 /// INTERFACE RELATED STUFF
 
-$('#translate').on('click', function() {
+$('#translate').on('click', function () {
 
     console.log("clicked start");
 
@@ -750,20 +768,20 @@ $('#translate').on('click', function() {
     }
 });
 
-$('#swap').on('click', function() {
+$('#swap').on('click', function () {
     //firstPerson = !firstPerson;
     swapCamera();
 });
 
-$('#stop').on('click', function() {
-    if(started){
+$('#stop').on('click', function () {
+    if (started) {
         cancelled = true;
     }
 });
 
-$('#play-pause').on('click', function(){
+$('#play-pause').on('click', function () {
     // will add if (animation.playing) {  or something, otherwise you cant switch or click
-    if(started) {
+    if (started) {
         paused = !paused;
         console.log(paused);
         Interface.play_pause_button.switch();   // switch icons
@@ -771,43 +789,45 @@ $('#play-pause').on('click', function(){
 });
 
 // EXAMPLE SENTENCES SELECTION
-$('#select').on('click', function(){
+$('#select').on('click', function () {
     // open the drop down menu with options and fill the English field with the selected sentence
     //$('.sub-menu').show().animate();
     $('.sub-menu').toggle('fast');
 
-    $('ul.sub-menu li').unbind().click(function(){
+    $('ul.sub-menu li').unbind().click(function () {
         $(this).parents('ul.sub-menu').hide('fast');
 
         var text = $(this).text();
         $('#english').val(text);
+        $("#translate").attr("class","button");
 
         return false;
     });
 
     // for hiding the menu once we've clicked outside
-    $(window).one('click',function() {
-      $('.sub-menu').hide('fast');
-    }); event.stopPropagation();
+    $(window).one('click', function () {
+        $('.sub-menu').hide('fast');
+    });
+    event.stopPropagation();
 });
 
 /** INFO MENU JS **/
 
-$('#info-button').on('click', function(){
+$('#info-button').on('click', function () {
     $('.overlay').slideToggle('fast');
     $('#options').toggle();
 });
 
-$('a#showdir').on('click', function(){
+$('a#showdir').on('click', function () {
     // temporary
-    if (Interface.available_signs_show){
+    if (Interface.available_signs_show) {
         $('#dir-result').html('');
         Interface.available_signs_show = false;
     }
     else {
         $.getJSON('/_print_dir', function (data) {
             result = data.result;
-            var string_res = '';
+            var string_res = '<b>Total signs: '+result.length+'</b><br/>';
             for (i = 0; i < result.length; i++) {
                 if (result[i].substr(result[i].length - 1) == '/') {
                     string_res += '<br/><b>' + result[i] + '</b><br/>';
@@ -825,28 +845,59 @@ $('a#showdir').on('click', function(){
 
 /** OPTIONS MENU JS **/
 
-$('#options').on('click', function(){
+$('#options').on('click', function () {
     $('.overlay-menu').slideToggle('fast');
     $('#info-button').toggle();
 });
 
 // JSLIDER
 var slider = new Slider('#ex1', {
-	formatter: function(value) {
+    formatter: function (value) {
         animation_speed = value.toFixed(1);
         updateSpeed(animation_speed);
-		$('#speed').html(animation_speed);
-	}
+        $('#speed').html(animation_speed);
+    }
 });
 
-$('#non-man-help').on('click', function() {
+$('#non-man-help').on('click', function () {
     Interface.show_non_manual = this.checked;
 });
 
-$('#auto-camera').on('click', function() {
+$('#auto-camera').on('click', function () {
     auto_cam = this.checked;
 });
 
-$(document).ready(function(){
+/** for checking spelling/correctness */
+//on keyup, start the countdown
+Interface.$input.on('keyup', function () {
+    clearTimeout(Interface.typingTimer);
+    Interface.typingTimer = setTimeout(doneTyping, Interface.doneTypingInterval);
+});
+
+//on keydown, clear the countdown
+Interface.$input.on('keydown', function () {
+    Interface.$input.css('color', 'black');
+    clearTimeout(Interface.typingTimer);
+});
+
+//user is "finished typing," do something
+function doneTyping() {
+    var txt = Interface.$input.val();
+    //console.log(txt);
+    if (endsWith(txt,".") || endsWith(txt,"!") || endsWith(txt,"?")){
+        $("#translate").attr("class","button");
+    }
+    else {
+        Interface.$input.css('color', 'red');
+        $("#translate").attr("class","button disabled");
+        flashScreen(false, "Missing punctuation");
+    }
+}
+
+$(document).ready(function () {
     initScreen(true);
 });
+
+function endsWith(str, suffix) {
+    return str.indexOf(suffix, str.length - suffix.length) !== -1;
+}
