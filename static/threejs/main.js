@@ -827,15 +827,18 @@ $('a#showdir').on('click', function () {
     else {
         $.getJSON('/_print_dir', function (data) {
             result = data.result;
-            var string_res = '<b>Total signs: '+result.length+'</b><br/>';
+            var number_of_signs = 0;
+            var string_res = '';//'<b>Total signs: '+result.length+'</b><br/>';
             for (i = 0; i < result.length; i++) {
                 if (result[i].substr(result[i].length - 1) == '/') {
                     string_res += '<br/><b>' + result[i] + '</b><br/>';
                 }
                 else {
                     string_res += result[i] + ', ';
+                    number_of_signs++;
                 }
             }
+            string_res = '<b>Total signs: '+number_of_signs+'</b><br/>'+string_res;
             console.log(string_res);
             $('#dir-result').html(string_res);
             Interface.available_signs_show = true;
