@@ -21,9 +21,6 @@ class Parser:
         except requests.exceptions.Timeout:
             print "Response too slow, using offline parser"
 
-        # for testing
-        status_code = 1
-
         if (status_code == 200): # if it's fine
             self.online = True
         else:
