@@ -248,11 +248,19 @@ function whenDoneLoading(promises, urls) {
         }
     }, function () {  // if any of the animations cannot be found we throw an error and replace the
         // not found json with the unknown
-        console.log('error', promises);
+        console.log('error', promises, urls);
         for (i = 0; i < promises.length; i++) {
             if (promises[i].status == 404) {
-                can_be_signed -= 1;
-                promises[i] = $.getJSON('../static/res/animations/init/unknown_0.js');
+
+                //console.log(urls[i].path.replace('/verbs',''));
+                if(urls[i].path.substr( - 5) == 'verbs'){           // if the verb can't be found, try in the nouns as it may be there to avoid being repeated
+                    urls[i].path = urls[i].path.replace('verbs','');
+                    promises[i] = $.getJSON('../static/res/animations/' + urls[i].path + urls[i].name + '.js');
+                }
+                else {
+                    can_be_signed -= 1;
+                    promises[i] = $.getJSON('../static/res/animations/init/unknown_0.js');
+                }
             }
         }
         whenDoneLoading(promises, urls);
@@ -789,7 +797,7 @@ $('#play-pause').on('click', function () {
 });
 
 // EXAMPLE SENTENCES SELECTION
-$('#select').on('click', function () {
+$('#select').on('click', function (event) {
     // open the drop down menu with options and fill the English field with the selected sentence
     //$('.sub-menu').show().animate();
     $('.sub-menu').toggle('fast');
@@ -827,19 +835,27 @@ $('a#showdir').on('click', function () {
     else {
         $.getJSON('/_print_dir', function (data) {
             result = data.result;
+            console.log(result);
             var number_of_signs = 0;
             var string_res = '';//'<b>Total signs: '+result.length+'</b><br/>';
+            var sub = false;
             for (i = 0; i < result.length; i++) {
-                if (result[i].substr(result[i].length - 1) == '/') {
+                if (result[i].trim() == 'verbs/') {}// do nothing
+                else if (result[i].substr(-1) == '/') {
                     string_res += '<br/><b>' + result[i] + '</b><br/>';
+                    sub = true;
                 }
                 else {
-                    string_res += result[i] + ', ';
+                    if (sub) {
+                        string_res += result[i] + ', ';
+                        sub = false;
+                    }
+                    else string_res += result[i].trim() + ', ';
                     number_of_signs++;
                 }
             }
             string_res = '<b>Total signs: '+number_of_signs+'</b><br/>'+string_res;
-            console.log(string_res);
+            //console.log(string_res);
             $('#dir-result').html(string_res);
             Interface.available_signs_show = true;
         });

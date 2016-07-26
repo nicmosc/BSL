@@ -604,7 +604,10 @@ class BSLSentence:
             else:
                 obj['name'] = w.root
                 obj['index'] = w.index
-                obj['path'] = 'words/'+w.root[0]  # arranged in alphabetical order
+                if w.wn_tag == 'v':  # if it's a verb we specify that
+                    obj['path'] = 'words/'+w.root[0]+'/verbs'
+                else:
+                    obj['path'] = 'words/'+w.root[0]  # arranged in alphabetical order
                 word_index_js.append(json.dumps(obj))
 
         # now get the non_manual stuff
@@ -685,6 +688,9 @@ class Word:
     is_negated = False      # if the word is connected to a neg, it is negated (used for nouns, verbs, adjectives)
     is_questioned = False   # if word is part of a question
 
+
+    wn_tag = None
+
     def __init__(self, text, tag, i):
         self.POStag = tag
         self.index = i
@@ -703,10 +709,10 @@ class Word:
         elif self.POStag == 'IN':
             self.root = self.text
         else:
-            wn_tag = penn_to_wn(tag)
-            if wn_tag != None:
-                self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=wn_tag).lower()
-                self.setCategory(wn_tag)
+            self.wn_tag = penn_to_wn(tag)
+            if self.wn_tag != None:
+                self.root = EnglishSentence.lemmatizer.lemmatize(self.text, pos=self.wn_tag).lower()
+                self.setCategory(self.wn_tag)
             else:
                 self.root = self.text
             # after getting the cateogory
