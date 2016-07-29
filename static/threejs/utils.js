@@ -56,6 +56,9 @@ function INTERFACE() {
     this.available_signs_show = false;
     this.show_non_manual = false;       // will display the non-manual features happening at that time
     
+    this.gloss_counter_diff = 0;        // if we have compounds the counters won't match, so we make the difference
+    this.gcd_has_changed = false;
+    
     // for checking the correct spelling of input
     this.typingTimer = 0;
     this.doneTypingInterval = 1000;
@@ -78,15 +81,19 @@ INTERFACE.prototype = {
         document.getElementById(div).innerHTML = text;
         this.current_gloss = text;
     },
-    highlightGloss: function(id, exists){
+    highlightGloss: function(id, exists, compound){
         if(id >= 0 && id < this.gloss_length) {
-            if (exists) {   // if the sign for gloss is found
+            if (compound && exists){
+                document.getElementById(id).style.color = 'lightgreen';
+                document.getElementById(id).style.textShadow = "lightgreen 0 0 5px";
+            }
+            else if (exists) {   // if the sign for gloss is found
                 document.getElementById(id).style.color = '#3366ff';
                 document.getElementById(id).style.textShadow = "#3366ff 0 0 5px";
             }
             else{   // if unknown color red
-                document.getElementById(id).style.color = '#ff0000';
-                document.getElementById(id).style.textShadow = "#ff0000 0 0 5px";
+                document.getElementById(id).style.color = 'red';
+                document.getElementById(id).style.textShadow = 'red 0 0 5px';
             }
         }
     },
@@ -100,8 +107,12 @@ INTERFACE.prototype = {
         $("span").css( 'color', document.getElementById('bsl').style.color)
             .css( 'text-shadow', document.getElementById('bsl').style.textShadow);
     },
-    showNonManual: function(tags, speed){
-        if(this.show_non_manual) {
+    resetGcd: function(){
+        this.gloss_counter_diff = 0;
+        this.gcd_has_changed = false;
+    },
+    showNonManual: function(tags, speed, override_show){
+        if(this.show_non_manual || override_show) {
             $('#non-manual-text').html(tags.join(', '));
             $('.helper').fadeIn(200).delay(speed).fadeOut(200);
         }

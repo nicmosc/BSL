@@ -340,7 +340,7 @@ function playAnimationSequence() {
         mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), interpolation_speed, false);
 
         // set interface changes
-        colorGloss();
+        colorGloss(fadeCounter);
 
         fadeCounter++;
         firstStep = false;
@@ -349,10 +349,7 @@ function playAnimationSequence() {
 
     if (continuousStep) {
         if (URL.manual.length > 1) {  // if we only have to play 1 animation, we skip the middle step
-
-            // TEMPORARY REMOVE LATER
-            // REMEMBER TO PAUSE LIKE BELOW FOR NON MANUAL CLIPS
-
+            
             // if the current clip has reached the end we pause it to have time to fade to the next one
             if (mixer.clipAction(manual_clips[fadeCounter].clip).time > (manual_clips[fadeCounter].clip.duration - 0.1)) {
                 mixer.clipAction(manual_clips[fadeCounter].clip).paused = true;  // pause current clip
@@ -371,10 +368,14 @@ function playAnimationSequence() {
                 // set modifiers (needs to be done here)
                 modifierLoop(manual_clips[fadeCounter + 1]);
 
-                mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), interpolation_speed, false);
+                // check if word is a compound I like lions and cats.
+
+                var compound_info = checkIfCompound();  // returns {counter, interpolation}
+
+                mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), compound_info.interpol, false);
 
                 // set interface changes
-                colorGloss();
+                colorGloss(compound_info.c);
 
                 if (fadeCounter == URL.manual.length) {   // if we reached the end of the animations, go to final step
                     continuousStep = false;
@@ -412,14 +413,32 @@ function playAnimationSequence() {
     }
 }
 
+function checkIfCompound(){
+
+    var counter = fadeCounter;
+    var interpolation = interpolation_speed;
+
+    if (URL.manual[counter-1].compound){    // if the word is a compound
+
+        counter -= URL.manual[counter-1].compound_index;
+        interpolation = 0.8 / animation_speed;      // change interpolation since it's a compound
+        Interface.gcd_has_changed = true;
+    }
+    else{
+        if (Interface.gcd_has_changed) {
+            Interface.gloss_counter_diff++;
+            Interface.gcd_has_changed = false;
+        }
+    }
+
+    return {c: counter - Interface.gloss_counter_diff, interpol: interpolation};
+}
+
 function playNonManualSequence(sign_index) {
 
     if (sign_index != NON_MAN_VARS.current_index) {      // if we change sign
         console.log('sign_index ' + sign_index);
         nonManualLoop(sign_index);                                // go through the non manual loop to set clips
-
-        //modifierLoop(sign_index);           // do the same for the modifiers
-
         NON_MAN_VARS.current_index = sign_index;        // update sign index
     }
 }
@@ -641,6 +660,7 @@ function animate() {
         // reset variables to first state
         if (done) {
             Interface.play_pause_button.pause();     // set back to play
+            Interface.resetGcd();
             resetNonManual();
             done = false;
             started = false;
@@ -677,15 +697,20 @@ function resetNonManual() {
     }
 }
 
-function colorGloss() {
+function colorGloss(counter) {
     // if current gloss is unknown
+    console.log("in color gloss",counter-1);
     var exists = true;
+    var compound = false;
     if (manual_clips[fadeCounter + 1].clip.name.indexOf('unknown_0') > -1) {   // check if name is (or contains unknown_0, in case it is repeated)
         exists = false
     }
+    if (URL.manual[fadeCounter-1].compound){
+        compound = true;
+    }
 
-    Interface.highlightGloss(fadeCounter - 1, exists);    // temporary solution for accessing the div id, (we go back one because of the idle and blinking)
-    Interface.resetGloss(fadeCounter - 2);        // could also set the id directly to match fadeCounter?
+    Interface.highlightGloss(counter - 1, exists, compound);    // temporary solution for accessing the div id, (we go back one because of the idle and blinking)
+    Interface.resetGloss(counter - 2);        // could also set the id directly to match fadeCounter?
 }
 function flashScreen(flash, str) {
     var colour = "#333333";

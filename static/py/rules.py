@@ -15,6 +15,8 @@ class Rules:
 
         self.combined_words = defaultdict(list)
 
+        self.compound_morphemes = defaultdict(str)
+
         # read the rules from the file
 
         # first open tree transforms
@@ -36,6 +38,9 @@ class Rules:
 
         self.readCombinedWords()    # load combined words from signbank
         #print self.combined_words
+
+        self.readCompoundMorphemes()    # load morphemes to create
+        print self.compound_morphemes
 
         for k,v in self.direct_translation.iteritems():
             print k
@@ -99,6 +104,21 @@ class Rules:
             for line in file:
                 split = line.strip().split(' ')
                 self.combined_words[split[0]].append(split[1:])
+            file.close()
+        except IOError:
+            print 'File ' + f_name + ' not found'
+
+    def readCompoundMorphemes(self):
+        f_name = 'compound_morphemes.txt'
+        try:
+            file = None
+            if self.APP:
+                file = open(join(APP_RULES, f_name), 'r')
+            else:
+                file = open(self.dir + f_name, 'r')
+            for line in file:
+                split = line.strip().split('->')
+                self.compound_morphemes[split[0]] = split[1]
             file.close()
         except IOError:
             print 'File ' + f_name + ' not found'
@@ -376,6 +396,11 @@ class Rules:
                             del words[1+i]
                         break
             i+=1
+
+    def checkForCompounds(self, i_sentence):
+        for word in i_sentence.words:
+            if self.compound_morphemes[word.root]:       # if there exist a mapping rule for compound morpheme
+                word.compound_morpheme = self.compound_morphemes[word.root]
 
 def subfinder(mylist, pattern):
     return [(i, i + len(pattern)) for i in range(len(mylist)) if mylist[i:i + len(pattern)] == pattern]

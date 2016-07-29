@@ -65,6 +65,8 @@ class Analyser:
 
         i_sentence.resetWordPositions()     # to make JS generation easier
 
+        self.rules.checkForCompounds(i_sentence)
+
         i_sentence.toString()       # print once to see results
 
         bsl_data = i_sentence.setNonManualFeatures()

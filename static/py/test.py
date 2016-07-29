@@ -27,7 +27,9 @@ def main():
         elif sent.split(' ')[0] == 'system_accuracy':
             systemAccuracy(sent)
         else:   # if we want to just test a sentence
-            print analyser.process(sent)[0]
+            result = analyser.process(sent)
+            print result[0] # gloss
+            print result[2] # js
 
 def tableResults(sent):
     f_name = sent.split(' ')[1]

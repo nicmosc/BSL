@@ -8,8 +8,6 @@ in /CD -> _ CD 		// any number following in e.g married in 1994 removes it
 WORDS
 there be -> _ _					// removes the existential there + is
 if it -> _ _						// removes the it in SBAR (cannot do tree, as 'if you' would match)
-as a -> _ _ 
-as an -> _ _
 have you -> _ you 				// remove any 'have you' questions
 time last -> past time
 year old -> _ age
@@ -20,6 +18,7 @@ week next -> next-week _
 day next -> next-day _
 year last -> last-year _
 week last -> last-week _
+as much as -> same _ _
 
 DT
 a->_
@@ -48,6 +47,7 @@ POS
 IN
 if->_
 because->why
+as->_
 
 MD
 will->_

@@ -204,7 +204,7 @@ class IntermediateSentence:
 
     def toString(self):
         # nicely prints all the details of the words
-        table_data = [['i', 'Word', 'POS', 'S-group', 'WN Category', 'Root', 'dep', 'dep-group','target','num_modified', 'negated', 'questioned']]
+        table_data = [['i', 'Word', 'POS', 'S-group', 'WN Category', 'Root', 'dep', 'dep-group','target','num_modified', 'negated', 'questioned', 'compound-morpheme']]
 
         for w in self.words:
             info = w.toString()
@@ -518,6 +518,7 @@ class IntermediateSentence:
 
         return container_list, containers_left
 
+
 def addPoss(indexes, gender):
     latest = 0
     for tpl in indexes:
@@ -601,13 +602,25 @@ class BSLSentence:
                         else:
                             obj['path'] = 'alphabet'
                         word_index_js.append(json.dumps(obj))
+
+            elif w.compound_morpheme:       # if it's not none
+                compound_index = 0
+                for free in w.compound_morpheme.split(' '):
+                    obj['name'] = free
+                    obj['index'] = w.index      # give them the same index
+                    # for now only handle non-verb compounds
+                    obj['path'] = 'words/'+free[0]
+                    obj['compound'] = True
+                    obj['compound_index'] = compound_index
+                    word_index_js.append(json.dumps(obj))
+                    compound_index += 1
             else:
                 obj['name'] = w.root
                 obj['index'] = w.index
                 if w.wn_tag == 'v':  # if it's a verb we specify that
-                    obj['path'] = 'words/'+w.root[0]+'/verbs'
+                    obj['path'] = 'words/' + w.root[0] + '/verbs'
                 else:
-                    obj['path'] = 'words/'+w.root[0]  # arranged in alphabetical order
+                    obj['path'] = 'words/' + w.root[0]  # arranged in alphabetical order
                 word_index_js.append(json.dumps(obj))
 
         # now get the non_manual stuff
@@ -664,12 +677,22 @@ class BSLSentence:
                 non_man[start_index][0].append(container.tag)
                 non_man[end_index][1].append(container.tag)
 
+# def makeObj(w):
+#     obj = {}
+#     obj['name'] = w.root
+#     obj['index'] = w.index
+#     if w.wn_tag == 'v':  # if it's a verb we specify that
+#         obj['path'] = 'words/' + w.root[0] + '/verbs'
+#     else:
+#         obj['path'] = 'words/' + w.root[0]  # arranged in alphabetical order
+#     return obj
+
 # this object will represent an english word with constructions such as
 # - text: actual word
 # - POS tag: as from Stanford
 # - index: position in the sentence (not array position)
 # - depIndex: position of the other word this word is related to, -1 if root
-# - root: i.e. it's simplest form e.g. root(trees) = tree, root(swimming) = swim
+# - root: i.e. its simplest form e.g. root(trees) = tree, root(swimming) = swim
 # - dependency: its role in the sentence
 
 class Word:
@@ -687,6 +710,9 @@ class Word:
     #facial_expr = ''        # the facial expression associated with the word
     is_negated = False      # if the word is connected to a neg, it is negated (used for nouns, verbs, adjectives)
     is_questioned = False   # if word is part of a question
+
+    compound_morpheme = None    # if it's a compound, before outputting we'll fetch the signs it is made of
+                                    # so that we print the root but display its components
 
 
     wn_tag = None
@@ -787,7 +813,7 @@ class Word:
     def toString(self):
 
         return [self.index, self.text.encode('ascii'), self.POStag.encode('ascii'), self.sent_group, self.category, self.root.encode('ascii'), \
-            self.dependency[0].encode('ascii'),self.dep_group, self.dependency[1].root, self.num_modified ,self.is_negated, self.is_questioned]
+            self.dependency[0].encode('ascii'),self.dep_group, self.dependency[1].root, self.num_modified ,self.is_negated, self.is_questioned, self.compound_morpheme]
 
     # this method will transform any proper noun into fingerspelled format (no need for rules as there are only a coupl
     def fingerSpell(self):
