@@ -238,7 +238,13 @@ function whenDoneLoading(promises, urls) {
                 console.log('cannot display', manual_clips);
                 for (i = 0; i < total_signs; i++) {
                     if (manual_clips[i + 2].clip.name == 'unknown_0') {
-                        Interface.highlightGloss(i, false);
+                        try {
+                            Interface.highlightGloss(i, false);
+                        } catch (e){
+                            if (e instanceof TypeError){
+                                console.log("cannot find gloss id in html "+i);
+                            }
+                        }
                     }
                 }
                 // display message
@@ -370,12 +376,12 @@ function playAnimationSequence() {
 
                 // check if word is a compound I like lions and cats.
 
-                var compound_info = checkIfCompound();  // returns {counter, interpolation}
+                var comp_counter = checkIfCompound();  // returns {counter, interpolation}
 
-                mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), compound_info.interpol, false);
+                mixer.clipAction(manual_clips[fadeCounter].clip).crossFadeTo(mixer.clipAction(manual_clips[fadeCounter + 1].clip), interpolation_speed, false);
 
                 // set interface changes
-                colorGloss(compound_info.c);
+                colorGloss(comp_counter);
 
                 if (fadeCounter == URL.manual.length) {   // if we reached the end of the animations, go to final step
                     continuousStep = false;
@@ -416,13 +422,15 @@ function playAnimationSequence() {
 function checkIfCompound(){
 
     var counter = fadeCounter;
-    var interpolation = interpolation_speed;
 
-    if (URL.manual[counter-1].compound){    // if the word is a compound
+    if (URL.manual[counter-1].compound && Interface.gloss_index != URL.manual[counter-1].index){    // if the word is a compound (same word)
 
         counter -= URL.manual[counter-1].compound_index;
-        interpolation = 0.8 / animation_speed;      // change interpolation since it's a compound
+        console.log("is compound", URL.manual[counter-1], manual_clips[fadeCounter+1].clip);
+
         Interface.gcd_has_changed = true;
+        mixer.clipAction(manual_clips[fadeCounter+1].clip).setEffectiveTimeScale(animation_speed*1.7);
+        mixer.clipAction(manual_clips[fadeCounter+2].clip).setEffectiveTimeScale(animation_speed*1.7);
     }
     else{
         if (Interface.gcd_has_changed) {
@@ -431,7 +439,9 @@ function checkIfCompound(){
         }
     }
 
-    return {c: counter - Interface.gloss_counter_diff, interpol: interpolation};
+    Interface.gloss_index = URL.manual[counter-1].index;
+
+    return counter - Interface.gloss_counter_diff;
 }
 
 function playNonManualSequence(sign_index) {
@@ -537,7 +547,7 @@ function updateSpeed(speed) {
         s = speed;
         if (i > 1) {
             if (URL.manual[i - 2].path == 'numbers' || URL.manual[i - 2].path == 'alphabet') {
-                s = speed * 1.5;
+                s = speed * 1.6;
             }
         }
         mixer.clipAction(manual_clips[i].clip).setEffectiveTimeScale(s);
@@ -741,6 +751,10 @@ $('#translate').on('click', function () {
 
     console.log("clicked start");
 
+    beginTranslate();
+});
+
+function beginTranslate(){
     var text = $('input[name="input_text"]').val();
 
     // start loading animation
@@ -799,7 +813,7 @@ $('#translate').on('click', function () {
         started = true;
         display_translation = true;
     }
-});
+}
 
 $('#swap').on('click', function () {
     //firstPerson = !firstPerson;
@@ -919,9 +933,14 @@ Interface.$input.on('keyup', function () {
 });
 
 //on keydown, clear the countdown
-Interface.$input.on('keydown', function () {
-    Interface.$input.css('color', 'black');
-    clearTimeout(Interface.typingTimer);
+Interface.$input.on('keydown', function (e) {
+    if (e.keyCode == 13 || e.which == 13 ){
+        if (Interface.can_begin_translate) beginTranslate();
+    }
+    else {
+        Interface.$input.css('color', 'black');
+        clearTimeout(Interface.typingTimer);
+    }
 });
 
 //user is "finished typing," do something
@@ -929,9 +948,11 @@ function doneTyping() {
     var txt = Interface.$input.val();
     //console.log(txt);
     if (endsWith(txt,".") || endsWith(txt,"!") || endsWith(txt,"?")){
+        Interface.can_begin_translate = true;
         $("#translate").attr("class","button");
     }
     else {
+        Interface.can_begin_translate = false;
         Interface.$input.css('color', 'red');
         $("#translate").attr("class","button disabled");
         flashScreen(false, "Missing punctuation");

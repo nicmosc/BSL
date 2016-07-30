@@ -12,6 +12,7 @@ NP -> JJ NN~ | NP -> NN~ JJ
 
 NP -> DT NN~ <> | NP -> NN~ DT <>
 NP -> DT RB JJ NN~ | NP -> NN~ DT RB JJ 
+NP -> RB JJ NN~ | NP -> NN~ RB JJ
 NP -> <> JJ NN~ | NP -> <> NN~ JJ
 NP -> <> ADJP NN~ | NP -> <> NN~ ADJP
 

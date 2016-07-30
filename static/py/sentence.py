@@ -148,7 +148,9 @@ class EnglishSentence:
         for k,v in self.subSentences.iteritems():
             print v
             tense = None
-            if v in [['VBD', 'VBG'],['VBD'],['VBZ', 'VBN'], ['VBP','VBN'], ['VBD', 'VB']]:
+            if v in [['VBD', 'VBG'],['VBD'], ['VBP','VBN'], ['VBD', 'VB']]:
+                tense = 'past'
+            elif v == ['VBZ', 'VBN'] and temp_verb_dict[k][0] == 'have':
                 tense = 'past'
             elif v == ['VBZ', 'VBG']:
                 tense = 'future'
@@ -609,7 +611,7 @@ class BSLSentence:
                     obj['name'] = free
                     obj['index'] = w.index      # give them the same index
                     # for now only handle non-verb compounds
-                    obj['path'] = 'words/'+free[0]
+                    obj['path'] = 'words/'+free[0]+'/verbs'
                     obj['compound'] = True
                     obj['compound_index'] = compound_index
                     word_index_js.append(json.dumps(obj))

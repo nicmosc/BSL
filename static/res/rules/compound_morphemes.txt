@@ -1,2 +1,5 @@
-blood->red liquid
-lion->cat big
+blood->red flow
+believe->think true
+check->see maybe
+promise->say true
+tiger->zebra animal

@@ -58,11 +58,13 @@ function INTERFACE() {
     
     this.gloss_counter_diff = 0;        // if we have compounds the counters won't match, so we make the difference
     this.gcd_has_changed = false;
+    this.gloss_index = 0;
     
     // for checking the correct spelling of input
     this.typingTimer = 0;
     this.doneTypingInterval = 1000;
     this.$input = $('#english');
+    this.can_begin_translate = false;
 }
 
 INTERFACE.prototype = {
@@ -84,8 +86,8 @@ INTERFACE.prototype = {
     highlightGloss: function(id, exists, compound){
         if(id >= 0 && id < this.gloss_length) {
             if (compound && exists){
-                document.getElementById(id).style.color = 'lightgreen';
-                document.getElementById(id).style.textShadow = "lightgreen 0 0 5px";
+                document.getElementById(id).style.color = '#33cc33';
+                document.getElementById(id).style.textShadow = "#33cc33 0 0 5px";
             }
             else if (exists) {   // if the sign for gloss is found
                 document.getElementById(id).style.color = '#3366ff';
@@ -110,6 +112,7 @@ INTERFACE.prototype = {
     resetGcd: function(){
         this.gloss_counter_diff = 0;
         this.gcd_has_changed = false;
+        this.gloss_index = 0;
     },
     showNonManual: function(tags, speed, override_show){
         if(this.show_non_manual || override_show) {
