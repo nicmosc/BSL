@@ -215,7 +215,7 @@ function whenDoneLoading(promises, urls) {
             for (i = 0; i < arguments.length; i++) {
                 clip = THREE.AnimationClip.parseAnimation(arguments[i][0].animations[0], arguments[i][0].bones);
                 manual_clips.push({clip: clip, index: urls[i].index});
-                console.log(clip, arguments[i]);
+                //console.log(clip, arguments[i]);
             }
         }
 
@@ -309,12 +309,12 @@ function updateNonManualClipList(clip) {
 }
 
 function estimateIfCanSign(total, can_sign) {
-    console.log(total, can_sign);
+    //console.log(total, can_sign);
 
     // if more than 30% of the sentene cannot be signed we don't show anything
     // if translate is pressed again the signs will be played anyway
     ratio = can_sign / total;
-    console.log(ratio);
+    //console.log(ratio);
     return ratio >= 0.3;
 }
 
@@ -363,7 +363,7 @@ function playAnimationSequence() {
                 // if the same letter repeats, we need to change its name
                 if (manual_clips[fadeCounter].clip.name == manual_clips[fadeCounter + 1].clip.name) {
                     manual_clips[fadeCounter + 1].clip.name += '_1';
-                    console.log(manual_clips[fadeCounter + 1].clip.name);
+                    //console.log(manual_clips[fadeCounter + 1].clip.name);
                 }
 
                 // setup next clip like in first step
@@ -447,7 +447,7 @@ function checkIfCompound(){
 function playNonManualSequence(sign_index) {
 
     if (sign_index != NON_MAN_VARS.current_index) {      // if we change sign
-        console.log('sign_index ' + sign_index);
+        //console.log('sign_index ' + sign_index);
         nonManualLoop(sign_index);                                // go through the non manual loop to set clips
         NON_MAN_VARS.current_index = sign_index;        // update sign index
     }
@@ -511,7 +511,7 @@ function applyModifier(mod, clip) {
     var tween = new TWEEN.Tween(mixer.clipAction(clip));
     var duration = (clip.duration - 0.3) * 1000 / animation_speed;    // milliseconds
 
-    console.log(mod, clip, duration, mixer.clipAction(clip).timeScale, tween);
+    //console.log(mod, clip, duration, mixer.clipAction(clip).timeScale, tween);
 
     if (mod == 'cp') {       // comparartive = small hold at the beginning and sign faster
         mixer.clipAction(clip).paused = true;
@@ -578,8 +578,6 @@ function autoChangeCamera(counter) {
         else if (URL.manual[counter].path != 'alphabet' && first_person) {
             swapCamera(500);
         }
-        console.log(URL.manual[counter]);
-        // if(URL.manual[counter-1])
         swap_counter = counter;
     }
 }
@@ -674,7 +672,6 @@ function animate() {
             resetNonManual();
             done = false;
             started = false;
-            console.log(paused, cancelled, done, started);
         }
     }
     render();
@@ -709,7 +706,6 @@ function resetNonManual() {
 
 function colorGloss(counter) {
     // if current gloss is unknown
-    console.log("in color gloss",counter-1);
     var exists = true;
     var compound = false;
     if (manual_clips[fadeCounter + 1].clip.name.indexOf('unknown_0') > -1) {   // check if name is (or contains unknown_0, in case it is repeated)
@@ -748,9 +744,6 @@ function initScreen(status) {
 /// INTERFACE RELATED STUFF
 
 $('#translate').on('click', function () {
-
-    console.log("clicked start");
-
     beginTranslate();
 });
 
@@ -774,11 +767,7 @@ function beginTranslate(){
 
             Interface.setGloss('bsl', data.result[0]);     // print the result on screen (gloss)
 
-            // once the animations starts playing we set the button to pause
-            //Interface.play_pause_button.pause();
-
             // use data.result[1] for the rest
-            console.log(data.result, URL.manual);
 
             resetClipAndUrlArrays();
 
@@ -830,7 +819,6 @@ $('#play-pause').on('click', function () {
     // will add if (animation.playing) {  or something, otherwise you cant switch or click
     if (started) {
         paused = !paused;
-        console.log(paused);
         Interface.play_pause_button.switch();   // switch icons
     }
 });
@@ -874,7 +862,6 @@ $('a#showdir').on('click', function () {
     else {
         $.getJSON('/_print_dir', function (data) {
             result = data.result;
-            console.log(result);
             var number_of_signs = 0;
             var string_res = '';//'<b>Total signs: '+result.length+'</b><br/>';
             var sub = false;

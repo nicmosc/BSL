@@ -12,7 +12,6 @@ Button.prototype = {
         document.getElementById(this.name).disable = false;
     },
     disable: function(){
-        console.log('disabling button',this,name);
         document.getElementById(this.name).disable = true;
     }
 };
@@ -72,11 +71,9 @@ INTERFACE.prototype = {
     constructor: INTERFACE,
 
     enableSpinner: function(div) {
-        console.log('enabling');
         document.getElementById(div).style.visibility = 'visible';
     },
     disableSpinner: function(div){
-        console.log('disabling');
         document.getElementById(div).style.visibility = 'hidden';
     },
     setGloss: function(div, text) {
