@@ -850,7 +850,7 @@ $('#select').on('click', function (event) {
 
 $('#info-button').on('click', function () {
     $('.overlay').slideToggle('fast');
-    $('#options').toggle();
+    $('#close').show();
 });
 
 $('a#showdir').on('click', function () {
@@ -892,8 +892,18 @@ $('a#showdir').on('click', function () {
 
 $('#options').on('click', function () {
     $('.overlay-menu').slideToggle('fast');
-    $('#info-button').toggle();
+    $('#close').show();
 });
+
+$('#close').on('click', function(){
+    closeMenus();
+});
+
+function closeMenus(){
+    $('.overlay-menu').slideUp('fast');
+    $('.overlay').slideUp('fast');
+    $('#close').hide();
+}
 
 // JSLIDER
 var slider = new Slider('#ex1', {
@@ -927,6 +937,12 @@ Interface.$input.on('keydown', function (e) {
     else {
         Interface.$input.css('color', 'black');
         clearTimeout(Interface.typingTimer);
+    }
+});
+
+$(document).on('keydown', function(e){
+    if (e.keyCode == 27 || e.which == 27) {      // if we're in a menu
+        closeMenus();
     }
 });
 

@@ -382,6 +382,21 @@ input[type="text"]:focus {
     color: #333333;
 }
 
+#close{
+    display: none;
+    font-size: 27px;
+    position: absolute;
+    top:2%;
+    right:2%;
+    cursor: pointer;
+    color: #777777;
+    z-index: 15;
+}
+
+#close:hover{
+    color: #bebebe;
+}
+
 /* for overlay - info menu */
 #curtain {
     position: absolute;
@@ -431,7 +446,6 @@ input[type="text"]:focus {
     font-size: 20px;
     padding: 5px;
     cursor: pointer;
-    z-index: 12;
 }
 
 /* for overlay - options menu */
@@ -479,7 +493,6 @@ input[type="text"]:focus {
     font-size: 18px;
     padding: 6px;
     cursor: pointer;
-    z-index: 14;
 }
 
 #ex1Slider .slider-selection {
