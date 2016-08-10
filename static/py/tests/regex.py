@@ -5,7 +5,7 @@ def regex():
 
     source = "NP -> DT <> NN~"
 
-    target = "NP -> NN~ DT <>"   # needs [1, (4,5), 2, 3]
+    target = "NP -> DT NN~ <>"   # needs [1, (4,5), 2, 3]
 
 
     # modify the mapping before applying it (for unique tags
@@ -144,4 +144,4 @@ def regex():
     else:
        print "No match!!"
 
-#regex()
+regex()

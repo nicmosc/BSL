@@ -26,6 +26,10 @@ def main():
             tableResults(sent)
         elif sent.split(' ')[0] == 'system_accuracy':
             systemAccuracy(sent)
+
+        elif sent.split(' ')[0] == 'print_accuracy':
+            fileTest(sent)
+
         else:   # if we want to just test a sentence
             result = analyser.process(sent)
             print result[0] # gloss
@@ -60,6 +64,44 @@ def tableResults(sent):
                 table_data.append([input, output, accuracy, colored(result, color)])
         table = AsciiTable(table_data)
         print table.table
+        file.close()
+
+    except IOError:
+        print 'File ' + f_name + ' not found'
+
+def fileTest(sent):
+    f_name = sent.split(' ')[1]
+
+    try:
+
+        file = open('unit-test/' + f_name + '.txt', 'r')
+        target_file = open('unit-test/accuracy_data.txt', 'w')
+
+        file_lines = file.readlines()
+
+        num_lines = sum(1 for i in list(file_lines) if i.rstrip())
+
+        current_line = 1
+        for line in file_lines:
+            if line.rstrip():
+                input = line.split(' | ')[0]
+                output = sub('\t|//.*', '', line).split(' | ')[1].strip()  # remove possible comments and tabs
+
+                # suppress printing from the result method
+                sys.stdout = open(devnull, 'w')
+                result = analyser.process(input)[0]  # this is the simple gloss text output
+                sys.stdout = sys.__stdout__
+
+                # do the test evaluation here...
+
+                accuracy = sentence_bleu([output], result)
+                target_file.write(str(len(input.split(' ')))+ ';'+ str(accuracy)+ '\n')
+
+                sys.stdout.write('\r' + str(int((float(current_line) / num_lines) * 100.0)) + '% ')
+                sys.stdout.flush()
+
+                current_line += 1
+
         file.close()
 
     except IOError:

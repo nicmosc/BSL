@@ -3,6 +3,7 @@ from static import APP_NLTK_DATA
 import nltk
 from copy import deepcopy
 from terminaltables import AsciiTable
+from tabulate import tabulate
 from utils import formatNumber, abbreviateMonth, findGender, toUpper
 from collections import defaultdict
 from itertools import takewhile
@@ -29,6 +30,12 @@ class EnglishSentence:
     treeTraversalIndex = 0  # only used to traverse the tree
 
     def __init__(self, text):
+
+        if text[-1] not in ['.', '?', '!']:
+            text += '.'         # add a full stop if it is missing
+                                # otherwise we leave it as is
+
+        print text
         self.stringRep = text   # keep a reference to the original text
         self.words = []  # list of word objects
         self.syntaxTree = Tree  # syntax tree (unaltered, for reference)
@@ -71,6 +78,7 @@ class EnglishSentence:
         # so that they can be modified
         self.syntaxTree = deepcopy(synTree)     # we don't want to modify syntax tree (not by reference, by value)
         self.augTree = synTree
+        print self.augTree.pformat_latex_qtree()
 
         for dep in dependencies:
             fst = dep.split(',')[0] # get target node and relation
@@ -174,6 +182,7 @@ class EnglishSentence:
             table_data.append(info)
 
         table = AsciiTable(table_data)
+        print tabulate(table_data[1:],table_data[0], tablefmt="latex")
         print table.table
 
     def clear(self):    # reset
@@ -213,6 +222,7 @@ class IntermediateSentence:
             table_data.append(info)
 
         table = AsciiTable(table_data)
+        print tabulate(table_data[1:], table_data[0], tablefmt="latex")
         print table.table
 
     # this method will cover anything which couldnt be handled with external rules

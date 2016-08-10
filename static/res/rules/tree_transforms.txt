@@ -10,7 +10,7 @@ NP -> DT <> NN~ | NP -> NN~ DT <>
 NP -> JJ NN~ | NP -> NN~ JJ
 //NP -> DT <> NN~ | NP -> DT NN~ <>		// generic case to swap any adjective modifier
 
-NP -> DT NN~ <> | NP -> NN~ DT <>
+//NP -> DT NN~ <> | NP -> NN~ DT <>
 NP -> DT RB JJ NN~ | NP -> NN~ DT RB JJ 
 NP -> RB JJ NN~ | NP -> NN~ RB JJ
 NP -> <> JJ NN~ | NP -> <> NN~ JJ

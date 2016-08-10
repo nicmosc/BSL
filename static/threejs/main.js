@@ -950,15 +950,13 @@ $(document).on('keydown', function(e){
 function doneTyping() {
     var txt = Interface.$input.val();
     //console.log(txt);
-    if (endsWith(txt,".") || endsWith(txt,"!") || endsWith(txt,"?")){
+    if (txt){
         Interface.can_begin_translate = true;
         $("#translate").attr("class","button");
     }
     else {
         Interface.can_begin_translate = false;
-        Interface.$input.css('color', 'red');
         $("#translate").attr("class","button disabled");
-        flashScreen(false, "Missing punctuation");
     }
 }
 
