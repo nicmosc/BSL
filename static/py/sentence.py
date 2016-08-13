@@ -3,7 +3,7 @@ from static import APP_NLTK_DATA
 import nltk
 from copy import deepcopy
 from terminaltables import AsciiTable
-from tabulate import tabulate
+#from tabulate import tabulate
 from utils import formatNumber, abbreviateMonth, findGender, toUpper
 from collections import defaultdict
 from itertools import takewhile
@@ -182,7 +182,7 @@ class EnglishSentence:
             table_data.append(info)
 
         table = AsciiTable(table_data)
-        print tabulate(table_data[1:],table_data[0], tablefmt="latex")
+        #print tabulate(table_data[1:],table_data[0], tablefmt="latex")
         print table.table
 
     def clear(self):    # reset
@@ -222,7 +222,7 @@ class IntermediateSentence:
             table_data.append(info)
 
         table = AsciiTable(table_data)
-        print tabulate(table_data[1:], table_data[0], tablefmt="latex")
+        #print tabulate(table_data[1:], table_data[0], tablefmt="latex")
         print table.table
 
     # this method will cover anything which couldnt be handled with external rules

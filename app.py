@@ -35,7 +35,6 @@ def index():
 @app.route('/_process_text')
 def process_text():
 
-    ''' this is the old stuff '''
     text = request.args.get('input_text', '', type = str)
 
     print text

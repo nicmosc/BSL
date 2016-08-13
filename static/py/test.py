@@ -1,13 +1,12 @@
+import sys
+from os import devnull
+from re import sub
+
 from termcolor import colored
 from terminaltables import AsciiTable
 
 from analyser import Analyser
-
-from bleu import sentence_bleu, corpus_bleu
-from re import sub
-
-import sys
-from os import devnull
+from static.py.bleu import sentence_bleu, corpus_bleu
 
 analyser = Analyser('../res/rules/')
 
@@ -27,7 +26,7 @@ def main():
         elif sent.split(' ')[0] == 'system_accuracy':
             systemAccuracy(sent)
 
-        elif sent.split(' ')[0] == 'print_accuracy':
+        elif sent.split(' ')[0] == 'write_output':
             fileTest(sent)
 
         else:   # if we want to just test a sentence
@@ -75,7 +74,9 @@ def fileTest(sent):
     try:
 
         file = open('unit-test/' + f_name + '.txt', 'r')
-        target_file = open('unit-test/accuracy_data.txt', 'w')
+        #target_file = open('unit-test/accuracy_data.txt', 'w')
+        references = open('unit-test/references-cl.txt', 'w')
+        hypothesis = open('unit-test/hypothesis-cl.txt','w')
 
         file_lines = file.readlines()
 
@@ -94,8 +95,10 @@ def fileTest(sent):
 
                 # do the test evaluation here...
 
-                accuracy = sentence_bleu([output], result)
-                target_file.write(str(len(input.split(' ')))+ ';'+ str(accuracy)+ '\n')
+                #accuracy = sentence_bleu([output], result)
+                #target_file.write(str(len(input.split(' ')))+ ';'+ str(accuracy)+ '\n')
+                references.write(output+'\n')
+                hypothesis.write(result+'\n')
 
                 sys.stdout.write('\r' + str(int((float(current_line) / num_lines) * 100.0)) + '% ')
                 sys.stdout.flush()
@@ -103,6 +106,8 @@ def fileTest(sent):
                 current_line += 1
 
         file.close()
+        references.close()
+        hypothesis.close()
 
     except IOError:
         print 'File ' + f_name + ' not found'
@@ -154,6 +159,7 @@ def systemAccuracy(sent):
 
         # we then calculate the system score and print it
         accuracy = corpus_bleu(reference, hypothesis)
+
 
         print accuracy
         file.close()
