@@ -27,7 +27,7 @@ What time does the class end? | (WHAT TIME CLASS FINISH)[q]
 Draw a straight line. | LINE STRAIGHT DRAW
 At what time is the class finish? | (WHAT TIME CLASS FINISH)[q]
 I'm truly grateful for your help. | ME GRATEFUL YOU-HELP-ME
-How are you? | YOU (HOW)[q]
+How are you? | (HOW)[q] YOU
 
 I'm sorry. | ME SORRY
 I am fine. | ME FINE

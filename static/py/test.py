@@ -29,6 +29,9 @@ def main():
         elif sent.split(' ')[0] == 'write_output':
             fileTest(sent)
 
+        elif sent.split(' ')[0] == 'corpus_stats':
+            corpusStats(sent)
+
         else:   # if we want to just test a sentence
             result = analyser.process(sent)
             print result[0] # gloss
@@ -162,6 +165,41 @@ def systemAccuracy(sent):
 
 
         print accuracy
+        file.close()
+
+    except IOError:
+        print 'File ' + f_name + ' not found'
+
+def corpusStats(sent):
+    f_name = sent.split(' ')[1]
+
+    try:
+
+        file = open('unit-test/' + f_name + '.txt', 'r')
+        file_lines = file.readlines()
+
+        current_line = 0
+        overall_input_len = 0
+        overall_output_len = 0
+
+        for line in file_lines:
+            if line.rstrip():
+                input = line.split(' | ')[0]
+                output = sub('\t|//.*', '', line).split(' | ')[1].strip()  # remove possible comments and tabs
+
+                overall_input_len += len(input.split(' '))
+                overall_output_len += len(output.split(' '))
+
+
+
+                current_line += 1
+
+        average_input_len =   float(overall_input_len) / float (current_line)
+        average_output_len = float(overall_output_len) / float(current_line)
+
+        print 'average',average_input_len, average_output_len
+        print 'total', overall_input_len, overall_output_len
+
         file.close()
 
     except IOError:
