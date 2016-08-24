@@ -59,9 +59,9 @@ def tableResults(sent):
 
                 accuracy = sentence_bleu([output], result)
 
-                accuracy_plain = sentence_bleu([sub('[\(\)]|\[.*\]','',output)], sub('[\(\)]|\[.*\]','',result))
+                #accuracy_plain = sentence_bleu([sub('[\(\)]|\[.*\]','',output)], sub('[\(\)]|\[.*\]','',result))
 
-                print input,'|',output,'|',colored(result,color),'|',accuracy,'|',accuracy_plain
+                print input,'|',output,'|',colored(result,color),'|',accuracy,'|'
 
                 table_data.append([input, output, accuracy, colored(result, color)])
         table = AsciiTable(table_data)
