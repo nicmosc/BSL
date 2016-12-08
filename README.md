@@ -6,7 +6,7 @@ An online translator from English to British Sign Language. It uses Python NLTK 
 
 ## DEMO
 
-You can view a demo of the project at http://www.translate.nicmosc.com
+You can view a demo of the project at http://translate.nicmosc.com
 
 ## INSTALLATION
 ```
