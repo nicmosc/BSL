@@ -39,9 +39,9 @@ def process_text():
 
     print text
 
-    sys.stdout = open(devnull, 'w') # suppress printing from the result method
+    # sys.stdout = open(devnull, 'w') # suppress printing from the result method
     data = analyser.process(text)
-    sys.stdout = sys.__stdout__     # reset printing
+    # sys.stdout = sys.__stdout__     # reset printing
 
     print 'Gloss:',data[0]
     print 'HTML:',data[1]
@@ -62,4 +62,4 @@ if __name__ == '__main__':
     #     port=int("5000"),
     #     debug=True
     # )
-	app.run()
+	app.run(host='0.0.0.0')
