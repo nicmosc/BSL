@@ -2,3 +2,4 @@ static/lib/stanford-parser-full
 *.pyc
 *.pyo
 .idea/
+venv
